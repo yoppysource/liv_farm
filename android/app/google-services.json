@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "593155184094",
+    "firebase_url": "https://liv-farm.firebaseio.com",
+    "project_id": "liv-farm",
+    "storage_bucket": "liv-farm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593155184094:android:a0cde11f4366c33324b94f",
+        "android_client_info": {
+          "package_name": "com.future_connect.liv_farm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593155184094-0jrvn60vvek9p1joil2jpg7qij97dopg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQ_e47wdyfszbC6FcORgLBKWtCWWn8ymw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593155184094-0jrvn60vvek9p1joil2jpg7qij97dopg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "593155184094-vujfa0occi3dv60f6c0i7eaeref7jt8h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.futureConnect.livFarm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
