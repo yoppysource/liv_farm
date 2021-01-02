@@ -3,21 +3,23 @@ import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/product.dart';
 
 class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
+  Product product;
 
-  final Product product;
+  get totalPrice =>
+      getPriceFromInt(product.productPrice * product.productQuantity);
 
-  get totalPrice => getPriceFromInt(product.quantity * product.price);
-
-  ProductDescriptionViewmodel({@required this.product});
+  ProductDescriptionViewmodel({@required Product product}) {
+    this.product = Product.copy(product);
+  }
 
   void addQuantity() {
-    product.quantity++;
+    product.productQuantity++;
     notifyListeners();
   }
 
   void subtractQuantity() {
-    if (product.quantity >= 2) {
-      product.quantity--;
+    if (product.productQuantity >= 2) {
+      product.productQuantity--;
       notifyListeners();
     }
   }

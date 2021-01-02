@@ -10,6 +10,9 @@ enum Endpoint {
   products,
   customersSnsId,
   purchaseHistory,
+  reviewGet,
+  reviewPost,
+  recentCart,
 }
 
 class API {
@@ -40,6 +43,9 @@ class API {
     Endpoint.cartItems: 'admin/cart_items',
     Endpoint.purchases: 'admin/Purchases',
     Endpoint.products: 'admin/products/',
-    Endpoint.customersSnsId: 'admin/Customers/sns_id'
+    Endpoint.customersSnsId: 'admin/Customers/sns_id',
+    Endpoint.reviewPost: 'admin/reviews',
+    Endpoint.reviewGet: 'admin/product_reviews',
+    Endpoint.recentCart: 'admin/carts_recent',
   };
 }

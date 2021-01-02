@@ -5,13 +5,17 @@ import 'package:liv_farm/service/server_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPageRepository {
-  Future<String> getAccessTokenFromLocal() async {
+  
+  Future<int> getDataFromLocal() async {
     try {
       SharedPreferences _pref = await SharedPreferences.getInstance();
       String accessToken = _pref.getString(KEY_access_token);
-      if (accessToken != null) {
+      int uid = _pref.getInt(KEY_customer_uid);
+
+      if (uid != null) {
         API.accessToken = accessToken;
-        return accessToken;
+        print(accessToken);
+        return uid;
       } else {
         return null;
       }
@@ -20,17 +24,19 @@ class LandingPageRepository {
     }
   }
 
-  Future<MyUser> getMyUserInitially() async {
+  Future<void> clearLocalData() async {
+    SharedPreferences _pref = await SharedPreferences.getInstance();
+    _pref.clear();
+  }
+
+  Future<MyUser> getMyUserInitially(int uid) async {
     Map<String, dynamic> data = await ServerService(
             api: API(endpoint: Endpoint.customers))
-        .getData();
+        .getData(params1: '/${uid.toString()}');
     if (data[MSG] == MSG_success) {
-      API.accessToken = data['token'];
-
       return MyUser.fromJson(data: data['result']);
-    } else {
-      API.accessToken = data['token'];
-      return null;
+    } else{
+        return null;
     }
   }
 }

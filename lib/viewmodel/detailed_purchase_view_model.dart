@@ -15,8 +15,10 @@ class DetailedPurchaseViewmodel with ChangeNotifier {
   Future init(List<Purchase> purchaseList, List<Product> productList) async {
     purchasePairedWithProductList = Map();
     try {
+      //TODO: purchase Fetch
       for (Purchase purchase in purchaseList) {
         List<Product> productListWithQuantity = List();
+        //TODO: purchase정보가지고 cart_items_cart에 엔드포인트에서 id와 quantity추출
         Map productIdPairedWithQuantity =
             await _repository.fetchProductIdPairedWithQuantity(purchase);
         if (productIdPairedWithQuantity == null) {
@@ -24,11 +26,12 @@ class DetailedPurchaseViewmodel with ChangeNotifier {
           return null;
         }
         for (int key in productIdPairedWithQuantity.keys) {
+          //TODO: 아이디를 가지고 prouductList에서 프로덕트 매칭후에 quantity 넣어주기.
           for (Product product in productList) {
             if (key == product.id) {
               Product currentProduct = product;
               print('${productIdPairedWithQuantity[key]}');
-              currentProduct.quantity = productIdPairedWithQuantity[key];
+              currentProduct.productQuantity = productIdPairedWithQuantity[key];
               productListWithQuantity.add(currentProduct);
             }
           }

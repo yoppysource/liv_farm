@@ -3,8 +3,6 @@ import 'package:kakao_flutter_sdk/user.dart';
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/repository/auth_page_repository/auth_page_repository.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 class KaKaoAuthRepository extends AuthPageRepository {
   Future<void> _issueAccessToken(String authCode) async {
     try {
@@ -18,6 +16,7 @@ class KaKaoAuthRepository extends AuthPageRepository {
   Future<Map<String, dynamic>> getInitialDataFromPackage() async {
     //TODO: 초기 화면으로 넘어갈때 카카오 뒤로가기가 생성되는 문제.
     try {
+
       final bool installed = await isKakaoTalkInstalled();
       final authCode = installed
           ? await AuthCodeClient.instance.requestWithTalk()
@@ -40,15 +39,13 @@ class KaKaoAuthRepository extends AuthPageRepository {
     return null;
   }
 
-  Future<void> deleteAccountKakaoTalk() async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    _pref.remove(KEY_access_token);
-
+  Future<void> signOutFromKakao() async {
     try {
-      var code = await UserApi.instance.unlink();
+      var code = await UserApi.instance.logout();
       print(code.toString());
     } catch (e) {
-      print(e);
+      print(e.toString());
+     rethrow;
     }
   }
 }

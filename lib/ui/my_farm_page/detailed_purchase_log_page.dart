@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/purchase.dart';
+import 'package:liv_farm/ui/my_farm_page/write_review_bottom_sheet.dart';
+import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 import 'package:liv_farm/ui/shared/appbar.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/viewmodel/detailed_purchase_view_model.dart';
+import 'package:liv_farm/viewmodel/product_description_view_model.dart';
 import 'package:provider/provider.dart';
 
 class DetailedPurchaseLogPage extends StatelessWidget with Formatter {
@@ -93,22 +96,21 @@ class DetailedPurchaseLogPage extends StatelessWidget with Formatter {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(product.name,
+                                              Text(product.productName,
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                       color: Colors.black87,
                                                       letterSpacing: 0.7)),
-
                                               Text(
-                                                  '구매수량 | ${product.quantity.toString()}개'),
+                                                  '구매수량 | ${product.productQuantity.toString()}개'),
                                               SizedBox(
                                                 height: 20,
                                               ),
                                               Text(
                                                   getPriceFromInt(
-                                                      product.price),
+                                                      product.productPrice),
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -122,19 +124,59 @@ class DetailedPurchaseLogPage extends StatelessWidget with Formatter {
                                       SizedBox(
                                         height: 8,
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.3,
-                                              color: Colors.black54),
-                                        ),
-                                        width: 130,
-                                        height: 35,
-                                        child: GestureDetector(
-                                          child: Center(child: Text('재구매')),
-                                          //TODO: 재주문 구현하기.
-                                          onTap: () {},
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          GestureDetector(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 0.3,
+                                                    color: Colors.black54),
+                                              ),
+                                              width: 130,
+                                              height: 35,
+                                              child:
+                                                  Center(child: Text('리뷰 작성')),
+                                            ),
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ReviewWriteBottomSheet(
+                                                  productId: product.id,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          GestureDetector(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 0.3,
+                                                    color: Colors.black54),
+                                              ),
+                                              width: 130,
+                                              height: 35,
+                                              child: Center(child: Text('재구매')),
+                                            ),
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChangeNotifierProvider(
+                                                              create: (context) =>
+                                                                  ProductDescriptionViewmodel(
+                                                                    product:
+                                                                        product,
+                                                                  ),
+                                                              child:
+                                                                  ProductDescriptionPage())));
+                                            },
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
                                         height: 15,

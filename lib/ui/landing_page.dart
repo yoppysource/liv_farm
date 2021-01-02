@@ -10,6 +10,7 @@ import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/my_farm_page_view_model.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:liv_farm/viewmodel/shopping_cart_view_model.dart';
+import 'package:liv_farm/viewmodel/user_input_page_view_model.dart';
 import 'package:provider/provider.dart';
 
 class LandingPage extends StatelessWidget {
@@ -30,15 +31,13 @@ class LandingPage extends StatelessWidget {
       return MultiProvider(
         providers: [
           // ChangeNotifierProvider(
-          //   create: (_) => HomePageViewModel(
-          //     user: _model.user,
-          //   ),
+          //   create: (context) =>  UserInputPageViewModel(_model.user),
           // ),
-          ChangeNotifierProvider(
+          ChangeNotifierProvider<OnlineShoppingViewmodel>(
             create: (context) => OnlineShoppingViewmodel(),
           ),
-          ChangeNotifierProvider(
-            create: (context) => ShoppingCartViewmodel(),
+          ChangeNotifierProvider<ShoppingCartViewmodel>(
+            create: (context) => ShoppingCartViewmodel(_model.user),
           ),
           ChangeNotifierProvider<MyFarmPageViewModel>(
               create: (context) => MyFarmPageViewModel(_model.user)),

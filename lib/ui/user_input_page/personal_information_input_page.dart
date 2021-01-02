@@ -6,8 +6,6 @@ import 'package:liv_farm/ui/shared/platform_widget/my_text_field.dart';
 import 'package:liv_farm/viewmodel/user_input_page_view_model.dart';
 import 'package:provider/provider.dart';
 
-enum UserInfoPurpose { drawer, payment }
-
 class PersonalInformationInputPage extends StatefulWidget {
   @override
   _PersonalInformationInputPageState createState() =>
@@ -67,7 +65,7 @@ class _PersonalInformationInputPageState
                   controller: _nameController,
                   hintText: '이름',
                   textInputType: TextInputType.name,
-                ),
+                ) ,
                 SizedBox(
                   height: 20,
                 ),
@@ -93,7 +91,7 @@ class _PersonalInformationInputPageState
                 SizedBox(
                   height: 15,
                 ),
-                _model.selectedGender == null
+                _model.selectedGender == ''
                     ? Center(
                       child: FlatButton(
                           onPressed: _model.updateGender, child: Text('선택하기')),
@@ -106,17 +104,17 @@ class _PersonalInformationInputPageState
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Colors.grey.withOpacity(0.5)),
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(5.0),
                               color: Colors.white),
                           child: Stack(
                             children: <Widget>[
                               AnimatedPositioned(
                                 duration: Duration(milliseconds: 1000),
                                 curve: Curves.easeIn,
-                                left: _model.selectedGender == 0 //남자일경
+                                left: _model.selectedGender == 'male' //남자일경
                                     ? 50
                                     : 0.0,
-                                right: _model.selectedGender == 0 ? 0.0 : 50,
+                                right: _model.selectedGender == 'male' ? 0.0 : 50,
                                 child: InkWell(
                                   onTap: _model.updateGender,
                                   child: AnimatedSwitcher(
@@ -128,7 +126,7 @@ class _PersonalInformationInputPageState
                                         turns: animation,
                                       );
                                     },
-                                    child: _model.selectedGender == 0
+                                    child: _model.selectedGender == 'male'
                                         ? Icon(
                                             FontAwesomeIcons.mars,
                                             color: Colors.blueAccent

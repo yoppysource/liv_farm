@@ -61,20 +61,14 @@ class StatusIndicator extends StatelessWidget {
     return Column(
       children: [
         Container(
-          child: icon,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-          ),
-        ),
-        Text(title),
-        Container(
             child: Text(
           '$num',
           style: TextStyle(
-              fontSize: 24,
+              fontSize: 30,
               fontWeight: FontWeight.w700,
-              color: Colors.black54),
+              color: Colors.grey),
         )),
+        Text(title, style: TextStyle(fontSize: 12, color: Colors.grey),),
       ],
     );
   }

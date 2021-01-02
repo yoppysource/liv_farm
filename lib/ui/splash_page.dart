@@ -7,7 +7,7 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          child: Image.asset(kLogoSample),
+          child: Image.asset(kLogo),
         ),
       ),
     );

@@ -27,25 +27,17 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>livFarm</string>
+				<string>com.googleusercontent.apps.593155184094-vujfa0occi3dv60f6c0i7eaeref7jt8h</string>
 				<string>kakaoac5068208cf1f0bb6197f66f62278038</string>
+				<string>fb483794755920034</string>
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleURLTypes</key>
-    <array>
-    	<dict>
-    		<key>CFBundleTypeRole</key>
-    		<string>Editor</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-	            <string>com.googleusercontent.apps.593155184094-vujfa0occi3dv60f6c0i7eaeref7jt8h</string>
-    		</array>
-    	</dict>
-    </array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAppID</key>
-	<string>3606179959448226</string>
+	<string>483794755920034</string>
 	<key>FacebookDisplayName</key>
 	<string>livFarm</string>
 	<key>KAKAO_APP_KEY</key>
@@ -57,9 +49,60 @@
 		<string>storykompassauth</string>
 		<string>kakaolink</string>
 		<string>kakaotalk-5.9.7</string>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+        <string>ispmobile</string>
+        <string>itms-apps</string> <!-- 앱스토어 -->
+        <string>hdcardappcardansimclick</string> <!-- 현대카드-앱카드 -->
+        <string>smhyundaiansimclick</string> <!-- 현대카드-공인인증서 -->
+        <string>shinhan-sr-ansimclick</string> <!-- 신한카드-앱카드 -->
+        <string>smshinhanansimclick</string> <!-- 신한카드-공인인증서 -->
+        <string>kb-acp</string> <!-- 국민카드-앱카드 -->
+        <string>mpocket.online.ansimclick</string> <!-- 삼성카드-앱카드 -->
+        <string>ansimclickscard</string> <!-- 삼성카드-온라인결제 -->
+        <string>ansimclickipcollect</string> <!-- 삼성카드-온라인결제 -->
+        <string>vguardstart</string> <!-- 삼성카드-백신 -->
+        <string>samsungpay</string> <!-- 삼성카드-삼성페이 -->
+        <string>scardcertiapp</string> <!-- 삼성카드-공인인증서 -->
+        <string>lottesmartpay</string> <!-- 롯데카드-모바일결제 -->
+        <string>lotteappcard</string> <!-- 롯데카드-앱카드 -->
+        <string>cloudpay</string> <!-- 하나카드-앱카드 -->
+        <string>nhappcardansimclick</string> <!-- 농협카드-앱카드 -->
+        <string>nonghyupcardansimclick</string> <!-- 농협카드-공인인증서 -->
+        <string>citispay</string> <!-- 씨티카드-앱카드 -->
+        <string>citicardappkr</string> <!-- 씨티카드-공인인증서 -->
+        <string>citimobileapp</string> <!-- 씨티카드-간편결제 -->
+        <string>kakaotalk</string> <!-- 카카오톡 -->
+        <string>payco</string> <!-- 페이코 -->
+        <string>lpayapp</string> <!-- 롯데 L페이 -->
+        <string>hanamopmoasign</string> <!-- 하나카드 공인인증앱 -->
+        <string>wooripay</string> <!-- 우리페이 -->
+        <string>nhallonepayansimclick</string> <!-- NH 올원페이 -->
+        <string>hanawalletmembers</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+      <!-- Allow Arbitrary Loads in Web Content 속성을 true로 설정 -->
+      <key>NSAllowsArbitraryLoadsInWebContent</key>
+      <true/>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

@@ -6,15 +6,13 @@ class MyCard extends StatelessWidget {
   const MyCard({Key key, this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final fullWidth = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: EdgeInsets.only(bottom: 5),
-      child: Card(
-        child: child,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 2),
+      child: child,
+      color: Colors.white,
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0.0),
       ),
     );
   }

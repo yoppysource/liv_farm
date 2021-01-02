@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/ui/shared/appbar.dart';
 import 'package:liv_farm/ui/shared/buttons/edit_button.dart';
+import 'package:liv_farm/ui/shared/platform_widget/dialogs/alert_dialog.dart';
 import 'package:liv_farm/ui/shared/platform_widget/my_text_field.dart';
 import 'package:liv_farm/viewmodel/user_input_page_view_model.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class _DeliveryInformationInputPageState
     extends State<DeliveryInformationInputPage> {
   TextEditingController _addressDetailController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _DeliveryInformationInputPageState
         Provider.of<UserInputPageViewModel>(context, listen: false);
     _addressDetailController.text = _model.myUser.addressDetail ?? '';
     _phoneNumberController.text = _model.myUser.phoneNumber ?? '';
+    _nameController.text = _model.myUser.name ?? '';
     super.initState();
   }
 
@@ -45,10 +48,29 @@ class _DeliveryInformationInputPageState
         Provider.of<UserInputPageViewModel>(context, listen: true);
     return Scaffold(
       appBar: MyAppBar(
-          title: '배송 정보 수정',
+          title: widget.purpose == DeliveryInformationPurpose.general
+              ? '배송 정보 수정'
+              : '배송 정보 입력',
           onPressed: () async {
-            widget.purpose ==DeliveryInformationPurpose.general ?await _model.submitForDeliveryInfo(addressDetail: _addressDetailController.text, phoneNumber: _phoneNumberController.text) : await _model.submitWithCheck();
-            Navigator.of(context).pop();
+            widget.purpose == DeliveryInformationPurpose.general
+                ? await _model.submitForDeliveryInfo(
+                    addressDetail: _addressDetailController.text,
+                    phoneNumber: _phoneNumberController.text)
+                : _model.isInformationAvailable(_addressDetailController.text,
+                        _phoneNumberController.text, _nameController.text)
+                    ? await _model.submitWithCheck(
+                        name: _nameController.text,
+                        addressDetail: _addressDetailController.text,
+                        phoneNumber: _phoneNumberController.text)
+                    : PlatformAlertDialog(
+                            title: '오류',
+                            widget: Text('배송 정보를 모두 입력해주세요'),
+                            defaultActionText: '확인')
+                        .show(context);
+
+              if(widget.purpose == DeliveryInformationPurpose.general || _model.isInformationAvailable(_addressDetailController.text, _phoneNumberController.text, _nameController.text))
+                Navigator.pop(context);
+
           }),
       body: SingleChildScrollView(
         child: Center(
@@ -59,6 +81,32 @@ class _DeliveryInformationInputPageState
               children: [
                 SizedBox(
                   height: 50,
+                ),
+                if (widget.purpose == DeliveryInformationPurpose.purchase)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('* 모든 항목은 필수 입력 사항입니다'),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        '이름',
+                        style: TextStyle(color: Colors.grey, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      PlatformTextField(
+                        controller: _nameController,
+                        hintText: '이름',
+                        textInputType: TextInputType.name,
+                      ),
+                    ],
+                  ),
+                SizedBox(
+                  height: 15,
                 ),
                 Row(
                   children: [
@@ -113,7 +161,7 @@ class _DeliveryInformationInputPageState
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       (_model.selectedPostCode == null ||
-                          _model.selectedPostCode == '')
+                              _model.selectedPostCode == '')
                           ? '우편번호를 입력해 주세요'
                           : _model.selectedPostCode,
                       style: TextStyle(

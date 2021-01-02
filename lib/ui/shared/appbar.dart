@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/ui/online_shopping_page/my_drawer.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -17,11 +20,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: onPressed,
         ),
       ] : null,
-     title: Text(title,style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),),
+     title: SizedBox(
+       height: 40,
+         width: 80,
+         child: Image.asset(kLogo,color: Color(kMainColor),)),
      elevation: 0,
-     backgroundColor: Theme
-         .of(context)
-         .scaffoldBackgroundColor,
+     backgroundColor: Colors.white,
      iconTheme: IconThemeData(color: Colors.black87),);
   }
 

@@ -12,6 +12,6 @@ class Formatter {
   }
 
   String getPriceFromInt(int price) {
-    return NumberFormat.simpleCurrency(locale: 'ko').format(price);
+    return NumberFormat('###,###,###,###원').format(price);
   }
 }

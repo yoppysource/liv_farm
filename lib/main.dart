@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
+import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/secret.dart';
 import 'package:liv_farm/ui/landing_page.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
@@ -19,11 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        primaryColor: Color(kMainColor),
         fontFamily: 'Spoqa Han Sans',
-        primarySwatch: Colors.blue,
       ),
       home: LandingPage(),
     );

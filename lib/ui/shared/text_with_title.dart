@@ -12,7 +12,7 @@ class TextWithTitle extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(color: Colors.grey.withOpacity(0.9)),),
+          Text(title, style: TextStyle(color: Colors.black.withOpacity(0.6)),),
           SizedBox(height: 2,),
           Text(text, style: TextStyle(color: Colors.black87,),),
         ],

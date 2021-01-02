@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPageRepository {
   String accessToken;
+  int uid;
   ServerService serverService =
       ServerService(api: API(endpoint: Endpoint.login));
 
@@ -19,6 +20,7 @@ class AuthPageRepository {
     if (result[MSG] == MSG_success) {
       print('${result['token']}');
       accessToken = result['token'];
+      uid = result['result'][KEY_customer_uid];
       API.accessToken = accessToken;
       Map<String, dynamic> data = result['result'] as Map;
       print('$accessToken');
@@ -40,10 +42,11 @@ class AuthPageRepository {
 
 
   Future<bool> saveAccessTokenToLocal() async {
-    print('save call');
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (accessToken != null) {
       await pref.setString(KEY_access_token, accessToken);
+      print(uid.toString());
+      await pref.setInt(KEY_customer_uid, uid);
       return true;
     }
     return false;

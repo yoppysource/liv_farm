@@ -25,7 +25,7 @@ class MyFarmPageRepository {
       List<dynamic> purchasesDataList = result[KEY_Result].cast() as List;
       if (purchasesDataList.isEmpty) {
         print('isempty!');
-        return [];
+        return List();
       }
       List<Purchase> purchasesList = purchasesDataList
           .map((i) => Purchase.fromJson(i))

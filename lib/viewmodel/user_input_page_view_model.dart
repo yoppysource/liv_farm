@@ -9,10 +9,12 @@ import 'package:liv_farm/temp/logger.dart';
 import 'package:liv_farm/ui/shared/platform_widget/platform_date_picker.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
 import 'package:liv_farm/utill/validator.dart';
+import 'package:liv_farm/viewmodel/my_farm_page_view_model.dart';
 
 class UserInputPageViewModel extends InputValidatorsForOrder
     with ChangeNotifier {
   UserInformationRepository _repository = UserInformationRepository();
+  MyFarmPageViewModel myFarmPageViewModel;
   MyUser myUser;
   bool isLoading = false;
   bool submitted = false;
@@ -20,16 +22,33 @@ class UserInputPageViewModel extends InputValidatorsForOrder
   String selectedPostCode;
   String selectedAddress;
 
+
   //0이면 남자 1이면 여자
   String selectedGender;
 
-  UserInputPageViewModel(MyUser user) {
-    this.myUser = user;
+  bool isInformationAvailable(String addressDetail, String phoneNumber, String name){
+    if(
+    selectedAddress == '' ||
+        selectedPostCode == ''  ||
+        addressDetail == ''   ||
+        phoneNumber == ''  ||
+       name == ''
+    ) {
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  UserInputPageViewModel(MyFarmPageViewModel model) {
+    this.myFarmPageViewModel = model;
+    this.myUser = model.user;
     this.isLoading = false;
-    this.selectedBirthDate = DateTime.parse(user.birthday);
-    this.selectedPostCode = user.postCode;
-    this.selectedAddress = user.address;
-    this.selectedGender = user.gender;
+    this.selectedBirthDate = DateTime.tryParse(model.user.birthday) ?? null;
+    this.selectedPostCode = model.user.postCode;
+    this.selectedAddress = model.user.address;
+    this.selectedGender = model.user.gender;
   }
 
   void updateGender() {
@@ -44,9 +63,9 @@ class UserInputPageViewModel extends InputValidatorsForOrder
 
   Future<void> updateBirthDate(BuildContext context) async {
     DateTime value = await PlatformDatePicker(
-      initialDate: (this.myUser.birthday == null)
+      initialDate: (this.myUser?.birthday == null || this.myUser.birthday == '')
           ? DateTime(1993, 09, 08)
-          : this.myUser.birthday,
+          : this.selectedBirthDate,
       onDateTimeChanged: (dateTime) {
         selectedBirthDate = dateTime;
         notifyListeners();
@@ -71,13 +90,14 @@ class UserInputPageViewModel extends InputValidatorsForOrder
   Future<void> submitForPersonalInfo({String name, String email}) async {
     myUser.name = name;
     myUser.gender = selectedGender;
-    myUser.birthday = selectedBirthDate.toIso8601String();
+    myUser.birthday = selectedBirthDate?.toIso8601String() ?? '';
     myUser.email = email;
     Map<String,dynamic> data = await _repository.updateUserData(
         userData: myUser.toJson(), userId: myUser.id.toString());
+    notifyListeners();
     if(data[MSG] == MSG_success){
       ToastMessage().showInfoSuccessToast();
-      notifyListeners();
+      myFarmPageViewModel.updateUser(myUser);
     } else{
       ToastMessage().showErrorToast();
     }
@@ -92,7 +112,7 @@ class UserInputPageViewModel extends InputValidatorsForOrder
         userData: myUser.toJson(), userId: myUser.id.toString());
     if(data[MSG] == MSG_success){
       ToastMessage().showInfoSuccessToast();
-      notifyListeners();
+      myFarmPageViewModel.updateUser(myUser);
     } else{
       ToastMessage().showErrorToast();
     }
@@ -130,12 +150,10 @@ class UserInputPageViewModel extends InputValidatorsForOrder
     return showErrorText ? invalidErrorText : null;
   }
 
-  Future<void> submitWithCheck() async {
+  Future<void> submitWithCheck({String name, String addressDetail, String phoneNumber}) async {
     isLoading = true;
-    submitted = true;
-    notifyListeners();
-    if (canSubmitWhenOrder) {
-      // submit();
-    }
+      myUser.name = name;
+      await submitForDeliveryInfo(addressDetail: addressDetail, phoneNumber: phoneNumber);
+
   }
 }

@@ -30,9 +30,9 @@ class PlatformDatePicker extends PlatformWidget {
     return Container(
       height: 300,
       child: CupertinoDatePicker(
-
           onDateTimeChanged: onDateTimeChanged,
           mode: CupertinoDatePickerMode.date,
+          //TODO: 한국어로 만들기. 성별 만들기.
           initialDateTime: initialDate,
           minimumDate: DateTime(1910),
           maximumDate: DateTime(2015)),

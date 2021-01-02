@@ -28,7 +28,7 @@ class AuthPage extends StatelessWidget {
                   height: 300,
                   width: 300,
                   child: Image.asset(
-                    kLogoSample,
+                    kLogo,
                   ),
                 ),
                 SizedBox(
@@ -56,7 +56,7 @@ class AuthPage extends StatelessWidget {
                   assetName: 'assets/images/facebook_icon.png',
                   text: 'Facebook으로 로그인',
                   onPressed: () {
-                    // _model.onPressedFacebook(context);
+                    _model.onPressedFacebook(context);
                   },
                 ),
                 SizedBox(
@@ -66,7 +66,9 @@ class AuthPage extends StatelessWidget {
                     ? LoginButton(
                         assetName: 'assets/images/apple_icon.png',
                         text: 'Apple로 로그인',
-                        onPressed: () {},
+                        onPressed: () {
+                          _model.onPressedApple(context);
+                        },
                       )
                     : Container(),
                 SizedBox(

@@ -1,7 +1,9 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/my_user.dart';
+import 'package:liv_farm/repository/auth_page_repository/apple_auth_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/auth_page_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/facebook_auth_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/google_auth_repository.dart';
@@ -17,25 +19,26 @@ class AuthPageViewmodel with ChangeNotifier {
   AuthPageRepository _authPageRepository = AuthPageRepository();
   KaKaoAuthRepository _kaKaoAuthRepository = KaKaoAuthRepository();
   GoogleAuthRepository _googleAuthRepository = GoogleAuthRepository();
+  AppleAuthRepository _appleAuthRepository = AppleAuthRepository();
 
-  // FacebookAuthRepository _facebookAuthRepository = FacebookAuthRepository();
+  FacebookAuthRepository _facebookAuthRepository = FacebookAuthRepository();
   AuthPageViewmodel(model) {
     log.methodLog(method: 'Init AuthPageViewmodel');
     this.model = model;
-    Future.microtask(() async => await getIsApple());
+    Future.microtask(() async => await initAuth());
   }
 
   Map<String, dynamic> initialData;
-  Future<void> getIsApple() async {
-    // try {
-    //   bool value = await SignInWithApple.isAvailable();
-    //   if (value) {
-    //     isApple = true;
-    //
-    //   }
-    // } catch (e) {
-    //   isApple = false;
-    // }
+  Future<void> initAuth() async {
+    try {
+      bool value = await AppleSignIn.isAvailable();
+      if (value) {
+        isApple = true;
+
+      }
+    } catch (e) {
+      isApple = false;
+    }
     await Firebase.initializeApp();
     log.methodLog(method: 'notifyListeners AuthPageViewmodel');
     isWorking = false;
@@ -44,6 +47,7 @@ class AuthPageViewmodel with ChangeNotifier {
 
   Future<void> onPressed(Future<Map<String, dynamic>> getDataFromPackage,
       BuildContext context) async {
+    print('dsd');
     isWorking = true;
     notifyListeners();
     initialData = await getDataFromPackage;
@@ -89,8 +93,13 @@ class AuthPageViewmodel with ChangeNotifier {
     context,
   );
 
-// Future<void> onPressedFacebook(BuildContext context) async => await onPressed(
-//       _facebookAuthRepository.getInitialDataFromPackage(),
-//       context,
-//     );
+Future<void> onPressedFacebook(BuildContext context) async => await onPressed(
+      _facebookAuthRepository.getInitialDataFromPackage(),
+      context,
+    );
+
+  Future<void> onPressedApple(BuildContext context) async => await onPressed(
+    _appleAuthRepository.getInitialDataFromPackage(),
+    context,
+  );
 }
