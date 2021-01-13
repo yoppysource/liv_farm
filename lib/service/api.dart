@@ -13,6 +13,7 @@ enum Endpoint {
   reviewGet,
   reviewPost,
   recentCart,
+  inventories,
 }
 
 class API {
@@ -46,6 +47,7 @@ class API {
     Endpoint.customersSnsId: 'admin/Customers/sns_id',
     Endpoint.reviewPost: 'admin/reviews',
     Endpoint.reviewGet: 'admin/product_reviews',
-    Endpoint.recentCart: 'admin/carts_recent',
+    Endpoint.recentCart: 'admin/carts_recent_items',
+    Endpoint.inventories: 'admin/inventories_product'
   };
 }

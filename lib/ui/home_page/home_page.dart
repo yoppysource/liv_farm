@@ -12,6 +12,8 @@ import 'package:liv_farm/ui/shopping_cart_page/shopping_cart_page.dart';
 import 'package:liv_farm/viewmodel/home_page_view_model.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/my_farm_page_view_model.dart';
+import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
+import 'package:liv_farm/viewmodel/shopping_cart_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,6 +49,12 @@ class _HomePageState extends State<HomePage> {
       setState(() => _currentTab = tabItem);
     }
   }
+  @override
+  void initState() {
+    if (mounted)
+    Provider.of<OnlineShoppingViewmodel>(context, listen: false).init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +82,7 @@ class TabItemData {
   static const Map<TabItem, TabItemData> allTabs = {
     TabItem.home: TabItemData(title: '홈', icon: CupertinoIcons.home),
     TabItem.onlineShopping: TabItemData(title: '카테고리', icon: CupertinoIcons.list_bullet),
-    TabItem.myFarm: TabItemData(title: '내 정보', icon: CupertinoIcons.person),
+    TabItem.myFarm: TabItemData(title: '마이 팜', icon: CupertinoIcons.person),
     TabItem.shoppingCart: TabItemData(title: '장바구니', icon: UiIcons.shoppingCart),
   };
 }

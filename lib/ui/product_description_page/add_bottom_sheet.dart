@@ -4,13 +4,15 @@ import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
+import 'package:liv_farm/ui/shared/toast_msg.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
 import 'package:provider/provider.dart';
 
 class AddBottomSheet extends StatefulWidget {
   final Product product;
+  final int inventory;
 
-  const AddBottomSheet({Key key, this.product}) : super(key: key);
+  const AddBottomSheet({Key key, this.product, this.inventory}) : super(key: key);
 
   @override
   _AddBottomSheetState createState() => _AddBottomSheetState();
@@ -59,7 +61,10 @@ class _AddBottomSheetState extends State<AddBottomSheet> with Formatter {
                       padding: EdgeInsets.zero,
                         splashRadius: 1,
                         icon: Icon(Icons.add),
-                        onPressed: (){
+                        onPressed: widget.inventory <= widget.product.productQuantity ? () {
+                        ToastMessage().showInventoryErrorToast();
+                        }:
+                            (){
                           setState(() {
                             widget.product.productQuantity += 1;
                           });

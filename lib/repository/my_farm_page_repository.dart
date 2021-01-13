@@ -19,7 +19,7 @@ class MyFarmPageRepository {
     Map<String, dynamic> result = await _purchaseServerService.getData(
       params1: '/customer',
       //TODO: For testing
-      params2: '/32',
+      params2: '/$customerId',
     );
     if (result[MSG] == MSG_success) {
       List<dynamic> purchasesDataList = result[KEY_Result].cast() as List;
@@ -40,7 +40,7 @@ class MyFarmPageRepository {
 
   Future<Map> fetchProductIdPairedWithQuantity(Purchase purchase) async {
     try {
-      Map<int, int> productIdPairedWithQuantity = Map();
+      Map<int, int>productIdWithQuantity = Map();
       dynamic data = await _historyServerService.getData(
           params1: '/${purchase.cartId}');
       if(data[MSG] == MSG_fail){
@@ -52,18 +52,18 @@ class MyFarmPageRepository {
       for (Map data in dataList) {
         if (data[KEY_productQuantity] == 0) {
           continue;
-        } else if (productIdPairedWithQuantity.keys.
+        } else if (productIdWithQuantity.keys.
             contains(data[KEY_productID])) {
-          productIdPairedWithQuantity[data[KEY_productID]] +=
+          productIdWithQuantity[data[KEY_productID]] +=
               data[KEY_productQuantity];
           continue;
         } else {
-          productIdPairedWithQuantity[data[KEY_productID]] =
+          productIdWithQuantity[data[KEY_productID]] =
               data[KEY_productQuantity];
         }
         print('done');
       }
-      return productIdPairedWithQuantity;
+      return productIdWithQuantity;
     } catch (e) {
       print(e.toString());
       return null;

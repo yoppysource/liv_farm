@@ -14,6 +14,7 @@ class PlatformDatePicker extends PlatformWidget {
   Future<DateTime> show(BuildContext context) async {
     return Platform.isIOS
         ? await showModalBottomSheet(
+
       backgroundColor: Colors.white,
             context: context,
             builder: (context) => this.buildCupertinoWidget(context),
@@ -30,6 +31,7 @@ class PlatformDatePicker extends PlatformWidget {
     return Container(
       height: 300,
       child: CupertinoDatePicker(
+
           onDateTimeChanged: onDateTimeChanged,
           mode: CupertinoDatePickerMode.date,
           //TODO: 한국어로 만들기. 성별 만들기.

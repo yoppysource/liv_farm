@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/product.dart';
+import 'package:liv_farm/repository/inventory_repository.dart';
 import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 import 'package:liv_farm/ui/shared/appbar.dart';
+import 'package:liv_farm/ui/shared/buttons/bottom_float_buttom.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
@@ -22,18 +24,12 @@ class RecommendationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 3,
-            ),
-            Center(
-              child: TitleText(
-                text: '이런 상품은 어떠세요?',
-              ),
+              height: 20,
             ),
             TitleText(
               text: '샐러드에 프로틴 추가!',
@@ -53,26 +49,15 @@ class RecommendationPage extends StatelessWidget {
                 productList: dressingProductList,
               ),
             ),
-            Center(
-              child: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: FlatButton(
-                      color: Color(kMainColor).withOpacity(0.9),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        '뒤로 가기',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-            ),
-            SizedBox(
-              height: 10,
+            BottomFloatButton(
+              text:  '뒤로 가기',
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -153,8 +138,9 @@ class ProductListView extends StatelessWidget with Formatter {
                         icon: Icon(FontAwesomeIcons.cartPlus,
                             size: 20,
                             color: Color(kMainColor).withOpacity(0.7)),
-                        onPressed: () {
-                          Provider.of<ShoppingCartViewmodel>(context,listen: false).addProduct(Product.copy(productList[index]), Provider.of<LandingPageViewModel>(context,listen: false).user.id);
+                        onPressed: () async {
+                          int inventory = await InventoryRepository().getInventoryNum(productList[index].id);
+                          Provider.of<ShoppingCartViewmodel>(context,listen: false).addProduct(Product.copy(productList[index]), Provider.of<LandingPageViewModel>(context,listen: false).user.id, inventory);
                         }))
               ],
             ),

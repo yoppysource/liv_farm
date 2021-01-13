@@ -1,53 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/review.dart';
+import 'package:liv_farm/ui/shared/my_card.dart';
+import 'package:liv_farm/viewmodel/product_description_view_model.dart';
 import 'package:liv_farm/viewmodel/review_page_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ReviewPageViewModel _model = Provider.of<ReviewPageViewModel>(context,listen: true);
-    if(_model.isBusy){
-      return Center(
-        child: SizedBox(
+    ProductDescriptionViewmodel _model =
+        Provider.of<ProductDescriptionViewmodel>(context, listen: true);
+    if (_model.isLazyLoaded == false) {
+      return SizedBox(
           height: 100,
-            width: 100,
-            child: CircularProgressIndicator()),
-      );
+          width: 100,
+          child: Center(child: CircularProgressIndicator()));
+    } else if (_model.reviewList.isEmpty) {
+      return SizedBox(
+          height: 100, width: 100, child: Center(child: Text('등록된 리뷰가 없습니다')));
     }
-    else if(_model.reviewList.isEmpty){
-      return Center(
-        child: Text('등록된 리뷰가 없습니다'),
-      );
+    else{
+    return Column(
+      children: _model.reviewList.map((e) => ReviewTile(review: e,)).toList()
+      ,
+    );
     }
-    return ListView.builder(
-      shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        itemCount: _model.reviewList.length,
-        itemBuilder: (context, index) => ReviewTile(review: _model.reviewList[index],),
-        );
   }
 }
 
-class ReviewTile extends StatelessWidget {
+class ReviewTile extends StatelessWidget with Formatter {
   final Review review;
 
   const ReviewTile({Key key, this.review}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(review.comment, style: TextStyle(fontSize:15),),
-      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-      trailing: RatingBarIndicator(
-        itemSize: 20,
-        rating: review.rating,
-        itemBuilder: (context, _) => Icon(
-          Icons.star,
-          color: Colors.greenAccent,
+    return MyCard(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('${getStringFromDatetime(review.createAt)}'),
+                RatingBarIndicator(
+                  itemSize: 20,
+                  rating: review.rating,
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.greenAccent,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              review.comment,
+              style: TextStyle(fontSize: 15),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
     );
+
+    //   ListTile(
+    //
+    //   title: Text(review.comment, style: TextStyle(fontSize:15),),
+    //   contentPadding: EdgeInsets.symmetric(horizontal: 20),
+    //   trailing: RatingBarIndicator(
+    //     itemSize: 20,
+    //     rating: review.rating,
+    //     itemBuilder: (context, _) => Icon(
+    //       Icons.star,
+    //       color: Colors.greenAccent,
+    //     ),
+    //   ),
+    // );
   }
 }
-

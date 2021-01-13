@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/cart_item.dart';
 import 'package:liv_farm/model/my_user.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/purchase.dart';
+import 'package:liv_farm/repository/inventory_repository.dart';
 import 'package:liv_farm/repository/online_shopping_repository.dart';
 import 'package:liv_farm/repository/shopping_cart_repository.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
 
 class ShoppingCartViewmodel with ChangeNotifier {
   MyUser myUser;
-  List<Product> shoppingCart = [];
+  List<CartItem> shoppingCart = [];
 
   get deliveryFee {
     if (shoppingCart.isNotEmpty) {
@@ -42,8 +44,7 @@ class ShoppingCartViewmodel with ChangeNotifier {
     }
     int sumOfPrice = 0;
     for (int i = 0; i < shoppingCart.length; i++) {
-      sumOfPrice +=
-          (shoppingCart[i].productQuantity * shoppingCart[i].productPrice);
+      sumOfPrice += shoppingCart[i].totalPrice;
     }
     return sumOfPrice;
   }
@@ -52,11 +53,9 @@ class ShoppingCartViewmodel with ChangeNotifier {
 
   ShoppingCartViewmodel(MyUser user) {
     myUser = user;
-    Future.microtask(() async => await init());
+    init();
   }
 
-  OnlineShoppingRepository _onlineShoppingRepository =
-      OnlineShoppingRepository();
   ShoppingCartRepository _shoppingCartRepository = ShoppingCartRepository();
 
   Future<void> init() async {
@@ -64,39 +63,36 @@ class ShoppingCartViewmodel with ChangeNotifier {
     data[KEY_customer_uid] = myUser.id;
     data[KEY_cartStatus] = 0;
     print(data.toString());
-    List cartRawList = await _shoppingCartRepository.fetchInitialCart(data);
-    if (cartRawList != null && cartRawList.isNotEmpty) {
-      List<Product> productList =
-          await _onlineShoppingRepository.fetchProductListFromServer();
-      this.shoppingCartID = cartRawList[0][KEY_cartID];
-      List<Product> initProductList = cartRawList
-          .map((i) {
-            Product product = productList
-                .firstWhere((product) => product.id == i[KEY_productID]);
-            print('${i[KEY_productQuantity]}');
-            product.productQuantity = i[KEY_productQuantity];
-            return product;
-          })
-          .toList()
-          .reversed
-          .toList();
-      print('${initProductList[0].productQuantity.toString()} g한');
-      shoppingCart = initProductList;
+    List<CartItem> initShoppingCart = await _shoppingCartRepository.fetchInitialCart(data);
+    if (initShoppingCart.isNotEmpty) {
+      this.shoppingCartID = initShoppingCart[0].cartId;
+      this.shoppingCart = initShoppingCart;
       notifyListeners();
+    }else{
+      shoppingCart = List<CartItem>();
     }
   }
 
-  Purchase createPurchaseData() {
+  Future<Purchase> createPurchaseData() async {
+    for (CartItem item in this.shoppingCart) {
+      int inventory = await InventoryRepository().getInventoryNum(item.productId);
+      if(item.quantity > inventory){
+        return null;
+      }
+    }
+
+
     return Purchase(
       customerId: myUser.id,
       cartId: shoppingCartID,
+      purchaseStatus: 0,
       deliveryAddress: "${myUser.address} ${myUser.addressDetail}",
       deliveryOption: 0,
       orderTimestamp: DateTime.now().toIso8601String(),
     );
   }
 
-  Future<void> addProduct(Product product, int customerId) async {
+  Future<void> addProduct(Product product, int customerId, int inventory) async {
     print('addProduct');
     print('shopping_list_length : ${shoppingCart.length}');
 
@@ -113,26 +109,29 @@ class ShoppingCartViewmodel with ChangeNotifier {
       this.shoppingCartID = result;
       print(shoppingCartID);
     } else {
-      for (Product existedProduct in shoppingCart) {
-        if (existedProduct.id == product.id) {
-          print('중복되는 상품 : ' + existedProduct.id.toString());
-          existedProduct.productQuantity += product.productQuantity;
-        int cartItemsId = await _shoppingCartRepository.getCartItemsId(this.shoppingCartID, product.id);
-        if(cartItemsId == null){
-          ToastMessage().showErrorToast();
-          return;
-        }
-        await _shoppingCartRepository.overrideCartItems(
-            {KEY_productQuantity: product.productQuantity},
-              this.shoppingCartID,
-             cartItemsId);
+      for (CartItem item in shoppingCart) {
+        if (item.productId == product.id) {
+          await changeQuantityOfProduct(item, product.productQuantity);
+          ToastMessage().showCartAddQuantityToast();
           return;
         }
       }
     }
-    await _shoppingCartRepository.postCartItems(
-        product.toJson(), this.shoppingCartID);
-    shoppingCart.add(product);
+    CartItem cartItem = CartItem(
+      cartId: this.shoppingCartID,
+      productId: product.id,
+      quantity: product.productQuantity,
+      totalPrice: product.productPrice*product.productQuantity,
+      inventory: inventory,
+    );
+    int cartItemId = await _shoppingCartRepository.postCartItems(
+       cartItem.toJson());
+    if(cartItemId == null){
+      ToastMessage().showErrorToast();
+      return;
+    }
+    cartItem.cartItemId = cartItemId;
+    shoppingCart.add(cartItem);
     notifyListeners();
     ToastMessage().showCartSuccessToast();
   }
@@ -141,52 +140,32 @@ class ShoppingCartViewmodel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteProduct(Product product) async {
-    product.productQuantity = 0;
-    int cartItemsId = await _shoppingCartRepository.getCartItemsId(this.shoppingCartID, product.id);
-    if(cartItemsId == null){
-      ToastMessage().showErrorToast();
-      return;
-    }
+  Future<void> deleteProduct(CartItem cartItem) async {
+    cartItem.quantity = 0;
     await _shoppingCartRepository.overrideCartItems(
-        {KEY_productQuantity: product.productQuantity},
+        {KEY_productQuantity: 0},
         this.shoppingCartID,
-        cartItemsId);
-    shoppingCart.remove(product);
+        cartItem.cartItemId);
+    shoppingCart.remove(cartItem);
     notifyListeners();
   }
 
-  Future<void> addQuantityOfProduct(Product product) async {
-    product.productQuantity += 1;
-    int cartItemsId = await _shoppingCartRepository.getCartItemsId(this.shoppingCartID, product.id);
-    if(cartItemsId == null){
-      ToastMessage().showErrorToast();
+  Future<void> changeQuantityOfProduct(CartItem cartItem ,int num) async {
+    if((cartItem.inventory <= cartItem.quantity) && (num>0)){
+      ToastMessage().showInventoryErrorToast();
       return;
     }
+    int price = cartItem.totalPrice~/cartItem.quantity;
+    cartItem.totalPrice += price*num;
+    cartItem.quantity += num;
+    notifyListeners();
     Map result = await _shoppingCartRepository.overrideCartItems(
-        {KEY_productQuantity: product.productQuantity},
+        {KEY_productQuantity: cartItem.quantity,
+          KEY_totalPrice: cartItem.totalPrice,
+        },
         this.shoppingCartID,
-        cartItemsId);
+        cartItem.cartItemId);
     print(result.toString());
-    notifyListeners();
-  }
-
-  Future<void> removeQuantityOfProduct(Product product) async {
-    if (product.productQuantity == 1) {
-      await deleteProduct(product);
-      notifyListeners();
-    }
-    product.productQuantity -= 1;
-    notifyListeners();
-    int cartItemsId = await _shoppingCartRepository.getCartItemsId(this.shoppingCartID, product.id);
-    if(cartItemsId == null){
-      ToastMessage().showErrorToast();
-      return;
-    }
-    await _shoppingCartRepository.overrideCartItems(
-        {KEY_productQuantity: product.productQuantity},
-        this.shoppingCartID,
-        cartItemsId);
     notifyListeners();
   }
 

@@ -21,9 +21,6 @@ class UserInputPageViewModel extends InputValidatorsForOrder
   DateTime selectedBirthDate;
   String selectedPostCode;
   String selectedAddress;
-
-
-  //0이면 남자 1이면 여자
   String selectedGender;
 
   bool isInformationAvailable(String addressDetail, String phoneNumber, String name){

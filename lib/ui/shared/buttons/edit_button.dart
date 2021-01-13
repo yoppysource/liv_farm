@@ -20,7 +20,7 @@ class EditButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
-            color: Color(0xffC5299B),
+            color: Color(0xffC5299B).withOpacity(0.85),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

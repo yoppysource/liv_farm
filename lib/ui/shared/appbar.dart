@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/constant.dart';
-import 'package:liv_farm/ui/online_shopping_page/my_drawer.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

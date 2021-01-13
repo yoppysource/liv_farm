@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/formatter.dart';
+import 'package:liv_farm/model/cart_item.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
+import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:liv_farm/viewmodel/shopping_cart_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CartListTile extends StatelessWidget with Formatter {
-  final Product product;
+  final CartItem cartItem;
 
-  const CartListTile({Key key, this.product}) : super(key: key);
+  const CartListTile({Key key, this.cartItem}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    Product product =  Provider.of<OnlineShoppingViewmodel>(context,listen: true).productList.firstWhere((element) {
+      return element.id == cartItem.productId;
+    });
     ShoppingCartViewmodel _model = Provider.of<ShoppingCartViewmodel>(context,listen: false);
     return Container(
       height: 100,
@@ -34,10 +40,13 @@ class CartListTile extends StatelessWidget with Formatter {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                TitleText(
-                  text: product.productName,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: TitleText(
+                    text: product.productName,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 TitleText(
                   text: getPriceFromInt(product.productPrice),
@@ -49,6 +58,7 @@ class CartListTile extends StatelessWidget with Formatter {
           ),
           Expanded(
             child: Container(
+              margin: EdgeInsets.only(left: 3),
               decoration: BoxDecoration(
                 border: Border.all(width: 0.5, color: Colors.blueGrey),
                   borderRadius: BorderRadius.circular(5),
@@ -64,16 +74,16 @@ class CartListTile extends StatelessWidget with Formatter {
                       padding: EdgeInsets.zero,
                       iconSize: 18,
                       disabledColor: Colors.transparent,
-                      onPressed: product.productQuantity <= 1
+                      onPressed: cartItem.quantity <= 1
                           ? null
                           : () {
-                        _model.removeQuantityOfProduct(product);
+                        _model.changeQuantityOfProduct(cartItem, -1);
                       },
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      '${product.productQuantity}',
+                      '${cartItem.quantity}',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -84,7 +94,7 @@ class CartListTile extends StatelessWidget with Formatter {
                         padding: EdgeInsets.zero,
                         iconSize: 18,
                         onPressed: () {
-                          _model.addQuantityOfProduct(product);
+                          _model.changeQuantityOfProduct(cartItem, 1);
                         },
                       ),
                     ),
@@ -100,7 +110,7 @@ class CartListTile extends StatelessWidget with Formatter {
               splashRadius: 0.1,
               icon: Icon(Icons.clear,size: 19,), color: Colors.grey.withOpacity(0.8),
             onPressed: (){
-              _model.deleteProduct(product);
+              _model.deleteProduct(cartItem);
             },
             ),
           )),

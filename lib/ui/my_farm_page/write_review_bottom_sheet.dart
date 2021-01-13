@@ -49,7 +49,7 @@ class _ReviewWriteBottomSheetState extends State<ReviewWriteBottomSheet> {
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
             Icons.star,
-            color: Colors.amber,
+            color: Colors.greenAccent,
           ),
           onRatingUpdate: (r) {
             setState(() {

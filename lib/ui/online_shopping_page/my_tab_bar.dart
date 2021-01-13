@@ -30,13 +30,19 @@ class MyTabBar extends StatelessWidget {
         tabs: [
           Tab(
             child: Text(
-              '샐러드',
+              '키트',
               style: TextStyle(color: Colors.black),
             ),
           ),
           Tab(
             child: Text(
-              '샘플러',
+              '곁들임',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          Tab(
+            child: Text(
+              '상추',
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -48,14 +54,8 @@ class MyTabBar extends StatelessWidget {
           ),
           Tab(
             child: Text(
-              '곁드림',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          Tab(
-            child: Text(
-              '드레싱',
-              style: TextStyle(color: Colors.black),
+              '허브',
+             style: TextStyle(color: Colors.black),
             ),
           ),
         ]);

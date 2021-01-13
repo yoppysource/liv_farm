@@ -1,20 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/constant.dart';
-import 'package:liv_farm/formatter.dart';
-import 'package:liv_farm/main.dart';
-import 'package:liv_farm/ui/farm_video_page.dart';
+import 'package:liv_farm/model/product.dart';
+import 'package:liv_farm/ui/online_shopping_page/product_search_delegate.dart';
 import 'package:liv_farm/ui/online_shopping_page/shopping_bar_view.dart';
+import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 import 'package:liv_farm/ui/shared/appbar.dart';
-import 'package:liv_farm/ui/shared/buttons/in_app_button.dart';
 import 'package:liv_farm/ui/shared/buttons/refresh_button.dart';
 import 'package:liv_farm/ui/shared/platform_widget/dialogs/platform_exception_alert_dialog.dart';
-import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
+import 'package:liv_farm/viewmodel/product_description_view_model.dart';
+import 'package:liv_farm/viewmodel/review_page_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'my_drawer.dart';
 import 'my_tab_bar.dart';
 
 class OnlineShoppingPage extends StatefulWidget {
@@ -31,7 +28,6 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this, initialIndex: index);
-    Provider.of<OnlineShoppingViewmodel>(context, listen: false).init();
   }
 
   @override
@@ -41,7 +37,6 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
     //List must be checked with isEmpty method.
     if (_model.productList == null) {
       return Scaffold(
-        drawer: MyDrawer(),
         appBar: MyAppBar(),
         body: Center(
           child: CircularProgressIndicator(),
@@ -52,7 +47,6 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
               title: '서버 오류', content: '데이터 정보를 가져오는데 실패했습니다.')
           .show(context);
       return Scaffold(
-        drawer: MyDrawer(),
         appBar: MyAppBar(),
         body: Center(
           child: RefreshButton(onPressed: () async => _model.init()),
@@ -60,16 +54,47 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
       );
     } else {
       return Scaffold(
-        drawer: MyDrawer(),
         appBar: AppBar(
-          actions: [IconButton(icon: Icon(CupertinoIcons.search), onPressed: (){})],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                  icon: Icon(CupertinoIcons.search),
+                  onPressed: () async {
+                    String productName = await showSearch(
+                        context: context,
+                        delegate: ProductSearch(_model.productList));
+                    if (productName != null) {
+                      Product searchedProduct = _model.productList.firstWhere(
+                          (element) => element.productName == productName);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ChangeNotifierProvider(
+                                create: (context) =>
+                                    ProductDescriptionViewmodel(
+                                      product: searchedProduct,
+                                    ),
+                                child:  ProductDescriptionPage(),
+                              ),
+                             ),
+                      );
+                    }
+                  }),
+            )
+          ],
           title: SizedBox(
               height: 40,
               width: 80,
-              child: Image.asset(kLogo,color: Color(kMainColor),)),
+              child: Image.asset(
+                kLogo,
+                color: Color(kMainColor),
+              )),
           elevation: 0,
           backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black87),),
+          iconTheme: IconThemeData(color: Colors.black87),
+        ),
         body: DefaultTabController(
           length: 5,
           initialIndex: 0,
@@ -92,4 +117,3 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
     }
   }
 }
-

@@ -1,4 +1,6 @@
 import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/cart_item.dart';
+import 'package:liv_farm/repository/inventory_repository.dart';
 import 'package:liv_farm/service/api.dart';
 import 'package:liv_farm/service/server_service.dart';
 
@@ -14,19 +16,31 @@ class ShoppingCartRepository {
     try {
       Map result = await _recentCartService.postData(data: data);
       if (result[MSG] == MSG_success) {
-        return result[KEY_Result].cast() as List;
+        List dataList = result[KEY_Result].cast() as List;
+        List<CartItem> initialCart = dataList.map((e) => CartItem.fromJson(e)).toList();
+        if(initialCart.isNotEmpty){
+          for (CartItem item in initialCart) {
+           int inventory = await InventoryRepository().getInventoryNum(item.productId);
+           item.inventory = inventory;
+          }
+        }
+        return initialCart;
       } else {
-        return null;
+        return List<CartItem>();
       }
     } catch (e) {
       print(e.toString());
-      return null;
+      return List<CartItem>();
     }
   }
 
-  Future<void> postCartItems(Map data, int cartID) async {
-    data[KEY_cartID] = cartID;
-    await _cartItemsService.postData(data: data);
+  Future<int> postCartItems(Map data) async {
+   Map result =  await _cartItemsService.postData(data: data);
+    if (result[MSG] == MSG_success) {
+      return result[KEY_Result]['cart_item_id'];
+    } else {
+      return null;
+    }
   }
 
   Future<int> postCartForInitAdd(Map data) async {

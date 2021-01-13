@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/my_farm_page/detailed_purchase_log_page.dart';
+import 'package:liv_farm/ui/shared/buttons/refresh_button.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
 import 'package:liv_farm/viewmodel/detailed_purchase_view_model.dart';
@@ -23,7 +24,16 @@ class OrderStatusCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TitleText(text: '주문/배송조회'),
+              Row(
+                children: [
+                  TitleText(text: '주문/배송조회'),
+                  RefreshButton(
+                    iconSize: 23,
+                    onPressed: () async {
+                    await _model.init();
+                  },)
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
                 child: InkWell(

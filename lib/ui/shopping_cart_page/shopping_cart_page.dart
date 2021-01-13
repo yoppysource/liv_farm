@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/purchase.dart';
-import 'package:liv_farm/ui/online_shopping_page/my_drawer.dart';
 import 'package:liv_farm/ui/payment_page.dart';
 import 'package:liv_farm/ui/shared/appbar.dart';
+import 'package:liv_farm/ui/shared/buttons/bottom_float_buttom.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
@@ -21,8 +21,8 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
   Widget build(BuildContext context) {
     ShoppingCartViewmodel _model =
         Provider.of<ShoppingCartViewmodel>(context, listen: true);
+
     return Scaffold(
-      drawer: MyDrawer(),
       appBar: MyAppBar(
         title: '장바구니',
       ),
@@ -98,7 +98,7 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
                                   );
                                 }
                                 return CartListTile(
-                                    product: _model.shoppingCart[index - 1]);
+                                    cartItem: _model.shoppingCart[index - 1]);
                               },
                               separatorBuilder: (context, index) => Divider(
                                 height: 0.5,
@@ -127,10 +127,12 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
                         trailing: Text(
                             getPriceFromInt(_model.deliveryFee).toString()),
                       ),
-                      Container(
-                        height: 0.2,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        decoration: BoxDecoration(color: Colors.black54),
+                      Center(
+                        child: Container(
+                          height: 0.2,
+                          width: MediaQuery.of(context).size.width * 0.93,
+                          decoration: BoxDecoration(color: Colors.black54),
+                        ),
                       ),
                       ListTile(
                         title: Text('총 금액'),
@@ -146,50 +148,42 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: FlatButton(
-                disabledColor: Colors.grey,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Color(kMainColor),
-                child: Text(
-                  _model.isInformationAvailable
-                      ? _model.totalAmount == 0
-                          ? '물품을 담아주세요'
-                          : '결제하기'
-                      : '배송 정보를 입력해주세요',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: _model.isInformationAvailable
-                    ? _model.totalAmount == 0
-                        ? null
-                        : () async {
-                            Purchase purchase = _model.createPurchaseData();
-                            bool isSuccess = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider<PaymentViewModel>(
-                                    create: (context) => PaymentViewModel(
-                                        purchase: purchase,
-                                        totalAmount: _model.totalAmount),
-                                    child: PaymentPage(),
-                                  ),
-                                ));
-                            if (isSuccess) {
-                              _model.clearCart();
-                              ToastMessage().showPurchaseSuccessToast();
-                            } else {
-                              ToastMessage().showPurchaseFailToast();
-                            }
-                          }
-                    : null,
-              ),
-            ),
-          )
+          BottomFloatButton(
+            text:  _model.isInformationAvailable
+                ? _model.totalAmount == 0
+                ? '물품을 담아주세요'
+                : '결제하기'
+                : '배송 정보를 입력해주세요',
+            onPressed:  _model.isInformationAvailable
+                ? _model.totalAmount == 0
+                ? null
+                : () async {
+              Purchase purchase = await _model.createPurchaseData();
+              if(purchase ==null) {
+                ToastMessage().showPurchaseFailByInventoryToast();
+                return;
+              }
+              bool isSuccess = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ChangeNotifierProvider<PaymentViewModel>(
+                          create: (context) => PaymentViewModel(
+                              purchase: purchase,
+                              totalAmount: _model.totalAmount),
+                          child: PaymentPage(),
+                        ),
+                  ));
+              if (isSuccess) {
+                _model.clearCart();
+                ToastMessage().showPurchaseSuccessToast();
+                await Provider.of<MyFarmPageViewModel>(context, listen: false).init();
+              } else {
+                ToastMessage().showPurchaseFailToast();
+              }
+            }
+                : null,
+          ),
         ],
       ),
     );

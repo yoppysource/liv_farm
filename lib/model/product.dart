@@ -16,10 +16,6 @@ class Product {
   int productQuantity;
   final int productCategory;
   final String productIntro;
-  final int productHardness;
-  final int productTaste;
-  final String productStorageDes;
-  final String productRecipe;
 
   Product(
       {@required this.id,
@@ -31,13 +27,20 @@ class Product {
       @required this.imagePath,
       @required this.productCategory,
       @required this.productIntro,
-      @required this.productHardness,
-      @required this.productTaste,
-      @required this.productStorageDes,
-      @required this.productRecipe,
       this.productQuantity});
 
   //json -> object
+  static Map<int, String> categoryMap= {
+  1: '샐러드',
+  2: '샘플러',
+  4:  '상추',
+  5: '치커리',
+  6: '케일',
+  7: '청경채',
+  8: '허브',
+  9: '프로틴',
+  10: '드레싱',
+  };
 
 
   factory Product.fromJson({Map<String, dynamic> data}) {
@@ -52,12 +55,8 @@ class Product {
       productLocation: data[KEY_productLocation],
       productDescription: data[KEY_productDescription],
       imagePath: data[KEY_imagePath],
-      productCategory: data[KEY_productCategory],
+      productCategory: int.tryParse(data[KEY_productCategory]),
       productIntro: data[KEY_productIntro],
-      productHardness: data[KEY_productHardness],
-      productTaste: data[KEY_productTaste],
-      productStorageDes: data[KEY_productStorageDes],
-      productRecipe: data[KEY_productRecipe],
       // if quantity is null(when user scan the product initially), should be 1.
       productQuantity: data[KEY_productQuantity] ?? 1,
     );
@@ -74,21 +73,8 @@ class Product {
       imagePath: product.imagePath,
       productCategory: product.productCategory,
       productIntro: product.productIntro,
-      productHardness:product.productHardness,
-      productTaste: product.productTaste,
-      productStorageDes: product.productStorageDes,
-      productRecipe: product.productRecipe,
       // if quantity is null(when user scan the product initially), should be 1.
       productQuantity: 1,
     );
   }
-  // Send to server
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      KEY_productID: id,
-      KEY_productQuantity: productQuantity,
-      KEY_totalPrice: productPrice * productQuantity,
-    };
-  }
-
 }
