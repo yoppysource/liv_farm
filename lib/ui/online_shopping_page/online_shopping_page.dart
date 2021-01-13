@@ -27,7 +27,7 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this, initialIndex: index);
+    _tabController = TabController(length: 4, vsync: this, initialIndex: index);
   }
 
   @override
@@ -96,7 +96,7 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
           iconTheme: IconThemeData(color: Colors.black87),
         ),
         body: DefaultTabController(
-          length: 5,
+          length: 4,
           initialIndex: 0,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

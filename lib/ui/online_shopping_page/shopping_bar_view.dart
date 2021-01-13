@@ -25,10 +25,10 @@ class ShoppingBarView extends StatelessWidget with Formatter {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 13),
+        padding: const EdgeInsets.symmetric(horizontal: 22),
         child: TabBarView(controller: _tabController, children: [
           ProductGridView(categoryList: [1, 2]),
-          ProductGridView(categoryList: [9, 10]),
+          // ProductGridView(categoryList: [9, 10]),
           ProductGridView(categoryList: [4]),
           ProductGridView(categoryList: [6, 7]),
           ProductGridView(categoryList: [8]),

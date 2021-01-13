@@ -39,3 +39,8 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+ios/Runner/Info.plis
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+android/app/src/main/AndroidManifest.xml

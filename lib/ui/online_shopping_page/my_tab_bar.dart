@@ -25,7 +25,7 @@ class MyTabBar extends StatelessWidget {
         indicator: UnderlineTabIndicator(
             borderSide:
             BorderSide(width: 3, color: Color(kMainColor)),
-            insets: EdgeInsets.symmetric(horizontal:26, vertical: 10)),
+            insets: EdgeInsets.symmetric(horizontal:35, vertical: 10)),
         controller: _tabController,
         tabs: [
           Tab(
@@ -34,12 +34,12 @@ class MyTabBar extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
           ),
-          Tab(
-            child: Text(
-              '곁들임',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
+          // Tab(
+          //   child: Text(
+          //     '곁들임',
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          // ),
           Tab(
             child: Text(
               '상추',
@@ -48,7 +48,7 @@ class MyTabBar extends StatelessWidget {
           ),
           Tab(
             child: Text(
-              '채소',
+              '특수채소',
               style: TextStyle(color: Colors.black),
             ),
           ),

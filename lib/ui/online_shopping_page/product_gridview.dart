@@ -7,6 +7,7 @@ import 'package:liv_farm/ui/icons.dart';
 import 'package:liv_farm/ui/product_description_page/add_bottom_sheet.dart';
 import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
+import 'package:liv_farm/viewmodel/add_bottom_sheet_view_model.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
@@ -184,26 +185,30 @@ class _ProductGridViewState extends State<ProductGridView> with Formatter {
                                         ToastMessage().msg('재고가 부족합니다');
                                         return;
                                       }
-                                    dynamic isAdded = await showBarModalBottomSheet(
+                                    List<Product> temp = await showBarModalBottomSheet(
                                       context: context,
                                       barrierColor: Colors.black.withOpacity(0.5),
                                       shape: Border.all(width: 0.0),
                                       expand: false,
-                                      builder: (context) => AddBottomSheet(
-                                        product: _productList[index],
-                                        inventory: inventory,
-                                      ),
-                                    );
-                                    if (isAdded == true) {
-                                      await Provider.of<ShoppingCartViewmodel>(context,
-                                                listen: false)
+                                      builder: (context) => ChangeNotifierProvider<AddBottomSheetViewModel>(
+                                        create: (context) => AddBottomSheetViewModel(
+                                          productList: Provider.of<OnlineShoppingViewmodel>(context,listen: false).productList,
+                                          selectedProduct: Product.copy(_productList[index]),
+                                        ),
+                                        child: AddBottomSheet(),
+                                      ),);
+                                    if (temp != null) {
+                                      temp.forEach((element) async  {
+                                        await Provider.of<ShoppingCartViewmodel>(context,
+                                            listen: false)
                                             .addProduct(
-                                                Product.copy(_productList[index]),
-                                                Provider.of<LandingPageViewModel>(
-                                                        context,
-                                                        listen: false)
-                                                    .user
-                                                    .id,inventory);
+                                            element,
+                                            Provider.of<LandingPageViewModel>(
+                                                context,
+                                                listen: false)
+                                                .user
+                                                .id,inventory);
+                                      });
                                     }
                                   },
                                   ),),

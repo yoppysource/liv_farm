@@ -8,6 +8,7 @@ import 'package:liv_farm/ui/product_description_page/bottom_tab_bar.dart';
 
 import 'package:liv_farm/ui/recommendation_page.dart';
 import 'package:liv_farm/ui/shared/buttons/bottom_float_buttom.dart';
+import 'package:liv_farm/viewmodel/add_bottom_sheet_view_model.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
@@ -88,30 +89,35 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage>
               ),
             ),
           ),
-          if (_model.isLazyLoaded == true)
+          if (_model.isLazyLoaded == true && !(_model.product.productCategory ==9 || _model.product.productCategory ==10))
             BottomFloatButton(
               text: _model.inventory <= 0 ? '품절된 상품 입니다.' : '장바구니에 담기',
               onPressed: _model.inventory <= 0
                   ? null
                   : () async {
-                      dynamic isAdded = await showBarModalBottomSheet(
-                        context: context,
-                        barrierColor: Colors.black.withOpacity(0.5),
-                        shape: Border.all(width: 0.0),
-                        expand: false,
-                        builder: (context) => AddBottomSheet(
-                          product: _model.product,
-                          inventory: _model.inventory,
-                        ),
-                      );
-                      if (isAdded == true) {
-                        await _shoppingCartViewModel.addProduct(
-                            _model.product,
-                            Provider.of<LandingPageViewModel>(context,
-                                    listen: false)
-                                .user
-                                .id,
-                            _model.inventory);
+                List<Product> temp = await showBarModalBottomSheet(
+                  context: context,
+                  barrierColor: Colors.black.withOpacity(0.5),
+                  shape: Border.all(width: 0.0),
+                  expand: false,
+                  builder: (context) => ChangeNotifierProvider<AddBottomSheetViewModel>(
+                    create: (context) => AddBottomSheetViewModel(
+                      productList: Provider.of<OnlineShoppingViewmodel>(context,listen: false).productList,
+                      selectedProduct: Product.copy(_model.product),
+                    ),
+                    child: AddBottomSheet(),
+                  ),
+                );
+                      if (temp != null) {
+                        temp.forEach((element)async {
+                          await _shoppingCartViewModel.addProduct(
+                              element,
+                              Provider.of<LandingPageViewModel>(context,
+                                  listen: false)
+                                  .user
+                                  .id,
+                              _model.inventory);
+                        });
                         Navigator.pop(context);
                         // if (product.productCategory == 1)
                         //   await showBarModalBottomSheet(
