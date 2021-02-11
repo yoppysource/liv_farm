@@ -37,7 +37,7 @@ class ShoppingCartRepository {
   Future<int> postCartItems(Map data) async {
    Map result =  await _cartItemsService.postData(data: data);
     if (result[MSG] == MSG_success) {
-      return result[KEY_Result]['cart_item_id'];
+      return result[KEY_Result];
     } else {
       return null;
     }
@@ -58,16 +58,16 @@ class ShoppingCartRepository {
     }
   }
 
-  Future<int> getCartItemsId(int cardId, int productId) async {
-    Map result = await _cartItemsService.getData(
-        params1: '/$cardId', params2: '/$productId');
-
-    if (result[MSG] == MSG_success) {
-      return result[KEY_Result];
-    } else {
-      return null;
-    }
-  }
+  // Future<int> getCartItemsId(int cardId, int productId) async {
+  //   Map result = await _cartItemsService.getData(
+  //       params1: '/$cardId', params2: '/$productId');
+  //
+  //   if (result[MSG] == MSG_success) {
+  //     return result[KEY_Result];
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Future<Map> overrideCartItems(Map data, int cartId, int cartItemsId) async {
    Map result = await _cartItemsService.postData(

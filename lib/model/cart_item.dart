@@ -1,5 +1,4 @@
 import 'package:liv_farm/constant.dart';
-import 'package:liv_farm/model/product.dart';
 
 class CartItem {
   int cartItemId;

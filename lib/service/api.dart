@@ -14,6 +14,8 @@ enum Endpoint {
   reviewPost,
   recentCart,
   inventories,
+  customerLogs,
+  purchasedProduct
 }
 
 class API {
@@ -24,7 +26,7 @@ class API {
   // 근본은 SQLite로 관리하는게 근본이다(refresh 토큰)
   static String accessToken;
   final Endpoint endpoint;
-  final String host = '34.64.245.117';
+  final String host = '127.0.0.1';
   API({@required this.endpoint});
 
 
@@ -39,15 +41,17 @@ class API {
     Endpoint.login : 'admin/login',
     Endpoint.customers: 'admin/customers',
     Endpoint.carts: 'admin/carts',
-    Endpoint.purchaseHistory : 'admin/cart_items_cart',
+    // Endpoint.purchaseHistory : 'admin/cart_items_cart',
     Endpoint.cartList: 'admin/cart_lists',
     Endpoint.cartItems: 'admin/cart_items',
-    Endpoint.purchases: 'admin/Purchases',
+    Endpoint.purchases: 'admin/purchases',
+    Endpoint.purchasedProduct: 'admin/purchased_product',
     Endpoint.products: 'admin/products/',
     Endpoint.customersSnsId: 'admin/Customers/sns_id',
     Endpoint.reviewPost: 'admin/reviews',
     Endpoint.reviewGet: 'admin/product_reviews',
     Endpoint.recentCart: 'admin/carts_recent_items',
-    Endpoint.inventories: 'admin/inventories_product'
+    Endpoint.inventories: 'admin/inventories_product',
+    Endpoint.customerLogs : "admin/customer_logs"
   };
 }

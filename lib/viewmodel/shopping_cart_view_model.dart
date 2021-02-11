@@ -2,17 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/model/cart_item.dart';
+import 'package:liv_farm/model/coupon.dart';
 import 'package:liv_farm/model/my_user.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/purchase.dart';
 import 'package:liv_farm/repository/inventory_repository.dart';
-import 'package:liv_farm/repository/online_shopping_repository.dart';
 import 'package:liv_farm/repository/shopping_cart_repository.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
 
 class ShoppingCartViewmodel with ChangeNotifier {
   MyUser myUser;
   List<CartItem> shoppingCart = [];
+  Coupon coupon;
+
+  void applyCoupon(Coupon coupon) {
+    this.coupon = coupon;
+    notifyListeners();
+  }
 
   get deliveryFee {
     if (shoppingCart.isNotEmpty) {
@@ -23,7 +29,7 @@ class ShoppingCartViewmodel with ChangeNotifier {
   }
 
   get totalAmount {
-    return deliveryFee + totalPrice;
+    return deliveryFee + totalPrice - discountAmount;
   }
 
   get isInformationAvailable {
@@ -38,15 +44,32 @@ class ShoppingCartViewmodel with ChangeNotifier {
     }
   }
 
-  int get totalPrice {
+    int get totalPrice {
     if (shoppingCart.length == 0) {
       return 0;
     }
+
     int sumOfPrice = 0;
     for (int i = 0; i < shoppingCart.length; i++) {
       sumOfPrice += shoppingCart[i].totalPrice;
     }
     return sumOfPrice;
+  }
+
+  int get discountAmount{
+    if(this.coupon!=null && totalPrice != 0) {
+      if(this.coupon.type == 1) {
+        if(this.coupon.value > totalPrice){
+          return 0;
+        } else {
+          return this.coupon.value.toInt();
+        }
+      } else {
+        return (totalPrice * (coupon.value)).toInt();
+      }
+    } else {
+      return 0;
+    }
   }
 
   int shoppingCartID;
@@ -146,6 +169,7 @@ class ShoppingCartViewmodel with ChangeNotifier {
         {KEY_productQuantity: 0},
         this.shoppingCartID,
         cartItem.cartItemId);
+
     shoppingCart.remove(cartItem);
     notifyListeners();
   }
@@ -168,8 +192,12 @@ class ShoppingCartViewmodel with ChangeNotifier {
     print(result.toString());
     notifyListeners();
   }
+  getCoupon(Coupon coupon) {
+    this.coupon =coupon;
+  }
 
   void clearCart() {
+    this.shoppingCartID = null;
     shoppingCart = [];
     notifyListeners();
   }

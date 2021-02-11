@@ -12,50 +12,26 @@ class MyTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
-        unselectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: Colors.grey,
-            letterSpacing: 1,
-            fontSize: 14),
-        labelStyle: TextStyle(
-          color: Colors.grey,
-          fontSize: 14,
-          letterSpacing: 1,
-        ),
+        labelStyle: Theme.of(context).textTheme.bodyText1,
         indicator: UnderlineTabIndicator(
             borderSide:
             BorderSide(width: 3, color: Color(kMainColor)),
-            insets: EdgeInsets.symmetric(horizontal:35, vertical: 10)),
+            insets: EdgeInsets.symmetric(horizontal:45, vertical: 8)),
         controller: _tabController,
         tabs: [
           Tab(
             child: Text(
-              '키트',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          // Tab(
-          //   child: Text(
-          //     '곁들임',
-          //     style: TextStyle(color: Colors.black),
-          //   ),
-          // ),
-          Tab(
-            child: Text(
-              '상추',
-              style: TextStyle(color: Colors.black),
+              '채소',
             ),
           ),
           Tab(
             child: Text(
-              '특수채소',
-              style: TextStyle(color: Colors.black),
+              '샐러드',
             ),
           ),
           Tab(
             child: Text(
-              '허브',
-             style: TextStyle(color: Colors.black),
+              '모둠채소',
             ),
           ),
         ]);

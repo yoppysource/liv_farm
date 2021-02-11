@@ -17,11 +17,11 @@ class BottomFloatButton extends StatelessWidget {
           disabledColor: Colors.grey,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
-          color: Color(kSubColorRed).withOpacity(0.9),
+          color: Color(kSubColorRed).withOpacity(1),
           child: Text(
             text,
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w700),
+                color: Colors.white, fontWeight: FontWeight.w500),
           ),
           onPressed: onPressed,
         ),

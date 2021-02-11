@@ -114,15 +114,6 @@ class CartListTile extends StatelessWidget with Formatter {
             },
             ),
           )),
-          // SizedBox(
-          //   width: 35,
-          //   child: IconButton(
-          //     icon: Icon(Icons.delete),
-          //     onPressed: () {
-          //       _model.deleteProduct(product);
-          //     },
-          //   ),
-          // ),
         ],
       ),
     );

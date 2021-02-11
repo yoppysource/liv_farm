@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastMessage {
@@ -17,7 +17,7 @@ class ToastMessage {
     Fluttertoast.showToast(msg: '이미 담긴 상품에 수량을 추가하셨습니다.');
   }
   void showInventoryErrorToast() {
-    Fluttertoast.showToast(msg: '재고보다 많이 담을 수 없습니다.');
+    Fluttertoast.showToast(msg: '재고가 부족합니다.');
   }
 
   void showInfoSuccessToast() {
@@ -41,5 +41,9 @@ class ToastMessage {
   }
   void showReviewFailToast() {
     Fluttertoast.showToast(msg: '리뷰 등록에 실패하셨습니다.');
+  }
+
+  void showSystemBackButtonPressed() {
+    Fluttertoast.showToast(msg: '앱을 종료하실려면 한번 더 눌러주세요.');
   }
 }

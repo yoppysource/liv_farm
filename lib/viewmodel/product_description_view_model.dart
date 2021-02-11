@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:liv_farm/formatter.dart';
-import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/review.dart';
 import 'package:liv_farm/repository/inventory_repository.dart';
 import 'package:liv_farm/repository/review_repository.dart';
+import 'package:liv_farm/service/analytic_service.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
+import 'package:liv_farm/utill/get_it.dart';
 
 class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
 
@@ -14,6 +14,7 @@ class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
   int inventory;
   bool isLazyLoaded = false;
   List<Review> reviewList;
+  int bottomTabIndex = 0;
 
   InventoryRepository _repository = InventoryRepository();
   ReviewRepository _reviewRepository = ReviewRepository();
@@ -28,6 +29,7 @@ class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
   Future<void> lazyLoad() async {
     this.inventory = await _repository.getInventoryNum(this.product.id);
     this.reviewList = await _reviewRepository.getReviewData(this.product.id);
+    await locator<AnalyticsService>().logViewItem(id: product.id, productName: product.productName, productCategory: Product.categoryMap[product.productCategory]);
     isLazyLoaded = true;
     notifyListeners();
   }
@@ -48,5 +50,14 @@ class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
       product.productQuantity--;
       notifyListeners();
     }
+  }
+  void onSwipeRight() {
+    bottomTabIndex = 0;
+    notifyListeners();
+  }
+
+  void onSwipeLeft() {
+    bottomTabIndex = 1;
+    notifyListeners();
   }
 }

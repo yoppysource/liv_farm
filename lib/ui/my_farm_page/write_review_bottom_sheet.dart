@@ -22,7 +22,7 @@ class ReviewWriteBottomSheet extends StatefulWidget {
 
 class _ReviewWriteBottomSheetState extends State<ReviewWriteBottomSheet> {
   TextEditingController _reviewController = TextEditingController();
-  double rating = 3;
+  double rating = 5;
 
   @override
   void dispose() {
@@ -49,7 +49,7 @@ class _ReviewWriteBottomSheetState extends State<ReviewWriteBottomSheet> {
           itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
           itemBuilder: (context, _) => Icon(
             Icons.star,
-            color: Colors.greenAccent,
+            color: Color(kSubColorRed),
           ),
           onRatingUpdate: (r) {
             setState(() {

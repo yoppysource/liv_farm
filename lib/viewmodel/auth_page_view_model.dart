@@ -8,14 +8,17 @@ import 'package:liv_farm/repository/auth_page_repository/auth_page_repository.da
 import 'package:liv_farm/repository/auth_page_repository/facebook_auth_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/google_auth_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/kakao_auth_repository.dart';
+import 'package:liv_farm/service/analytic_service.dart';
 import 'package:liv_farm/temp/logger.dart';
 import 'package:liv_farm/ui/shared/platform_widget/dialogs/platform_exception_alert_dialog.dart';
+import 'package:liv_farm/utill/get_it.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 
 class AuthPageViewmodel with ChangeNotifier {
   bool isWorking = true;
   LandingPageViewModel model;
   bool isApple = false;
+  bool isSuccess = false;
   AuthPageRepository _authPageRepository = AuthPageRepository();
   KaKaoAuthRepository _kaKaoAuthRepository = KaKaoAuthRepository();
   GoogleAuthRepository _googleAuthRepository = GoogleAuthRepository();
@@ -34,7 +37,6 @@ class AuthPageViewmodel with ChangeNotifier {
       bool value = await AppleSignIn.isAvailable();
       if (value) {
         isApple = true;
-
       }
     } catch (e) {
       isApple = false;
@@ -47,7 +49,6 @@ class AuthPageViewmodel with ChangeNotifier {
 
   Future<void> onPressed(Future<Map<String, dynamic>> getDataFromPackage,
       BuildContext context) async {
-    print('dsd');
     isWorking = true;
     notifyListeners();
     initialData = await getDataFromPackage;
@@ -77,9 +78,10 @@ class AuthPageViewmodel with ChangeNotifier {
     }
     isWorking = false;
     if (user != null) {
-      //TODO: 죄책감... no other way...
+      await locator<AnalyticsService>().setUserProperties(userId: user.id.toString());
       model.userStatusChanged(user);
       log.methodLog(method: 'notifyListeners In LandingPageViewModel called');
+      isSuccess =true;
     }
     return;
   }

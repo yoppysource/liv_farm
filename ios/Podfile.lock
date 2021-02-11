@@ -6,16 +6,16 @@ PODS:
   - AppAuth/ExternalUserAgent (1.4.0)
   - apple_sign_in (0.0.1):
     - Flutter
-  - FBSDKCoreKit (5.15.1):
-    - FBSDKCoreKit/Basics (= 5.15.1)
-    - FBSDKCoreKit/Core (= 5.15.1)
-  - FBSDKCoreKit/Basics (5.15.1)
-  - FBSDKCoreKit/Core (5.15.1):
+  - FBSDKCoreKit (8.2.0):
+    - FBSDKCoreKit/Basics (= 8.2.0)
+    - FBSDKCoreKit/Core (= 8.2.0)
+  - FBSDKCoreKit/Basics (8.2.0)
+  - FBSDKCoreKit/Core (8.2.0):
     - FBSDKCoreKit/Basics
-  - FBSDKLoginKit (5.15.1):
-    - FBSDKLoginKit/Login (= 5.15.1)
-  - FBSDKLoginKit/Login (5.15.1):
-    - FBSDKCoreKit (~> 5.0)
+  - FBSDKLoginKit (8.2.0):
+    - FBSDKLoginKit/Login (= 8.2.0)
+  - FBSDKLoginKit/Login (8.2.0):
+    - FBSDKCoreKit (~> 8.2.0)
   - Firebase/Analytics (6.33.0):
     - Firebase/Core
   - Firebase/Auth (6.33.0):
@@ -67,15 +67,19 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.7)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
-  - flutter_facebook_login (0.0.1):
-    - FBSDKCoreKit (~> 5.5)
-    - FBSDKLoginKit (~> 5.5)
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+  - flutter_login_facebook (0.3.0):
+    - FBSDKLoginKit (~> 8.0)
     - Flutter
   - flutter_webview_plugin (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - "geolocator (6.0.0+4)":
     - Flutter
   - google_sign_in (0.0.1):
@@ -131,13 +135,22 @@ PODS:
   - nanopb/encode (1.30906.0)
   - package_info (0.0.1):
     - Flutter
-  - PromisesObjC (1.2.11)
+  - path_provider (0.0.1):
+    - Flutter
+  - PromisesObjC (1.2.12)
   - shared_preferences (0.0.1):
     - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
   - Toast (4.0.0)
   - uni_links (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
+    - Flutter
+  - video_player (0.0.1):
+    - Flutter
+  - wakelock (0.0.1):
     - Flutter
   - webview_flutter (0.0.1):
     - Flutter
@@ -148,7 +161,8 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
-  - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_login_facebook (from `.symlinks/plugins/flutter_login_facebook/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
@@ -156,9 +170,13 @@ DEPENDENCIES:
   - iamport_flutter (from `.symlinks/plugins/iamport_flutter/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -172,6 +190,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseInstallations
+    - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleSignIn
@@ -193,8 +212,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
-  flutter_facebook_login:
-    :path: ".symlinks/plugins/flutter_facebook_login/ios"
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_login_facebook:
+    :path: ".symlinks/plugins/flutter_login_facebook/ios"
   flutter_webview_plugin:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   fluttertoast:
@@ -209,20 +230,28 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/kakao_flutter_sdk/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   uni_links:
     :path: ".symlinks/plugins/uni_links/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  video_player:
+    :path: ".symlinks/plugins/video_player/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
-  FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
-  FBSDKLoginKit: f1ea8026a58b52d30c9f2e6a58ca7d813619fb83
+  FBSDKCoreKit: 4afd6ff53d8133a433dbcda44451c9498f8c6ce4
+  FBSDKLoginKit: 7181765f2524d7ebf82d9629066c8e6caafc99d0
   Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
   firebase_analytics: 9118044ffb98bee71d84733fc594f5134fe4bc1b
   firebase_auth: d5159db3873478d1ac839af7b10d2f831516136a
@@ -233,9 +262,11 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
+  flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
+  flutter_login_facebook: 86e1415ecde2d59ca72c5760fd53d1d1952017fb
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: 1ae40084cc6c1586ce5ad12cfc3fd38c64d05f2f
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   GoogleAppMeasurement: 966e88df9d19c15715137bb2ddaf52373f111436
@@ -248,13 +279,17 @@ SPEC CHECKSUMS:
   kakao_flutter_sdk: c314c15347e033a31279acaa3c5efb5cad1426eb
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
+  video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
+  wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+PODFILE CHECKSUM: ac11fc852a681d8d7d22e344055d0c36b734cfc2
 
 COCOAPODS: 1.10.0

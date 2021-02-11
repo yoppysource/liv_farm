@@ -18,7 +18,7 @@
 // Measure_2	쓴맛-단맛	VARCHAR(45)	N/A		X
 // Storage_desc	보관 및 손질/활용	VARCHAR(255)	N/A	문장	X
 // Recipe	샐러드 레시피	VARCHAR(255)	N/A	문장	X
-import 'package:flutter/cupertino.dart';
+
 
 const String KEY_productID = 'product_id';
 const String KEY_productName = 'name';
@@ -95,4 +95,6 @@ const String Review_comment = 'comment';
 const String Review_createdAt = 'createdAt';
 
 //const in general
+
+const String IMG_brand = 'assets/images/brand.jpg';
 

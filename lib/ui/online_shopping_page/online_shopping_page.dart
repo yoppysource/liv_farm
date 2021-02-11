@@ -10,8 +10,8 @@ import 'package:liv_farm/ui/shared/buttons/refresh_button.dart';
 import 'package:liv_farm/ui/shared/platform_widget/dialogs/platform_exception_alert_dialog.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
-import 'package:liv_farm/viewmodel/review_page_view_model.dart';
 import 'package:provider/provider.dart';
+
 import 'my_tab_bar.dart';
 
 class OnlineShoppingPage extends StatefulWidget {
@@ -27,14 +27,15 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this, initialIndex: index);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: index);
   }
 
   @override
   Widget build(BuildContext context) {
     OnlineShoppingViewmodel _model =
         Provider.of<OnlineShoppingViewmodel>(context, listen: true);
-    //List must be checked with isEmpty method.
+
+
     if (_model.productList == null) {
       return Scaffold(
         appBar: MyAppBar(),
@@ -70,6 +71,7 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+                          settings: RouteSettings(name: 'ProductDescriptionPage'),
                           builder: (context) =>
                               ChangeNotifierProvider(
                                 create: (context) =>
@@ -96,7 +98,7 @@ class _OnlineShoppingPageState extends State<OnlineShoppingPage>
           iconTheme: IconThemeData(color: Colors.black87),
         ),
         body: DefaultTabController(
-          length: 4,
+          length: 3,
           initialIndex: 0,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

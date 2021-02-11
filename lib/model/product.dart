@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
@@ -16,6 +15,8 @@ class Product {
   int productQuantity;
   final int productCategory;
   final String productIntro;
+  final String descriptionImgPath;
+  final String thumbnailPath;
 
   Product(
       {@required this.id,
@@ -27,10 +28,13 @@ class Product {
       @required this.imagePath,
       @required this.productCategory,
       @required this.productIntro,
+        @required this.descriptionImgPath,
+        @required this.thumbnailPath,
+
       this.productQuantity});
 
   //json -> object
-  static Map<int, String> categoryMap= {
+  static final Map<int, String> categoryMap= {
   1: '샐러드',
   2: '샘플러',
   4:  '상추',
@@ -57,6 +61,8 @@ class Product {
       imagePath: data[KEY_imagePath],
       productCategory: int.tryParse(data[KEY_productCategory]),
       productIntro: data[KEY_productIntro],
+      descriptionImgPath: data['description_img_path'] ?? '',
+      thumbnailPath: data['thumb_img_path'] ?? '',
       // if quantity is null(when user scan the product initially), should be 1.
       productQuantity: data[KEY_productQuantity] ?? 1,
     );
@@ -73,6 +79,8 @@ class Product {
       imagePath: product.imagePath,
       productCategory: product.productCategory,
       productIntro: product.productIntro,
+      descriptionImgPath: product.descriptionImgPath,
+      thumbnailPath: product.thumbnailPath,
       // if quantity is null(when user scan the product initially), should be 1.
       productQuantity: 1,
     );

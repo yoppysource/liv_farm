@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:liv_farm/constant.dart';
 
 class EditButton extends StatelessWidget {
   final onPressed;
@@ -36,7 +35,7 @@ class EditButton extends StatelessWidget {
                 Text(
                   '수정',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     color: Colors.white,
                   ),
                 ),

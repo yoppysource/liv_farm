@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/product.dart';
-import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
+import 'package:liv_farm/ui/shared/information_about_company_card.dart';
 
 class AdditionalInformationPage extends StatelessWidget {
 
@@ -10,8 +11,19 @@ class AdditionalInformationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-        child: Image.asset('assets/images/sample.png'));
+    return Column(
+      children: [
+        Container(child:
+        CachedNetworkImage(
+          imageUrl: product.descriptionImgPath,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+    ),
+        InformationAboutCard(),
+        SizedBox(height: 50,),
+      ],
+    );
   }
 }

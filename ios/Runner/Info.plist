@@ -6,6 +6,8 @@
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>LivFarm</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,11 +15,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>liv_farm</string>
+	<string>LivFarm</string>
 	<key>CFBundlePackageType</key>
-	<string>APPLE</string>
+	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -35,7 +37,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>483794755920034</string>
 	<key>FacebookDisplayName</key>
@@ -64,49 +66,48 @@
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
-        <string>ispmobile</string>
-        <string>itms-apps</string> <!-- 앱스토어 -->
-        <string>hdcardappcardansimclick</string> <!-- 현대카드-앱카드 -->
-        <string>smhyundaiansimclick</string> <!-- 현대카드-공인인증서 -->
-        <string>shinhan-sr-ansimclick</string> <!-- 신한카드-앱카드 -->
-        <string>smshinhanansimclick</string> <!-- 신한카드-공인인증서 -->
-        <string>kb-acp</string> <!-- 국민카드-앱카드 -->
-        <string>mpocket.online.ansimclick</string> <!-- 삼성카드-앱카드 -->
-        <string>ansimclickscard</string> <!-- 삼성카드-온라인결제 -->
-        <string>ansimclickipcollect</string> <!-- 삼성카드-온라인결제 -->
-        <string>vguardstart</string> <!-- 삼성카드-백신 -->
-        <string>samsungpay</string> <!-- 삼성카드-삼성페이 -->
-        <string>scardcertiapp</string> <!-- 삼성카드-공인인증서 -->
-        <string>lottesmartpay</string> <!-- 롯데카드-모바일결제 -->
-        <string>lotteappcard</string> <!-- 롯데카드-앱카드 -->
-        <string>cloudpay</string> <!-- 하나카드-앱카드 -->
-        <string>nhappcardansimclick</string> <!-- 농협카드-앱카드 -->
-        <string>nonghyupcardansimclick</string> <!-- 농협카드-공인인증서 -->
-        <string>citispay</string> <!-- 씨티카드-앱카드 -->
-        <string>citicardappkr</string> <!-- 씨티카드-공인인증서 -->
-        <string>citimobileapp</string> <!-- 씨티카드-간편결제 -->
-        <string>kakaotalk</string> <!-- 카카오톡 -->
-        <string>payco</string> <!-- 페이코 -->
-        <string>lpayapp</string> <!-- 롯데 L페이 -->
-        <string>hanamopmoasign</string> <!-- 하나카드 공인인증앱 -->
-        <string>wooripay</string> <!-- 우리페이 -->
-        <string>nhallonepayansimclick</string> <!-- NH 올원페이 -->
-        <string>hanawalletmembers</string>
+		<string>ispmobile</string>
+		<string>itms-apps</string>
+		<string>hdcardappcardansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>smshinhanansimclick</string>
+		<string>kb-acp</string>
+		<string>mpocket.online.ansimclick</string>
+		<string>ansimclickscard</string>
+		<string>ansimclickipcollect</string>
+		<string>vguardstart</string>
+		<string>samsungpay</string>
+		<string>scardcertiapp</string>
+		<string>lottesmartpay</string>
+		<string>lotteappcard</string>
+		<string>cloudpay</string>
+		<string>nhappcardansimclick</string>
+		<string>nonghyupcardansimclick</string>
+		<string>citispay</string>
+		<string>citicardappkr</string>
+		<string>citimobileapp</string>
+		<string>kakaotalk</string>
+		<string>payco</string>
+		<string>lpayapp</string>
+		<string>hanamopmoasign</string>
+		<string>wooripay</string>
+		<string>nhallonepayansimclick</string>
+		<string>hanawalletmembers</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
-    <dict>
-      <!-- Allow Arbitrary Loads in Web Content 속성을 true로 설정 -->
-      <key>NSAllowsArbitraryLoadsInWebContent</key>
-      <true/>
-      <key>NSAllowsArbitraryLoads</key>
-      <true/>
-    </dict>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>$(PRODUCT_NAME) needs Location access for finding your address</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>$(PRODUCT_NAME) needs Location access for finding your address</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

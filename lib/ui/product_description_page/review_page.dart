@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/review.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/viewmodel/product_description_view_model.dart';
-import 'package:liv_farm/viewmodel/review_page_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ReviewPage extends StatelessWidget {
@@ -23,6 +23,7 @@ class ReviewPage extends StatelessWidget {
     }
     else{
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: _model.reviewList.map((e) => ReviewTile(review: e,)).toList()
       ,
     );
@@ -39,7 +40,7 @@ class ReviewTile extends StatelessWidget with Formatter {
   Widget build(BuildContext context) {
     return MyCard(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,7 +53,7 @@ class ReviewTile extends StatelessWidget with Formatter {
                   rating: review.rating,
                   itemBuilder: (context, _) => Icon(
                     Icons.star,
-                    color: Colors.greenAccent,
+                    color: Color(kSubColorRed),
                   ),
                 ),
               ],

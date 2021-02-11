@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:liv_farm/repository/my_farm_page_repository.dart';
 import 'package:liv_farm/ui/my_farm_page/detailed_purchase_log_page.dart';
 import 'package:liv_farm/ui/shared/buttons/refresh_button.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
 import 'package:liv_farm/viewmodel/detailed_purchase_view_model.dart';
+import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/my_farm_page_view_model.dart';
 import 'package:liv_farm/viewmodel/online_shopping_view_model.dart';
 import 'package:provider/provider.dart';
@@ -52,10 +54,10 @@ class OrderStatusCard extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ChangeNotifierProvider(
                         create: (context) => DetailedPurchaseViewmodel(
-                            _model.purchaseList,
                             Provider.of<OnlineShoppingViewmodel>(context,
                                 listen: false)
-                                .productList),
+                                .productList, Provider.of<MyFarmPageViewModel>(context,
+                            listen: false).user.id),
                         child: DetailedPurchaseLogPage(),
                       ),
                       fullscreenDialog: true,

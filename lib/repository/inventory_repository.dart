@@ -1,5 +1,4 @@
 import 'package:liv_farm/constant.dart';
-import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/service/api.dart';
 import 'package:liv_farm/service/server_service.dart';
 

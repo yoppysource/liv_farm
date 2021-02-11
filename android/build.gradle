@@ -4,6 +4,7 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+        mavenCentral()
     }
 
     dependencies {
@@ -29,8 +30,4 @@ allprojects {
     subprojects {
         project.evaluationDependsOn(':app')
     }
-
-//    task clean(type: Delete) {
-//        delete rootProject.buildDir
-//    }
 }

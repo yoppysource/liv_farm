@@ -1,19 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/model/my_user.dart';
-import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/purchase.dart';
 import 'package:liv_farm/repository/my_farm_page_repository.dart';
 import 'package:liv_farm/temp/logger.dart';
-import 'package:logger/logger.dart';
 
 class MyFarmPageViewModel with ChangeNotifier {
   List<Purchase> purchaseList;
   bool isLoading;
   List<int> orderCountList;
-
   // MyUser user;
-
   MyUser user;
 
   MyFarmPageRepository _repository = MyFarmPageRepository();

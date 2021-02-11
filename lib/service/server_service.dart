@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:liv_farm/constant.dart';
@@ -7,10 +7,9 @@ import 'package:liv_farm/service/api.dart';
 
 class ServerService {
   final API api;
-
   dynamic mapForException = {MSG: MSG_fail};
 
-  ServerService({this.api});
+    ServerService({this.api});
 
   Future<T> postData<T>(
       {@required data, String params1 = '', String params2 = ''}) async {
@@ -33,6 +32,7 @@ class ServerService {
 
   Future<T> getData<T>({String params1 = '', String params2 = ''}) async {
     try {
+      print(api.uri);
       final response = await http.get(
         '${api.uri}$params1$params2',
         headers: {

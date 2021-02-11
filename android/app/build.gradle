@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '3'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '3.0'
 }
 
 apply plugin: 'com.android.application'
@@ -35,22 +35,31 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.future_connect.liv_farm"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 4
+        versionName '1.2'
+//        versionCode flutterVersionCode.toInteger()
+//        versionName flutterVersionNameㅇ
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../keystore/key.jks')
+            storePassword file('../keystore/keystore.password').text.trim()
+            keyPassword file('../keystore/keystore.password').text.trim()
+            keyAlias 'key'
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -63,6 +72,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.1')
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.2'
     implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.30.2'
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: '1.30.2'

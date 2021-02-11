@@ -14,7 +14,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         FlatButton(
           child: Text(
             '저장하기',
-            style: TextStyle(fontSize: 15, color: Colors.blue),
+            style: TextStyle(fontSize: 15, color: Color(kSubColorRed)),
           ),
           onPressed: onPressed,
         ),

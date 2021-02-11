@@ -46,18 +46,33 @@ dependencies:
   firebase_auth: ^0.18.4+1
   firebase_analytics: ^5.0.2
   google_sign_in: ^4.5.6
-  flutter_facebook_login: ^3.0.0
+  flutter_login_facebook: ^0.4.2+3
   apple_sign_in: ^0.1.0
   modal_bottom_sheet: ^1.0.0+1
   iamport_flutter: ^0.9.13
   badges: ^1.1.6
   flutter_rating_bar: ^3.2.0+1
+  youtube_player_flutter: ^7.0.0+7
+  cached_network_image: ^2.5.0
+  flutter_html: ^1.2.0
+  get_it: ^5.0.6
+  
 
 dev_dependencies:
+
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.8.0"
+  flutter_launcher_name: "^0.0.1"
+
+flutter_launcher_name:
+  name: "LivFarm"
 
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
 
 flutter:
   uses-material-design: true
@@ -67,12 +82,9 @@ flutter:
     - family: 'Spoqa Han Sans'
       fonts:
         - asset: assets/fonts/Spoqa Han Sans Regular.ttf
-        - asset: assets/fonts/Spoqa Han Sans Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Spoqa Han Sans Light.ttf
-          weight: 300
-        - asset: assets/fonts/Spoqa Han Sans Thin.ttf
-          weight: 200
     - family: 'UiIcons'
       fonts:
         - asset: assets/fonts/ui_icons.ttf
+    - family: 'MyFlutterApp'
+      fonts:
+         - asset: assets/fonts/MyFlutterApp.ttf

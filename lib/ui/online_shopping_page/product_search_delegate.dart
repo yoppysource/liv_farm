@@ -1,7 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/product.dart';
-import 'package:liv_farm/ui/product_description_page/basic_description_page.dart';
-import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
 
 class ProductSearch extends SearchDelegate<String> {
   final List<Product> products;
@@ -51,7 +50,7 @@ class ProductSearch extends SearchDelegate<String> {
               query = productSearchList[index].productName;
               Navigator.of(context).pop(query);
             },
-            leading: Image.network(productSearchList[index].imagePath),
+            leading: Image(image: CachedNetworkImageProvider(productSearchList[index].thumbnailPath),),
             title: Text('${productSearchList[index].productName}'),
           );
         });

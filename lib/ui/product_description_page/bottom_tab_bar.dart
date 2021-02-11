@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/product_description_page/addtional_information_page.dart';
 import 'package:liv_farm/ui/product_description_page/review_page.dart';
 import 'package:liv_farm/ui/product_description_page/tabs_view.dart';
-import 'package:liv_farm/viewmodel/product_description_view_model.dart';
-import 'package:provider/provider.dart';
 
 class BottomTabBar extends StatefulWidget {
   final List<Tab> tabs;
+  final Product product;
 
-  const BottomTabBar({Key key, this.tabs}) : super(key: key);
+  const BottomTabBar({Key key, this.tabs, this.product}) : super(key: key);
+
 
   @override
   _BottomTabBarState createState() => _BottomTabBarState();
@@ -18,7 +19,6 @@ class BottomTabBar extends StatefulWidget {
 class _BottomTabBarState extends State<BottomTabBar> {
 
   int _tabIndex = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +34,15 @@ class _BottomTabBarState extends State<BottomTabBar> {
                   _tabIndex = index;
                 });
               },
-              unselectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey,
-                  letterSpacing: 1,
-                  fontSize: 13),
-              labelStyle: TextStyle(
-                color: Colors.black54,
-                letterSpacing: 1,
-              ),
+              labelStyle: Theme.of(context).textTheme.bodyText1,
               indicator: UnderlineTabIndicator(
                   borderSide:
-                  BorderSide(width: 3.0, color: Color(kMainColor)),
-                  insets:
-                  EdgeInsets.symmetric(horizontal: 75, vertical: 10)),
+                  BorderSide(width: 3, color: Color(kMainColor)),
+                  insets: EdgeInsets.symmetric(horizontal:60, vertical: 8)),
               tabs: widget.tabs,),
             SizedBox(height: 10,),
             TabsView(tabIndex: _tabIndex,
-              firstTab: AdditionalInformationPage(),
+              firstTab: AdditionalInformationPage(product: widget.product,),
               secondTab: ReviewPage(),
             ),
           ],

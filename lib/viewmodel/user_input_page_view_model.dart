@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kopo/kopo.dart';
 import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/address.dart';
 import 'package:liv_farm/model/my_user.dart';
 import 'package:liv_farm/repository/user_information_repository.dart';
 import 'package:liv_farm/temp/logger.dart';
 import 'package:liv_farm/ui/shared/platform_widget/platform_date_picker.dart';
 import 'package:liv_farm/ui/shared/toast_msg.dart';
+import 'package:liv_farm/ui/address_select_page/kakao_map_page.dart';
 import 'package:liv_farm/utill/validator.dart';
 import 'package:liv_farm/viewmodel/my_farm_page_view_model.dart';
 
@@ -74,14 +76,11 @@ class UserInputPageViewModel extends InputValidatorsForOrder
     }
   }
 
-  Future<void> updatePostcodeAndAddress(BuildContext context) async {
-    KopoModel result = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Kopo()));
-    if (result != null) {
-      selectedAddress = result.address;
-      selectedPostCode = result.zonecode;
+void updatePostcodeAndAddress(Address address) {
+    selectedAddress = address.address;
+    selectedPostCode = address.postCode;
       notifyListeners();
-    }
+
   }
 
   Future<void> submitForPersonalInfo({String name, String email}) async {

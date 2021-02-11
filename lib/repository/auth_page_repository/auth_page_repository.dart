@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/model/my_user.dart';
@@ -23,7 +22,6 @@ class AuthPageRepository {
       uid = result['result'][KEY_customer_uid];
       API.accessToken = accessToken;
       Map<String, dynamic> data = result['result'] as Map;
-      print('$accessToken');
       return MyUser.fromJson(data: data);
     } else {
       print('issue token fail');

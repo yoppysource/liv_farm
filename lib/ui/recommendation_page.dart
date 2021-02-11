@@ -6,7 +6,6 @@ import 'package:liv_farm/formatter.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/repository/inventory_repository.dart';
 import 'package:liv_farm/ui/product_description_page/product_description_page.dart';
-import 'package:liv_farm/ui/shared/appbar.dart';
 import 'package:liv_farm/ui/shared/buttons/bottom_float_buttom.dart';
 import 'package:liv_farm/ui/shared/title_text.dart';
 import 'package:liv_farm/viewmodel/landing_page_view_model.dart';

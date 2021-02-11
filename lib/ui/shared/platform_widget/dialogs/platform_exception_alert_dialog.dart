@@ -11,3 +11,4 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
           defaultActionText: 'OK',
         );
 }
+

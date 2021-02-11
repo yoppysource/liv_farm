@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/shared/platform_widget/platform_widget.dart';
@@ -20,7 +19,7 @@ class PlatformAlertDialog extends PlatformWidget {
     return Platform.isIOS
         ? await showCupertinoDialog(
             context: context,
-            builder: (context) => this,
+            builder: (context) => this
           )
         : await showDialog<bool>(
             context: context,
