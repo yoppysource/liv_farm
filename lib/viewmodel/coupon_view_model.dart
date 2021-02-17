@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/coupon.dart';
+import 'package:liv_farm/repository/coupon_repository.dart';
 
 class CouponViewmodel with ChangeNotifier{
   List<Coupon> couponList = List();
   Coupon selectedCoupon;
+  CouponRepository _repository = CouponRepository();
 
-  CouponViewmodel() {
-    init();
+  CouponViewmodel(int customerID) {
+    Future.microtask(() async=> await init(customerID));
   }
-  init() {
-    couponList.add(Coupon(
-      couponID: 1,
-      type: 1,
-      value: 1000,
-      expireDate: DateTime.now(),
-      description: '첫 방문 고객님께 드리는 감사 쿠폰'
-    ));
-    couponList.add(Coupon(
-        couponID: 2,
-        type: 2,
-        value: 0.1,
-        expireDate: DateTime.now(),
-        description: '사전 예약 신청 이벤트 쿠폰'
-    ));
+  Future<void> init(customerID) async{
+    couponList = await _repository.getCustomerCoupon(customerID);
+    print(couponList[0]);
+    notifyListeners();
   }
 
   void selectCoupon(Coupon coupon){
     this.selectedCoupon = coupon;
     notifyListeners();
+  }
+
+  Future<bool> registerCoupon(int customerID, String input) async {
+    bool result=await _repository.registerCoupon(customerID, input);
+    return result;
   }
 
 }

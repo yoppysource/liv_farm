@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:liv_farm/constant.dart';
@@ -13,11 +15,16 @@ import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/payment_view_model.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GestureBinding.instance.resamplingEnabled = true;
   KakaoContext.clientId = kakaoClientId;
   setupLocator();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   runApp(ChangeNotifierProvider(
       create: (_) => LandingPageViewModel(), child: MyApp()));
 }

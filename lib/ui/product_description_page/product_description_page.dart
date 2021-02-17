@@ -4,8 +4,11 @@ import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/service/analytic_service.dart';
 import 'package:liv_farm/ui/auth_page.dart';
 import 'package:liv_farm/ui/product_description_page/add_bottom_sheet.dart';
+import 'package:liv_farm/ui/product_description_page/addtional_information_page.dart';
 import 'package:liv_farm/ui/product_description_page/basic_description_page.dart';
 import 'package:liv_farm/ui/product_description_page/bottom_tab_bar.dart';
+import 'package:liv_farm/ui/product_description_page/product_bottom_page_view.dart';
+import 'package:liv_farm/ui/product_description_page/review_page.dart';
 import 'package:liv_farm/ui/shared/buttons/bottom_float_buttom.dart';
 import 'package:liv_farm/ui/shared/platform_widget/dialogs/login_suggestion_dialog.dart';
 import 'package:liv_farm/utill/get_it.dart';
@@ -26,7 +29,7 @@ class ProductDescriptionPage extends StatefulWidget {
 class _ProductDescriptionPageState extends State<ProductDescriptionPage>
     with SingleTickerProviderStateMixin, Formatter {
   int selectedIndex = 0;
-  TabController controller;
+  ScrollController _scrollController;
 
   @override
   void initState() {
@@ -34,13 +37,20 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage>
       Provider.of<ProductDescriptionViewmodel>(context, listen: false)
           .lazyLoad();
     }
-    //
-    controller= TabController(length: 2, vsync: this);
+    _scrollController = ScrollController()..addListener(() {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent -8&&
+          !_scrollController.position.outOfRange) {
+        setState(() {
+          debugPrint("reach the top");
+        });
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -51,39 +61,21 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage>
         Provider.of<ProductDescriptionViewmodel>(context, listen: true);
     Product product = _model.product;
     ShoppingCartViewmodel _shoppingCartViewModel = _landingPageViewModel.user != null? Provider.of<ShoppingCartViewmodel>(context, listen: false): null;
-
-
     return Scaffold(
       body: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                BasicDescriptionPage(
-                  product: product,
-                  inventory:
-                      _model.isLazyLoaded == false ? null : _model.inventory,
-                ),
-                // BottomBar(tabController: controller,),
-                BottomTabBar(
-                  tabs: [
-                    Tab(
-                      child: Text(
-                        '상세정보',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        '리뷰(${_model.isLazyLoaded == false ? '' : _model.reviewList.length})',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ],
-                  product: product,
-                ),
-              ],
-            ),
+          ListView(
+            controller: _scrollController,
+            padding: EdgeInsets.zero,
+            children: [
+              BasicDescriptionPage(
+                product: product,
+                inventory:
+                    _model.isLazyLoaded == false ? null : _model.inventory,
+              ),
+              SizedBox(height: 10,),
+              ProductBottomPageView(children: [AdditionalInformationPage(product: product,), ReviewPage()],)
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),

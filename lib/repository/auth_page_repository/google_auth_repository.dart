@@ -17,9 +17,10 @@ class GoogleAuthRepository extends AuthPageRepository {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       String uid = _credential.user.uid;
+      String email = _credential.user.email;
 
       Map<String, dynamic> initialData =
-          super.createInitialData(uid, Platform_google);
+          super.createInitialData(uid, email, Platform_google);
 
       return initialData;
     } catch (e) {

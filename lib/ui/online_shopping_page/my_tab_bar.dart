@@ -31,7 +31,7 @@ class MyTabBar extends StatelessWidget {
           ),
           Tab(
             child: Text(
-              '모둠채소',
+              '모둠 샘플러',
             ),
           ),
         ]);

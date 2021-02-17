@@ -9,7 +9,7 @@ class InformationAboutCard extends StatelessWidget {
         padding: const EdgeInsets.only(left: 20, top: 4, bottom: 4),
         child: Column(
           children: [
-            InnerText(title: '퓨처커넥트 주식회사', content: '',),
+            InnerText(title: '(주)퓨처커넥트', content: '',),
             SizedBox(height: 8,),
             InnerText(title: '대표자', content: '강길모',),
             InnerText(title: '사업자등록번호', content: '801-81-01885',),
@@ -17,7 +17,7 @@ class InformationAboutCard extends StatelessWidget {
             InnerText(title: '배송기간', content: '즉시배송',),
             InnerText(title: '주소', content: '서울특별시 강남구 테헤란로63길 14, 12층',),
             InnerText(title: '대표전화', content: '010 3338 8179',),
-            InnerText(title: '이메일', content: 'liv.farm.kr@gmail.com',),
+            InnerText(title: '이메일', content: 'admin@livfarm.com',),
             InnerText(title: '홈페이지', content: 'www.livfarm.com',),
           ],
         ),

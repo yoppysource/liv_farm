@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/coupon.dart';
 import 'package:liv_farm/temp/logger.dart';
@@ -42,7 +43,7 @@ class MyFarmPage extends StatelessWidget {
                       text: '쿠폰함',
                       onPressed: ()async  {
                         Coupon coupon = await   Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeNotifierProvider(
-                          create: (context) => CouponViewmodel(),
+                          create: (context) => CouponViewmodel(Provider.of<LandingPageViewModel>(context, listen: false).user.id),
                             child: CouponPage())));
                         if(coupon!=null)
                           Provider.of<ShoppingCartViewmodel>(context,listen: false).applyCoupon(coupon);
@@ -69,7 +70,10 @@ class MyFarmPage extends StatelessWidget {
                       {
                         showLicensePage(
                           context: context,
-                          applicationIcon: Image.asset('assets/images/symbol.png'),
+                          applicationIcon: Container(
+                            height: 100,
+                              width: 100,
+                              child: Image.asset('assets/images/symbol.png')),
                           applicationName: "Liv Farm",
                           applicationLegalese:'COPYRIGHTⓒ 2021. Future Connect all rights reserved'
                         );

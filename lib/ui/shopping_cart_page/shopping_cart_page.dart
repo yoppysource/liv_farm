@@ -165,7 +165,7 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
                                           ),
                                           onPressed: ()async {
                                             Coupon coupon = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeNotifierProvider(
-                                                create: (context) => CouponViewmodel(),
+                                                create: (context) => CouponViewmodel(Provider.of<LandingPageViewModel>(context,listen: false).user.id),
                                                 child: CouponPage())));
                                             if(coupon!=null){
                                               _model.applyCoupon(coupon);
@@ -245,7 +245,7 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
                           ToastMessage().showPurchaseFailByInventoryToast();
                           return;
                         }
-                        bool isSuccess =
+                        PaymentResult paymentResult =
                             await Navigator.of(context, rootNavigator: true)
                                 .push(MaterialPageRoute(
                           fullscreenDialog: true,
@@ -253,16 +253,22 @@ class ShoppingCartPage extends StatelessWidget with Formatter {
                               ChangeNotifierProvider<PaymentViewModel>(
                             create: (context) => PaymentViewModel(
                                 purchase: purchase,
+                                coupon: _model.coupon,
+                                cartID: _model.shoppingCartID,
                                 totalAmount: _model.totalAmount),
                             child: PaymentPage(),
                           ),
                         ));
-                        if (isSuccess) {
+                        print(paymentResult);
+                        if (paymentResult == PaymentResult.Success) {
                           _model.clearCart();
                           ToastMessage().showPurchaseSuccessToast();
                           await Provider.of<MyFarmPageViewModel>(context,
                                   listen: false)
                               .init();
+                        } else if(paymentResult == PaymentResult.PaidButNotUpload) {
+                          ToastMessage().showPaidButNotUploaded();
+
                         } else {
                           ToastMessage().showPurchaseFailToast();
                         }

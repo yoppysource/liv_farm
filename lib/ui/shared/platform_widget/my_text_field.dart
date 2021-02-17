@@ -11,8 +11,9 @@ class PlatformTextField extends PlatformWidget {
   final TextInputType textInputType;
   final bool isForDesign;
   final String text;
+  final bool isForPostCode;
 
-  PlatformTextField({this.onChanged, this.hintText, this.errorText, this.controller, this.textInputType, this.isForDesign=false, this.text = ''});
+  PlatformTextField({this.onChanged, this.hintText, this.errorText, this.controller, this.textInputType, this.isForDesign=false, this.text = '', this.isForPostCode = false});
 
 Widget build(BuildContext context) {
     return super.build(context);
@@ -34,7 +35,8 @@ Widget build(BuildContext context) {
       enableInteractiveSelection: false,
       textInputAction: TextInputAction.done,
       placeholder: text,
-      placeholderStyle: TextStyle(color: Colors.black87),
+      textAlign: isForPostCode ? TextAlign.center : TextAlign.start,
+      placeholderStyle: TextStyle(color: Colors.black87, ),
     );
   }
 

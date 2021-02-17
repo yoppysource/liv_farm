@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:liv_farm/model/product.dart';
-
+// 프로바이더로 구현하기.
 class AnalyticsService {
   final _analytics = FirebaseAnalytics();
   FirebaseAnalyticsObserver getAnalyticsObserver() => FirebaseAnalyticsObserver(analytics: _analytics);

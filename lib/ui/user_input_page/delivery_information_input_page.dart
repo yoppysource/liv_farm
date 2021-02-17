@@ -126,8 +126,9 @@ class _DeliveryInformationInputPageState
                     Row(
                       children: [
                         Container(
-                          width: 65,
+                          width: 90,
                           child: PlatformTextField(
+                            isForPostCode: true,
                            isForDesign: true,
                             text:  (_model.selectedPostCode == null ||
                                 _model.selectedPostCode == '')

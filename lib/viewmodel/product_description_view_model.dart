@@ -51,13 +51,4 @@ class ProductDescriptionViewmodel extends Formatter with ChangeNotifier {
       notifyListeners();
     }
   }
-  void onSwipeRight() {
-    bottomTabIndex = 0;
-    notifyListeners();
-  }
-
-  void onSwipeLeft() {
-    bottomTabIndex = 1;
-    notifyListeners();
-  }
 }

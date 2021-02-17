@@ -16,7 +16,6 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: 왜 false를 두면 안되고 true를 둬야할까. notifiyListener는 콜되는데 rebuild는 되지 않는다.
     log.builderLog(className: 'AuthPage');
     AuthPageViewmodel _model =
         Provider.of<AuthPageViewmodel>(context, listen: true);
@@ -54,16 +53,18 @@ class AuthPage extends StatelessWidget {
                 LoginButton(
                   assetName: 'assets/images/google_icon.png',
                   text: 'Google로 로그인',
-                  onPressed: () async =>
+                  onPressed:
+                      () async =>
                       await onPressed(_model.onPressedGoogle(context), context, _model),
-                ),
+                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 LoginButton(
                   assetName: 'assets/images/facebook_icon.png',
                   text: 'Facebook으로 로그인',
-                  onPressed: () async => await onPressed(
+                  onPressed:
+                   () async => await onPressed(
                       _model.onPressedFacebook(context), context, _model),
                 ),
                 SizedBox(
@@ -73,7 +74,8 @@ class AuthPage extends StatelessWidget {
                     ? LoginButton(
                         assetName: 'assets/images/apple_icon.png',
                         text: 'Apple로 로그인',
-                        onPressed: () async => await onPressed(
+                        onPressed:
+                            () async => await onPressed(
                             _model.onPressedApple(context), context, _model),
                       )
                     : Container(),

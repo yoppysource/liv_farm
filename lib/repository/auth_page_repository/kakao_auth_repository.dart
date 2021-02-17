@@ -27,7 +27,7 @@ class KaKaoAuthRepository extends AuthPageRepository {
       User user = await UserApi.instance.me();
       print(user.id);
 
-      Map<String, dynamic> initialData = super.createInitialData(user.id.toString(), Platform_kakao);
+      Map<String, dynamic> initialData = super.createInitialData(user.id.toString(),user.kakaoAccount.email, Platform_kakao);
       if (initialData[KEY_customer_snsId] != null) {
         return initialData;
       } else {

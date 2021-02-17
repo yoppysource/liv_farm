@@ -22,7 +22,11 @@ class ShoppingCartViewmodel with ChangeNotifier {
 
   get deliveryFee {
     if (shoppingCart.isNotEmpty) {
-      return 3000;
+      if(totalPrice< 20000){
+        return 3000;
+      } else{
+        return 1000;
+      }
     } else {
       return 0;
     }

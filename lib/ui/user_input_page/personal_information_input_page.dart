@@ -88,96 +88,96 @@ class _PersonalInformationInputPageState
                     SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      '성별',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    _model.selectedGender == ''
-                        ? Center(
-                          child: FlatButton(
-                              onPressed: _model.updateGender, child: Text('선택하기')),
-                        )
-                        : Center(
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 1000),
-                              height: 35,
-                              width: 90,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5)),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: Colors.white),
-                              child: Stack(
-                                children: <Widget>[
-                                  AnimatedPositioned(
-                                    duration: Duration(milliseconds: 1000),
-                                    curve: Curves.easeIn,
-                                    left: _model.selectedGender == 'male' //남자일경
-                                        ? 50
-                                        : 0.0,
-                                    right: _model.selectedGender == 'male' ? 0.0 : 50,
-                                    child: InkWell(
-                                      onTap: _model.updateGender,
-                                      child: AnimatedSwitcher(
-                                        duration: Duration(milliseconds: 1000),
-                                        transitionBuilder: (Widget child,
-                                            Animation<double> animation) {
-                                          return RotationTransition(
-                                            child: child,
-                                            turns: animation,
-                                          );
-                                        },
-                                        child: _model.selectedGender == 'male'
-                                            ? Icon(
-                                                FontAwesomeIcons.mars,
-                                                color: Colors.blueAccent
-                                                    .withOpacity(0.6),
-                                                size: 28,
-                                                key: UniqueKey(),
-                                              )
-                                            : Icon(
-                                                FontAwesomeIcons.venus,
-                                                color: Colors.pinkAccent
-                                                    .withOpacity(0.6),
-                                                size: 28,
-                                                key: UniqueKey(),
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      '생년월일',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: Container(
-                        height: 35,
-                        width: 200,
-                        child: FlatButton(
-                          onPressed: () async {
-                            await _model.updateBirthDate(context);
-                          },
-                          child: Text(
-                            _model.selectedBirthDate == null
-                                ? '생년월일을 선택해주세요'
-                                : getStringFromDatetime(_model.selectedBirthDate),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Text(
+                    //   '성별',
+                    //   style: TextStyle(color: Colors.grey, fontSize: 15),
+                    // ),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
+                    // _model.selectedGender == ''
+                    //     ? Center(
+                    //       child: FlatButton(
+                    //           onPressed: _model.updateGender, child: Text('선택하기')),
+                    //     )
+                    //     : Center(
+                    //         child: AnimatedContainer(
+                    //           duration: Duration(milliseconds: 1000),
+                    //           height: 35,
+                    //           width: 90,
+                    //           decoration: BoxDecoration(
+                    //               border: Border.all(
+                    //                   color: Colors.grey.withOpacity(0.5)),
+                    //               borderRadius: BorderRadius.circular(5.0),
+                    //               color: Colors.white),
+                    //           child: Stack(
+                    //             children: <Widget>[
+                    //               AnimatedPositioned(
+                    //                 duration: Duration(milliseconds: 1000),
+                    //                 curve: Curves.easeIn,
+                    //                 left: _model.selectedGender == 'male' //남자일경
+                    //                     ? 50
+                    //                     : 0.0,
+                    //                 right: _model.selectedGender == 'male' ? 0.0 : 50,
+                    //                 child: InkWell(
+                    //                   onTap: _model.updateGender,
+                    //                   child: AnimatedSwitcher(
+                    //                     duration: Duration(milliseconds: 1000),
+                    //                     transitionBuilder: (Widget child,
+                    //                         Animation<double> animation) {
+                    //                       return RotationTransition(
+                    //                         child: child,
+                    //                         turns: animation,
+                    //                       );
+                    //                     },
+                    //                     child: _model.selectedGender == 'male'
+                    //                         ? Icon(
+                    //                             FontAwesomeIcons.mars,
+                    //                             color: Colors.blueAccent
+                    //                                 .withOpacity(0.6),
+                    //                             size: 28,
+                    //                             key: UniqueKey(),
+                    //                           )
+                    //                         : Icon(
+                    //                             FontAwesomeIcons.venus,
+                    //                             color: Colors.pinkAccent
+                    //                                 .withOpacity(0.6),
+                    //                             size: 28,
+                    //                             key: UniqueKey(),
+                    //                           ),
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // Text(
+                    //   '생년월일',
+                    //   style: TextStyle(color: Colors.grey, fontSize: 15),
+                    // ),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
+                    // Center(
+                    //   child: Container(
+                    //     height: 35,
+                    //     width: 200,
+                    //     child: FlatButton(
+                    //       onPressed: () async {
+                    //         await _model.updateBirthDate(context);
+                    //       },
+                    //       child: Text(
+                    //         _model.selectedBirthDate == null
+                    //             ? '생년월일을 선택해주세요'
+                    //             : getStringFromDatetime(_model.selectedBirthDate),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

@@ -1,8 +1,9 @@
-class PurchasedProduct {
+import 'package:liv_farm/model/product.dart';
+
+class PurchaseWithProducts {
   final String orderTimestamp;
   final int purchasedStatus;
-  final int productId;
-  final int quantity;
+  final List<dynamic> productDataList;
 
   static Map<int, String> purchasedStatusMap = {
     0: '결제완료',
@@ -12,14 +13,14 @@ class PurchasedProduct {
     4: '환불 처리',
   };
 
-  PurchasedProduct(this.orderTimestamp, this.purchasedStatus, this.productId, this.quantity);
+  PurchaseWithProducts(this.orderTimestamp, this.purchasedStatus, this.productDataList);
 
-  factory PurchasedProduct.fromJson(Map<String, dynamic> data) {
+  factory PurchaseWithProducts.fromJson(Map<String, dynamic> data) {
     if(data==null){
       return null;
     }
 
-    return PurchasedProduct(data["order_timestamp"],  data["purchase_status"], data["product_id"], data["quantity"]);
+    return PurchaseWithProducts(data["order_timestamp"],  data["purchase_status"], data["product_list"]);
 
 
   }

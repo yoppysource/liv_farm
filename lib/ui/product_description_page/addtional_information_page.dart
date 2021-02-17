@@ -9,18 +9,23 @@ class AdditionalInformationPage extends StatelessWidget {
 
   const AdditionalInformationPage({Key key, this.product}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(child:
+
         CachedNetworkImage(
           imageUrl: product.descriptionImgPath,
+
           progressIndicatorBuilder: (context, url, downloadProgress) =>
-              Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+              Container(
+                height: 100,
+                  width: 100,
+                  child: Center(child: CircularProgressIndicator(value: downloadProgress.progress))),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-    ),
+        Image.asset('assets/images/brand.jpg'),
         InformationAboutCard(),
         SizedBox(height: 50,),
       ],

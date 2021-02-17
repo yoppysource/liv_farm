@@ -8,9 +8,6 @@ class ReviewRepository {
 
   ServerService _getReviewService = ServerService(api: API(endpoint: Endpoint.reviewGet));
   ServerService _postReviewService = ServerService(api: API(endpoint: Endpoint.reviewPost));
-
-  API getAPI = API(endpoint: Endpoint.reviewGet);
-
   Future getReviewData(int productId) async {
    Map result = await _getReviewService.getData(params1: '/$productId}');
 

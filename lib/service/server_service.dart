@@ -41,6 +41,7 @@ class ServerService {
           // '${API.accessToken ?? ''}',
         },
       );
+      print(response.body);
       final result = await json.decode(response.body);
       return result;
     } catch (e) {

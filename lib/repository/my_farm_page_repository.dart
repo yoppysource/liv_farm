@@ -1,4 +1,5 @@
 import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/purchase.dart';
 import 'package:liv_farm/model/purchased_product.dart';
 import 'package:liv_farm/service/api.dart';
@@ -19,21 +20,22 @@ class MyFarmPageRepository {
   //   ),
   // );
 
-  Future<List<PurchasedProduct>> getPurchasedProduct(int customerId) async {
+  Future<List<PurchaseWithProducts>> getPurchasedProduct(int customerId) async {
     Map<String, dynamic> result =
         await _purchasedProductService.getData(params1: '/$customerId');
     if (result[MSG] == MSG_success) {
-      List<dynamic> purchasesProductDataList = result[KEY_Result].cast() as List;
-      if (purchasesProductDataList.isEmpty) {
+      List<dynamic> purchaseLogsWithProductsData = result[KEY_Result].cast() as List;
+      if ( purchaseLogsWithProductsData.isEmpty) {
         print('isempty!');
         return List();
       }
-      List<PurchasedProduct> purchasedProductList = purchasesProductDataList
-          .map((i) => PurchasedProduct.fromJson(i))
+      List<PurchaseWithProducts>  purchaseWithProductsList =  purchaseLogsWithProductsData
+          .map((i) => PurchaseWithProducts.fromJson(i))
           .toList()
           .reversed
           .toList();
-      return purchasedProductList;
+
+      return purchaseWithProductsList;
     } else {
       return List();
     }

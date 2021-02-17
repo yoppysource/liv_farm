@@ -14,18 +14,24 @@ class ReviewPage extends StatelessWidget {
         Provider.of<ProductDescriptionViewmodel>(context, listen: true);
     if (_model.isLazyLoaded == false) {
       return SizedBox(
-          height: 100,
+          height: 500,
           width: 100,
           child: Center(child: CircularProgressIndicator()));
     } else if (_model.reviewList.isEmpty) {
       return SizedBox(
-          height: 100, width: 100, child: Center(child: Text('등록된 리뷰가 없습니다')));
+          height: 500, width: 100, child: Center(child: Text('등록된 리뷰가 없습니다')));
     }
     else{
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: _model.reviewList.map((e) => ReviewTile(review: e,)).toList()
-      ,
+    return ConstrainedBox(
+      constraints: new BoxConstraints(
+        minHeight: 500,
+        maxHeight: double.infinity,
+      ),
+
+      child: Column(
+        children: _model.reviewList.map((e) => ReviewTile(review: e,)).toList()
+        ,
+      ),
     );
     }
   }

@@ -18,7 +18,7 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '3.0'
+    flutterVersionName = '1.0'
 }
 
 apply plugin: 'com.android.application'
@@ -41,11 +41,11 @@ android {
     defaultConfig {
         applicationId "com.future_connect.liv_farm"
         minSdkVersion 24
-        targetSdkVersion 29
-        versionCode 4
-        versionName '1.2'
-//        versionCode flutterVersionCode.toInteger()
-//        versionName flutterVersionNameㅇ
+        targetSdkVersion 30
+//        versionCode 4
+//        versionName '1.2'
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
     signingConfigs {

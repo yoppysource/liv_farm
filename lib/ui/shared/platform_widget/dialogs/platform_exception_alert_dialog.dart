@@ -7,7 +7,7 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
       {@required String title, @required content,})
       : super(
           title: title,
-          widget: Text(content),
+          widget: Text(content, style: TextStyle(fontSize: 16.0, fontFamily: 'Spoqa Han Sans', color: Colors.black.withOpacity(0.8))),
           defaultActionText: 'OK',
         );
 }

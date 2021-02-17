@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:liv_farm/secret.dart';
 
 enum Endpoint {
   login,
@@ -15,7 +16,11 @@ enum Endpoint {
   recentCart,
   inventories,
   customerLogs,
-  purchasedProduct
+  purchasedProduct,
+  version,
+  promotionCoupon,
+  coupon,
+  couponCustomer,
 }
 
 class API {
@@ -26,7 +31,7 @@ class API {
   // 근본은 SQLite로 관리하는게 근본이다(refresh 토큰)
   static String accessToken;
   final Endpoint endpoint;
-  final String host = '127.0.0.1';
+  final String host = hostIP;
   API({@required this.endpoint});
 
 
@@ -52,6 +57,10 @@ class API {
     Endpoint.reviewGet: 'admin/product_reviews',
     Endpoint.recentCart: 'admin/carts_recent_items',
     Endpoint.inventories: 'admin/inventories_product',
-    Endpoint.customerLogs : "admin/customer_logs"
+    Endpoint.customerLogs : "admin/customer_logs",
+    Endpoint.version : "admin/ret_v",
+    Endpoint.promotionCoupon : "admin/temp_promos_create",
+    Endpoint.coupon : "admin/coupon",
+    Endpoint.couponCustomer : "admin/coupon_customer"
   };
 }

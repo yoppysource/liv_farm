@@ -44,7 +44,7 @@ class CouponWidget extends StatelessWidget with Formatter {
                 Align(
                     alignment: Alignment.topRight,
                     child: Text(
-                      "~${getStringFromDatetime(coupon.expireDate)}",
+                      "~${getStringFromDateTimeInString(coupon.expireDate)}",
                       textAlign: TextAlign.right,
                     )),
               ],

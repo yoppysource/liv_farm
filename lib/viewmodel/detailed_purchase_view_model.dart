@@ -8,14 +8,14 @@ class DetailedPurchaseViewmodel with ChangeNotifier {
   bool isBusy = true;
   MyFarmPageRepository _repository = MyFarmPageRepository();
   final List<Product> productList;
-  List<PurchasedProduct> purchasedProductList;
+  List<PurchaseWithProducts> purchaseWithProductsList;
 
   DetailedPurchaseViewmodel(this.productList, customerId) {
     init(customerId);
   }
 
   Future<void> init(customerId) async {
-    purchasedProductList = await _repository.getPurchasedProduct(customerId);
+    purchaseWithProductsList = await _repository.getPurchasedProduct(customerId);
     isBusy =false;
     notifyListeners();
   }

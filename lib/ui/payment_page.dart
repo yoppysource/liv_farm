@@ -9,7 +9,11 @@ import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
 import 'package:liv_farm/viewmodel/payment_view_model.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
-
+enum PaymentResult {
+  Success,
+  PaidButNotUpload,
+  NotPaid
+}
 class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class PaymentPage extends StatelessWidget {
         Provider.of<LandingPageViewModel>(context, listen: false).user;
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, false);
+        Navigator.pop(context, PaymentResult.NotPaid);
         return false;
       },
       child: ModalProgressHUD(
@@ -29,7 +33,7 @@ class PaymentPage extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
-                Navigator.pop(context, false);
+                Navigator.pop(context, PaymentResult.NotPaid);
               },
             ),
             title: Text(
@@ -58,9 +62,8 @@ class PaymentPage extends StatelessWidget {
           data: PaymentData.fromJson({
             'pg': 'html5_inicis', // PG사
             'payMethod': 'card', // 결제수단
-            'name': '아임포트 결제데이터 분석', // 주문명
-            'merchantUid':
-                'mid_${DateTime.now().millisecondsSinceEpoch}', // 주문번호
+            'name': "주문번호: ${user.id}.${model.cartID}", // 주문명
+            'merchantUid': 'mid_${DateTime.now().millisecondsSinceEpoch}', // 주문번호
             'amount': model.totalAmount, // 결제금액
             'buyerName': user.name, // 구매자 이름
             'buyerTel': user.phoneNumber, // 구매자 연락처
@@ -74,8 +77,8 @@ class PaymentPage extends StatelessWidget {
           }),
           /* [필수입력] 콜백 함수 */
           callback: (Map<String, String> result) async {
-            bool isSuccess = await model.onPressedCallBack(result);
-            Navigator.of(context).pop(isSuccess);
+            PaymentResult paymentResult = await model.onPressedCallBack(result);
+            Navigator.of(context).pop(paymentResult);
           },
         ),
       ),

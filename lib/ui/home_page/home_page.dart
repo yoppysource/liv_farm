@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
       navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
     } else {
       if(_model.user == null && tabItem.index>1){
-        bool pressYes = await LoginSuggestionDialog().show(context);
+        dynamic pressYes = await LoginSuggestionDialog().show(context) ?? false;
             if(pressYes){
               Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
@@ -83,24 +83,6 @@ class _HomePageState extends State<HomePage> {
       }} else {
         setState(() => _currentTab = tabItem);
       }
-      // if(_model.user == null && index > 1)
-      //   {
-      //     _controller.index = widget.currentTab.index;
-      //     bool pressYes = await LoginSuggestionDialog().show(context);
-      //     if(pressYes){
-      //       Navigator.of(context, rootNavigator: true).push(
-      //         MaterialPageRoute(
-      //           builder: (context) => ChangeNotifierProvider(
-      //             create: (context) => AuthPageViewmodel(_model),
-      //             child: AuthPage(),
-      //           ),
-      //           fullscreenDialog: true,
-      //         ),
-      //       );
-      //     }
-      //   }
-
-
     }
   }
   @override

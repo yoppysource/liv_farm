@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/constant.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/product_description_page/addtional_information_page.dart';
+import 'package:liv_farm/ui/product_description_page/product_bottom_page_view.dart';
 import 'package:liv_farm/ui/product_description_page/review_page.dart';
 import 'package:liv_farm/ui/product_description_page/tabs_view.dart';
 
@@ -28,23 +29,24 @@ class _BottomTabBarState extends State<BottomTabBar> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TabBar(
-              onTap: (index) {
-                setState(() {
-                  _tabIndex = index;
-                });
-              },
-              labelStyle: Theme.of(context).textTheme.bodyText1,
-              indicator: UnderlineTabIndicator(
-                  borderSide:
-                  BorderSide(width: 3, color: Color(kMainColor)),
-                  insets: EdgeInsets.symmetric(horizontal:60, vertical: 8)),
-              tabs: widget.tabs,),
-            SizedBox(height: 10,),
-            TabsView(tabIndex: _tabIndex,
-              firstTab: AdditionalInformationPage(product: widget.product,),
-              secondTab: ReviewPage(),
-            ),
+            // TabBar(
+            //   onTap: (index) {
+            //     setState(() {
+            //       _tabIndex = index;
+            //     });
+            //   },
+            //   labelStyle: Theme.of(context).textTheme.bodyText1,
+            //   indicator: UnderlineTabIndicator(
+            //       borderSide:
+            //       BorderSide(width: 3, color: Color(kMainColor)),
+            //       insets: EdgeInsets.symmetric(horizontal:60, vertical: 8)),
+            //   tabs: widget.tabs,),
+            // SizedBox(height: 10,),
+            // ProductBottomPageView(children: [AdditionalInformationPage(product: widget.product,), ReviewPage()],)
+            // TabsView(tabIndex: _tabIndex,
+            //   firstTab: ,
+            //   secondTab: ,
+            // ),
           ],
         )
     );

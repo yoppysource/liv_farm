@@ -1,5 +1,4 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:liv_farm/model/customer_log.dart';
 import 'package:liv_farm/service/api.dart';
 import 'package:liv_farm/service/server_service.dart';
@@ -19,12 +18,12 @@ class CustomerLogRepository {
     final String os = await AppleSignIn.isAvailable() == true ? 'Ios' : 'Android';
     final PackageInfo info = await PackageInfo.fromPlatform();
     final String version =  info.version;
-    final Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    // final Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     CustomerLog log = new CustomerLog(
       customerId: this.userId,
-      lng: currentPosition.longitude,
-      lat: currentPosition.latitude,
+      // lng: currentPosition.longitude,
+      // lat: currentPosition.latitude,
       appVersion: version,
       loginOS: os,
     );

@@ -1,7 +1,9 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:liv_farm/model/my_user.dart';
 import 'package:liv_farm/repository/auth_page_repository/apple_auth_repository.dart';
 import 'package:liv_farm/repository/auth_page_repository/auth_page_repository.dart';
@@ -25,6 +27,7 @@ class AuthPageViewmodel with ChangeNotifier {
   AppleAuthRepository _appleAuthRepository = AppleAuthRepository();
 
   FacebookAuthRepository _facebookAuthRepository = FacebookAuthRepository();
+
   AuthPageViewmodel(model) {
     log.methodLog(method: 'Init AuthPageViewmodel');
     this.model = model;
@@ -32,8 +35,10 @@ class AuthPageViewmodel with ChangeNotifier {
   }
 
   Map<String, dynamic> initialData;
+
   Future<void> initAuth() async {
     try {
+      await Firebase.initializeApp();
       bool value = await AppleSignIn.isAvailable();
       if (value) {
         isApple = true;
@@ -41,7 +46,6 @@ class AuthPageViewmodel with ChangeNotifier {
     } catch (e) {
       isApple = false;
     }
-    await Firebase.initializeApp();
     log.methodLog(method: 'notifyListeners AuthPageViewmodel');
     isWorking = false;
     notifyListeners();
@@ -78,30 +82,61 @@ class AuthPageViewmodel with ChangeNotifier {
     }
     isWorking = false;
     if (user != null) {
-      await locator<AnalyticsService>().setUserProperties(userId: user.id.toString());
+      await locator<AnalyticsService>()
+          .setUserProperties(userId: user.id.toString());
       model.userStatusChanged(user);
       log.methodLog(method: 'notifyListeners In LandingPageViewModel called');
-      isSuccess =true;
+      isSuccess = true;
     }
     return;
   }
 
-  Future<void> onPressedKakao(BuildContext context) async => await onPressed(
+  // Future<void> onPressedKakao(BuildContext context) async {
+  //   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  //   const String providerId = 'kakaocorp.com';
+  //   final installed = await isKakaoTalkInstalled();
+  //   final authCode = installed
+  //       ? await AuthCodeClient.instance.requestWithTalk()
+  //       : await AuthCodeClient.instance.request();
+  //   AccessTokenResponse token =
+  //   await AuthApi.instance.issueAccessToken(authCode);
+  //
+  //   await AccessTokenStore.instance.toStore(
+  //       token); // St
+  //   // ore access token in AccessTokenStore for future API requests.
+  //   String customToken;
+  //   try {
+  //     final HttpsCallable callable =
+  //     FirebaseFunctions.instance.httpsCallable('verifyKakaoToken');
+  //     final HttpsCallableResult result = await callable.call(
+  //       <String, dynamic>{
+  //         'token': token.accessToken,
+  //       },
+  //     );
+  //     customToken = result.data['token'];
+  //     print(result.data);
+  //   } catch (e) {
+  //     return Future.error(e);
+  //   }
+  //   final authResult = await _firebaseAuth.signInWithCustomToken(customToken);
+  //   print(authResult.toString());
+  // }
+  Future<void> onPressedKakao(BuildContext context)async => await onPressed(
         _kaKaoAuthRepository.getInitialDataFromPackage(),
         context,
       );
   Future<void> onPressedGoogle(BuildContext context) async => await onPressed(
-    _googleAuthRepository.getInitialDataFromPackage(),
-    context,
-  );
+        _googleAuthRepository.getInitialDataFromPackage(),
+        context,
+      );
 
-Future<void> onPressedFacebook(BuildContext context) async => await onPressed(
-      _facebookAuthRepository.getInitialDataFromPackage(),
-      context,
-    );
+  Future<void> onPressedFacebook(BuildContext context) async => await onPressed(
+        _facebookAuthRepository.getInitialDataFromPackage(),
+        context,
+      );
 
   Future<void> onPressedApple(BuildContext context) async => await onPressed(
-    _appleAuthRepository.getInitialDataFromPackage(),
-    context,
-  );
+        _appleAuthRepository.getInitialDataFromPackage(),
+        context,
+      );
 }

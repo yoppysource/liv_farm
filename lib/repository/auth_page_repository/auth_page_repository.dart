@@ -16,8 +16,9 @@ class AuthPageRepository {
     print('${initialData.toString()}');
     Map<String, dynamic> result =
         await serverService.postData(data: initialData);
+    print(result.toString());
     if (result[MSG] == MSG_success) {
-      print('${result['token']}');
+      print('${result['token']} current');
       accessToken = result['token'];
       uid = result['result'][KEY_customer_uid];
       API.accessToken = accessToken;
@@ -28,10 +29,11 @@ class AuthPageRepository {
       return null;
     }
   }
-  Map<String, dynamic> createInitialData(String id, String platformInfo){
+  Map<String, dynamic> createInitialData(String id,String email, String platformInfo){
     print(id);
     Map<String, dynamic> initialData = Map();
     initialData[KEY_customer_snsId] = id;
+    initialData[KEY_customer_email] = email;
     initialData[KEY_customer_platform] = platformInfo;
 
     return initialData;

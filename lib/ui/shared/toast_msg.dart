@@ -10,6 +10,15 @@ class ToastMessage {
     Fluttertoast.showToast(msg: '오류가 발생 했습니다. 잠시 후에 다시 시도해 주세요.');
   }
 
+  void showCouponSuccessToast() {
+    Fluttertoast.showToast(msg: '쿠폰이 성공적으로 등록되었습니다.');
+  }
+
+  void showCouponFailToast() {
+    Fluttertoast.showToast(msg: '존재하지 않는 번호거나 이미 등록한 쿠폰입니다.');
+  }
+
+
   void showCartSuccessToast() {
     Fluttertoast.showToast(msg: '장바구니에 성공적으로 담겼습니다');
   }
@@ -34,6 +43,9 @@ class ToastMessage {
 
   void showPurchaseFailByInventoryToast() {
     Fluttertoast.showToast(msg: '재고보다 상품수량이 더 많습니다.');
+  }
+  void showPaidButNotUploaded() {
+    Fluttertoast.showToast(msg: '죄송합니다. 내부 에러가 발생했습니다. 고객센터에 연락 바랍니다.');
   }
 
   void showReviewSucceedToast() {

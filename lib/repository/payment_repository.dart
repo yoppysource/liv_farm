@@ -3,16 +3,17 @@ import 'package:liv_farm/service/api.dart';
 import 'package:liv_farm/service/server_service.dart';
 
 class PaymentRepository {
-  ServerService _cartServerService =
-  ServerService(api: API(endpoint: Endpoint.carts));
+  // ServerService _cartServerService =
+  // ServerService(api: API(endpoint: Endpoint.carts));
   ServerService _purchaseServerService =
   ServerService(api: API(endpoint: Endpoint.purchases));
 
-  Future<void> updateCartsWhenPurchased({Map data, int cartId}) async {
-    await _cartServerService.postData(data: data,params1: '/${cartId.toString()}');
-  }
+  // Future<void> updateCartsWhenPurchased({Map data, int cartId}) async {
+  //   await _cartServerService.postData(data: data,params1: '/${cartId.toString()}');
+  // }
 
-  Future<void> postPurchase(Purchase purchase) async {
-    await _purchaseServerService.postData(data: purchase.toJson());
+  Future<Map> postPurchase(Purchase purchase) async {
+    Map<String, dynamic> data = await _purchaseServerService.postData(data: purchase.toJson());
+    return data;
   }
 }
