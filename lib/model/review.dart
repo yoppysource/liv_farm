@@ -1,43 +1,27 @@
-import 'package:flutter/cupertino.dart';
-import 'package:liv_farm/constant.dart';
-
 class Review {
-  final int id;
-  final int customerId;
-  final int productId;
-  final double rating;
-  final String comment;
-  final DateTime createAt;
+  DateTime createdAt;
+  String review;
+  double rating;
+  String id;
+  String userName;
 
-  Review(
-      {this.id,
-      this.customerId,
-      @required this.productId,
-      @required this.rating,
-      @required this.comment,
-      this.createAt});
+  Review({this.createdAt, this.review, this.rating, this.userName, this.id});
 
-  factory Review.fromJson(Map<String, dynamic> data) {
-    if (data == null) {
-      return null;
-    } else {
-      return Review(
-          id: data[Review_id],
-          rating: data[Review_rating].toDouble(),
-          customerId: data[Review_customer_id],
-          productId: data[Review_product_id],
-          comment: data[Review_comment],
-          createAt: DateTime.tryParse(data[Review_createdAt]));
-    }
+  Review.fromJson(Map<String, dynamic> json) {
+    createdAt = DateTime?.parse(json['createdAt']) ?? null;
+    review = json['review'];
+    rating = json['rating'].toDouble();
+    id = json['id'];
+    userName = json['userName'];
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      Review_rating: rating,
-      Review_customer_id: customerId,
-      Review_product_id: productId,
-      Review_comment: comment,
-      Review_createdAt: createAt,
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['createdAt'] = DateTime.now().toIso8601String();
+    data['review'] = this.review;
+    data['rating'] = this.rating;
+    data['userName'] = this.userName;
+    data['id'] = this.id;
+    return data;
   }
 }

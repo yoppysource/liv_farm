@@ -1,28 +1,36 @@
-import 'package:flutter/cupertino.dart';
-
 class Coupon {
-  final int couponID;
-  final int type;
-  final int value;
-  final String expireDate;
-  final String description;
+  String type;
+  String id;
+  String code;
+  bool used;
+  String category;
+  int amount;
+  String expireDate;
 
-  Coupon({@required this.couponID,@required this.type,@required this.value,@required this.expireDate, this.description});
+  Coupon(
+      {this.type,
+      this.id,
+      this.code,
+      this.used,
+      this.category,
+      this.amount,
+      this.expireDate});
 
-  factory Coupon.fromJson({Map<String, dynamic> data}){
-    if(data ==null){
-      return null;
+  Coupon.fromJson(Map<String, dynamic> json) {
+    if (!json['used']) {
+      type = json['type'];
+      id = json['_id'];
+      code = json['code'];
+      category = json['category'];
+      amount = json['amount'];
+      expireDate = json['expireDate'];
     }
-    return Coupon(couponID: data['coupon_id'],description: data['description'] ?? '', type: data['type'], value: data['value'], expireDate: data['expire_date']);
   }
 
-  Map<String, dynamic> toJson(Coupon coupon) {
-    return {
-      'coupon_id': coupon.couponID,
-      'type' : coupon.type,
-      'value' : coupon.value,
-      'expire_date' : coupon.expireDate,
-      'description' : coupon.description,
-    };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
+    data['used'] = this.used;
+    return data;
   }
 }

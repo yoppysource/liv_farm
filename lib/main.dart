@@ -1,36 +1,33 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
-import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/secret.dart';
-import 'package:liv_farm/service/root_navigation_service.dart';
-import 'package:liv_farm/ui/auth_page.dart';
-import 'package:liv_farm/ui/landing_page.dart';
-import 'package:liv_farm/utill/get_it.dart';
-import 'package:liv_farm/viewmodel/auth_page_view_model.dart';
-import 'package:liv_farm/viewmodel/landing_page_view_model.dart';
-import 'package:liv_farm/viewmodel/payment_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:liv_farm/ui/home/home_view.dart';
+import 'package:liv_farm/ui/landing/landing_view.dart';
+import 'package:liv_farm/ui/shared/bottom_sheet/setup_bottom_sheet.dart';
+import 'package:liv_farm/ui/shared/styles.dart';
+
+import 'package:stacked_services/stacked_services.dart';
+
+import 'app/app.router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GestureBinding.instance.resamplingEnabled = true;
-  KakaoContext.clientId = kakaoClientId;
-  setupLocator();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  runApp(ChangeNotifierProvider(
-      create: (_) => LandingPageViewModel(), child: MyApp()));
+  KakaoContext.clientId = kakaoClientId;
+  setupLocator();
+  setupBottomSheetUi();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,7 +36,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      navigatorKey: navigatorKey,
+      navigatorKey: StackedService.navigatorKey,
+      onGenerateRoute: StackedRouter().onGenerateRoute,
       supportedLocales: [
         const Locale('ko', 'KO'),
       ],
@@ -47,18 +45,46 @@ class MyApp extends StatelessWidget {
       title: 'LivFarm',
       theme: ThemeData(
         appBarTheme: AppBarTheme(
-          color: Colors.white,
+          color: kMainIvory,
+          iconTheme: IconThemeData(
+            color: kMainPink,
+          ),
           elevation: 0.0,
         ),
-        primaryColor: Color(kMainColor),
+        dialogTheme: DialogTheme(
+          titleTextStyle: TextStyle(
+              fontSize: 18.0,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff333333)),
+          contentTextStyle: TextStyle(
+              fontSize: 16.0,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff333333)),
+        ),
+        scaffoldBackgroundColor: kMainIvory,
+        accentColor: kMainPink,
         fontFamily: 'Spoqa Han Sans',
         textTheme: TextTheme(
-          subtitle1: TextStyle(fontSize: 20.0, fontFamily: 'Spoqa Han Sans', color: Colors.black),
-          bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Spoqa Han Sans', color: Colors.black.withOpacity(0.8)),
-          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Spoqa Han Sans', color: Colors.black.withOpacity(0.7)),
+          subtitle1: TextStyle(
+              fontSize: 30.0,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff333333)),
+          subtitle2: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff333333)),
+          bodyText1: TextStyle(
+              fontSize: 16.0,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff333333)),
+          bodyText2: TextStyle(
+              fontSize: 14.0,
+              fontFamily: 'Spoqa Han Sans',
+              color: Color(0xff828282)),
         ),
       ),
-      home: LandingPage(),
+      home: LandingView(),
     );
   }
 }

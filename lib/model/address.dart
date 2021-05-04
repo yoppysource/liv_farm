@@ -1,31 +1,20 @@
-import 'package:flutter/foundation.dart';
-
 class Address {
-  final String address;
-  final String postCode;
+  String address;
+  String addressDetail;
+  String postcode;
+  Address({this.address, this.addressDetail, this.postcode});
 
-  Address({@required this.address, @required this.postCode});
+  Address.fromJson(Map<String, dynamic> json) {
+    address = json['address'];
+    addressDetail = json['addressDetail'];
+    postcode = json['postcode'];
+  }
 
-  static List<String> validAddress = [
-    '위례',
-    '복정',
-    '태평',
-    '양지',
-    '단대',
-    '여수',
-    '하대원',
-    '상대원',
-    '중앙',
-    '성남',
-    '수진',
-    '야탑',
-    '이매',
-    '삼평동',
-    '도촌동',
-    '은행',
-    '금광',
-    '산성',
-    '신흥',
-    '양지'
-  ];
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['address'] = this.address;
+    data['addressDetail'] = this.addressDetail;
+    data['postcode'] = this.postcode;
+    return data;
+  }
 }

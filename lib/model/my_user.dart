@@ -1,69 +1,83 @@
-import 'package:liv_farm/constant.dart';
+import 'package:liv_farm/model/cart.dart';
+import 'package:liv_farm/model/coupon.dart';
+import 'package:liv_farm/model/address.dart';
 
 class MyUser {
-  final int id;
-  final String snsId;
-  String name;
+  bool agreeToGetMail;
+  String role;
+  int point;
+  String id;
   String email;
-  String birthday;
-  String postCode;
-  String address;
+  String snsId;
+  String platform;
+  String name;
+  DateTime birthday;
   String gender;
-  String addressDetail;
   String phoneNumber;
-  final String platform;
-  final String updatedAt;
+  List<Address> addresses;
+  List<Coupon> coupons;
+  Cart cart;
 
   MyUser(
-      {this.id,
-      this.snsId,
-      this.name,
+      {this.agreeToGetMail,
+      this.role,
+      this.point,
+      this.id,
       this.email,
+      this.snsId,
       this.birthday,
-      this.postCode,
-      this.gender,
-      this.address,
-      this.addressDetail,
-      this.phoneNumber,
       this.platform,
-      this.updatedAt,
- });
+      this.name,
+      this.gender,
+      this.phoneNumber,
+      this.addresses,
+      this.coupons,
+      this.cart});
 
-  factory MyUser.fromJson({Map<String, dynamic> data}) {
-    if (data == null) {
-      return null;
-    } else {
-      return MyUser(
-          id: data[KEY_customer_uid],
-          snsId: data[KEY_customer_snsId].toString() ?? '',
-          name: data[KEY_customer_name] ?? '',
-          email: data[KEY_customer_email] ?? '',
-          birthday: data[KEY_customer_birth] ?? '',
-          postCode: data[KEY_customer_postcode] ?? '',
-          address: data[KEY_customer_address] ?? '',
-          addressDetail: data[KEY_customer_detailedAddress] ?? '',
-          phoneNumber: data[KEY_customer_phone] ?? '',
-          platform: data[KEY_customer_platform],
-          gender: data[KEY_customer_gender] ?? '',
-          updatedAt: data[KEY_customer_updatedAt] ?? '',
-      );
+  MyUser.fromJson(Map<String, dynamic> json) {
+    agreeToGetMail = json['agreeToGetMail'];
+    if (json['gender'] != null) gender = json['gender'];
+    if (json['role'] != null) role = json['role'];
+    point = json['point'];
+    id = json['_id'];
+    if (json['name'] != null) name = json['name'];
+    if (json['email'] != null) email = json['email'];
+    snsId = json["snsId"];
+    platform = json["platform"];
+    if (json["birthday"] != null)
+      this.birthday = DateTime.tryParse(json["birthday"]);
+    phoneNumber = json["phoneNumber"];
+    if (json['addresses'] != null) {
+      addresses = [];
+      json['addresses'].forEach((v) {
+        addresses.add(new Address.fromJson(v));
+      });
     }
+    if (json['coupons'] != null) {
+      coupons = [];
+      json['coupons'].forEach((v) {
+        coupons.add(new Coupon.fromJson(v));
+      });
+    }
+    if (json['cart'] != null) cart = new Cart.fromJson(json['cart']);
   }
 
-  //어플 내에서의 가변값을 지정해야된
+//ToJson must be relevant to the updating. Thus it is worth to secure the data which is not allowed to change.
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      KEY_customer_uid: this.id,
-      KEY_customer_snsId: this.snsId,
-      KEY_customer_name: this.name ?? '',
-      KEY_customer_gender: this.gender ?? '',
-      KEY_customer_email: this.email ?? '',
-      KEY_customer_birth: this.birthday,
-      KEY_customer_postcode: this.postCode ?? '',
-      KEY_customer_address: this.address ?? '',
-      KEY_customer_detailedAddress: this.addressDetail ?? '',
-      KEY_customer_phone: this.phoneNumber ?? '',
-      KEY_customer_updatedAt: this.updatedAt ?? DateTime.now().toIso8601String(),
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['agreeToGetMail'] = this.agreeToGetMail ?? false;
+    if (this.phoneNumber != null) data['phoneNumber'] = this.phoneNumber;
+    if (this.gender != null) data['gender'] = this.gender;
+    if (this.birthday != null)
+      data['birthday'] = this.birthday.toIso8601String();
+    if (this.name != null) data['name'] = this.name;
+    data['updatedAt'] = DateTime.now().toIso8601String();
+    if (this.addresses != null && this.addresses.isNotEmpty) {
+      data['addresses'] = this.addresses.map((v) => v.toJson()).toList();
+    }
+    if (this.coupons != null && this.coupons.isNotEmpty) {
+      data['coupons'] = this.coupons.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
