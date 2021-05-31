@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
@@ -9,8 +7,7 @@ import 'package:liv_farm/services/server_service/APIException.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
-import 'package:liv_farm/ui/home/home_view.dart';
-import 'package:liv_farm/ui/landing/video_view.dart';
+import 'package:liv_farm/ui/home/video/video_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:package_info/package_info.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -53,9 +50,14 @@ class LandingViewModel extends FutureViewModel {
     }
   }
 
+  void _setStreamingTag(String streamingTag) {
+    VideoView.streamingTag = streamingTag;
+  }
+
   Future<Version> _checkVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String installed = packageInfo.version.toString();
+
     print(installed);
     try {
       Map<String, dynamic> data =
@@ -75,6 +77,7 @@ class LandingViewModel extends FutureViewModel {
         return Version.needToBeUpdated;
       if (currentAppVersion[2] < requiredAppVersion[2])
         return Version.needToBeUpdated;
+      _setStreamingTag(data['data']["streamingTag"]);
 
       return Version.fit;
     } catch (e) {

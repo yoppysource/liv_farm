@@ -139,234 +139,244 @@ class OrderCard extends StatelessWidget with Formatter {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MyCard(
-      title:
-          '${order.createdAt == null ? '' : getStringFromDatetime(order.createdAt)}',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            '${order.orderStatus}',
-            style: TextStyle(
-              color: kMainGrey,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: MyCard(
+        title:
+            '${order.createdAt == null ? '' : getStringFromDatetime(order.createdAt)}',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '${order.orderStatus}',
+              style: TextStyle(
+                color: kMainGrey,
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          verticalSpaceRegular,
-          ListView.separated(
-            itemCount: order.cart.items.length,
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              Item _item = order.cart.items[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 120,
-                        width: 120,
-                        child: CachedNetworkImage(
-                          imageUrl: _item.product.thumbnailPath,
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                          fadeInDuration: Duration(milliseconds: 50),
-                          fit: BoxFit.cover,
+            verticalSpaceRegular,
+            ListView.separated(
+              itemCount: order.cart.items.length,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                Item _item = order.cart.items[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 120,
+                          width: 120,
+                          child: CachedNetworkImage(
+                            imageUrl: _item.product.thumbnailPath,
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            fadeInDuration: Duration(milliseconds: 50),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      horizontalSpaceRegular,
-                      Container(
-                        height: 100,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        horizontalSpaceRegular,
+                        Container(
+                          height: 100,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(_item.product.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                  ),
+                                  Text(
+                                    '구매수량 | ${_item.quantity}개',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                ],
+                              ),
+                              Text(getPriceFromInt(_item.product.price),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 0.5)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    verticalSpaceSmall,
+                    this.isCurrentOrder == true
+                        ? Container()
+                        : Container(
+                            height: 40,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(_item.product.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    child: Badge(
+                                      badgeColor: kMainColor.withOpacity(0.9),
+                                      shape: BadgeShape.square,
+                                      elevation: 0.5,
+                                      position: BadgePosition.topEnd(),
+                                      borderRadius: BorderRadius.circular(10),
+                                      padding: (!this.order.isReviewed &&
+                                              !this.isCurrentOrder)
+                                          ? EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 2)
+                                          : EdgeInsets.zero,
+                                      badgeContent: (!this.order.isReviewed &&
+                                              !this.isCurrentOrder)
+                                          ? Text(
+                                              "리뷰를 작성해 주세요",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          : Container(),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.5,
+                                              color: this.order.isReviewed
+                                                  ? kMainBlack
+                                                  : kMainColor),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          '리뷰 작성',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              .copyWith(
+                                                  color: this.order.isReviewed
+                                                      ? kMainBlack
+                                                      : kMainColor),
+                                        )),
+                                      ),
+                                    ),
+                                    onTap: () async => await model.createReview(
+                                        _item.product.id, this.order.id),
+                                  ),
                                 ),
-                                Text(
-                                  '구매수량 | ${_item.quantity}개',
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                horizontalSpaceRegular,
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.5, color: kMainBlack),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        '재구매',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                      )),
+                                    ),
+                                    onTap: () {
+                                      model.navigateToProductDetail(
+                                          _item.product);
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
-                            Text(getPriceFromInt(_item.product.price),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.5)),
-                          ],
-                        ),
+                          ),
+                    verticalSpaceSmall,
+                  ],
+                );
+              },
+              separatorBuilder: (context, index) => Container(),
+            ),
+            if (this.isCurrentOrder == true)
+              Column(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '배송지',
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: kMainGrey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      verticalSpaceTiny,
+                      Text(
+                        "${order.address.address} ${order.address?.addressDetail ?? ""}",
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              fontSize: 16,
+                            ),
                       ),
                     ],
                   ),
                   verticalSpaceSmall,
-                  this.isCurrentOrder == true
-                      ? Container()
-                      : Container(
-                          height: 40,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  child: Badge(
-                                    badgeColor: kMainColor.withOpacity(0.9),
-                                    shape: BadgeShape.square,
-                                    elevation: 0.5,
-                                    position: BadgePosition.topEnd(),
-                                    borderRadius: BorderRadius.circular(10),
-                                    padding: (!this.order.isReviewed &&
-                                            !this.isCurrentOrder)
-                                        ? EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 2)
-                                        : EdgeInsets.zero,
-                                    badgeContent: (!this.order.isReviewed &&
-                                            !this.isCurrentOrder)
-                                        ? Text(
-                                            "리뷰를 작성해 주세요",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10),
-                                          )
-                                        : Container(),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.5,
-                                            color: this.order.isReviewed
-                                                ? kMainBlack
-                                                : kMainColor),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        '리뷰 작성',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            .copyWith(
-                                                color: this.order.isReviewed
-                                                    ? kMainBlack
-                                                    : kMainColor),
-                                      )),
-                                    ),
-                                  ),
-                                  onTap: () async => await model.createReview(
-                                      _item.product.id, this.order.id),
-                                ),
-                              ),
-                              horizontalSpaceRegular,
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.5, color: kMainBlack),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      '재구매',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    )),
-                                  ),
-                                  onTap: () {},
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '배송예정시간',
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: kMainGrey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      verticalSpaceTiny,
+                      Text(
+                        order.deliveryReservationMessage?.toString() ?? '',
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              fontSize: 16,
+                            ),
+                      ),
+                    ],
+                  ),
                   verticalSpaceSmall,
+                  Divider(
+                    height: 5,
+                    thickness: 2,
+                    color: kMainLightPink,
+                  ),
+                  verticalSpaceSmall,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '결제 금액',
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: kMainGrey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      Text(
+                        getPriceFromInt(order.paidAmount),
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: kMainBlack,
+                            fontSize: 16,
+                            letterSpacing: 0.7),
+                      ),
+                    ],
+                  ),
                 ],
-              );
-            },
-            separatorBuilder: (context, index) => Container(),
-          ),
-          if (this.isCurrentOrder == true)
-            Column(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '배송지',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: kMainGrey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    verticalSpaceTiny,
-                    Text(
-                      "${order.address.address} ${order.address?.addressDetail ?? ""}",
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            fontSize: 16,
-                          ),
-                    ),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '배송예정시간',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: kMainGrey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    verticalSpaceTiny,
-                    Text(
-                      order.deliveryReservationMessage?.toString() ?? '',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            fontSize: 16,
-                          ),
-                    ),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Divider(
-                  height: 5,
-                  thickness: 2,
-                  color: kMainLightPink,
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '결제 금액',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: kMainGrey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    Text(
-                      getPriceFromInt(order.paidAmount),
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                          color: kMainBlack, fontSize: 16, letterSpacing: 0.7),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-        ],
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:liv_farm/model/cart.dart';
 import 'package:liv_farm/model/coupon.dart';
 import 'package:liv_farm/model/item.dart';
 import 'package:liv_farm/model/order.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
@@ -26,10 +27,10 @@ class ShoppingCartViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   Coupon selectedCoupon;
   DateTime selectedDateTime;
-  //TODO:테스트 바꾸기
   Address get selectedAddress => _userProviderService.user.addresses.isNotEmpty
       ? _userProviderService.user.addresses[0]
       : null;
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
 
   //About Cart
   Cart get cart => _userProviderService.user?.cart ?? null;
@@ -63,8 +64,16 @@ class ShoppingCartViewModel extends BaseViewModel {
   }
 
   int get _couponDiscountAmount {
-    return 0;
+    if (selectedCoupon != null &&
+        this.selectedCoupon.amount < this.totalPrice) {
+      return selectedCoupon.amount;
+    } else {
+      return 0;
+    }
   }
+
+  bool get showCouponAlert =>
+      (selectedCoupon != null && this.selectedCoupon.amount > this.totalPrice);
 
   Future<void> syncCart() async {
     Map<String, dynamic> cartJson =
@@ -83,6 +92,7 @@ class ShoppingCartViewModel extends BaseViewModel {
       notifyListeners();
       ToastMessageService.showToast(message: '장바구니에 담았습니다');
     } catch (e) {
+      print(e.toString());
       _dialogService.showDialog(
           title: '오류',
           description: e.message.toString(),
@@ -110,10 +120,15 @@ class ShoppingCartViewModel extends BaseViewModel {
 
   Future<void> increaseItemQuantity(Item item) async {
     try {
-      item.quantity += 1;
-      notifyListeners();
-      await _serverService.patchData(
-          path: '/myCart/items/${item.id}', data: {'quantity': item.quantity});
+      if (item.product.inventory > item.quantity) {
+        item.quantity += 1;
+        notifyListeners();
+        await _serverService.patchData(
+            path: '/myCart/items/${item.id}',
+            data: {'quantity': item.quantity});
+      } else {
+        ToastMessageService.showToast(message: "재고가 부족합니다");
+      }
     } catch (e) {
       _dialogService.showDialog(
           title: '오류',
@@ -153,6 +168,11 @@ class ShoppingCartViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<void> onPressedCouponSelect() async {
+    await _navigationService.navigateTo(Routes.couponView);
+    notifyListeners();
+  }
+
   void onPressedAddress() {
     _navigationService.navigateToView(AddressSelectView());
   }
@@ -164,7 +184,9 @@ class ShoppingCartViewModel extends BaseViewModel {
           _userProviderService.user.phoneNumber != '');
 
   bool get isPossibleToPurchase =>
-      (this.selectedAddress != null) && isPhoneNumberAndNameExisted;
+      (this.selectedAddress != null) &&
+      isPhoneNumberAndNameExisted &&
+      this.finalPrice >= 1000;
   //Onpressed On order
   String get purchaseButtonMessage {
     if (this.selectedAddress == null) {
@@ -183,7 +205,8 @@ class ShoppingCartViewModel extends BaseViewModel {
   }
 
   void onPressedOnPayment() {
-    String orderId = "${_userProviderService.user.id}_${DateTime.now()}";
+    String orderId =
+        "${_userProviderService.user.id}_${DateTime.now().millisecondsSinceEpoch}";
     _navigationService.navigateWithTransition(
         PurchaseView(
             paymentData: PaymentData.fromJson({
@@ -191,9 +214,10 @@ class ShoppingCartViewModel extends BaseViewModel {
               'payMethod': 'card',
               'name':
                   "${this.cart.items[0].product.name} 포함 ${this.cart.items.length}건에 대한 주문",
+              //TODO: change the amount
               'amount': 10,
               'customData': {
-                "scheduledDate": selectedDateTime?.toIso8601String() ?? '',
+                "scheduledDate": this.deliveryReservationMessage ?? '',
                 "deliveryRequest": this.deliveryRequest ?? '',
                 "customerId": _userProviderService.user.id,
                 "cartId": cart.id,
@@ -215,13 +239,16 @@ class ShoppingCartViewModel extends BaseViewModel {
                 status: 0,
                 deliveryReservationMessage: this.deliveryReservationMessage,
                 address: this.selectedAddress,
+                createdAt: DateTime.now(),
                 cart: this.cart,
                 paidAmount: this.finalPrice,
                 user: _userProviderService.user,
                 payMethod: "card",
                 scheduledDate: this.selectedDateTime,
                 deliveryRequest: this.deliveryRequest,
-                coupon: this.selectedCoupon)),
+                coupon: (selectedCoupon != null || !showCouponAlert)
+                    ? this.selectedCoupon
+                    : null)),
         transition: 'fade');
   }
 }

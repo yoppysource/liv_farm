@@ -67,12 +67,12 @@ class AuthLayout extends StatelessWidget {
                   ),
                   onPressed: onBackButtonPressed,
                 ),
-                verticalSpaceMedium,
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                verticalSpaceMedium,
+                // verticalSpaceMedium,
+                // Text(
+                //   title,
+                //   style: Theme.of(context).textTheme.subtitle1,
+                // ),
+                // verticalSpaceMedium,
               ],
             ),
           ),
@@ -81,76 +81,81 @@ class AuthLayout extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                form,
-                if (onForgetPasswordButtonPressed != null)
-                  Align(
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: onForgetPasswordButtonPressed,
-                      child: Text('비밀번호를 잊어버리셨습니까?',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                  ),
-                validationMessage != null
-                    ? Column(
-                        children: [
-                          verticalSpaceSmall,
-                          Text(validationMessage,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .copyWith(color: Colors.red)),
-                          verticalSpaceSmall,
-                        ],
-                      )
-                    : verticalSpaceMedium,
-                AuthButton(
-                  needBorder: false,
-                  color: kMainColor,
-                  onPressed: isVaildToSubmit
-                      ? () {
-                          FocusScope.of(context).unfocus();
-                          onMainButtonPressed();
-                        }
-                      : null,
-                  child: Text(
-                    mainButtonTitle,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18),
-                  ),
-                ),
-                verticalSpaceMedium,
-                GestureDetector(
-                  onTap: onToggleButtonPressed,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        toggleQuestionText,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .copyWith(color: Colors.black54),
-                      ),
-                      horizontalSpaceSmall,
-                      Text(
-                        '${title == '로그인' ? '회원가입' : '로그인'}하기',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      )
-                    ],
-                  ),
-                ),
-                if (showTermsText) Text('이용정보 보호 약관'),
-                verticalSpaceMedium,
+                // form,
+                // if (onForgetPasswordButtonPressed != null)
+                //   Align(
+                //     alignment: Alignment.center,
+                //     child: GestureDetector(
+                //       onTap: onForgetPasswordButtonPressed,
+                //       child: Text('비밀번호를 잊어버리셨습니까?',
+                //           style: Theme.of(context).textTheme.bodyText1),
+                //     ),
+                //   ),
+                // validationMessage != null
+                //     ? Column(
+                //         children: [
+                //           verticalSpaceSmall,
+                //           Text(validationMessage,
+                //               style: Theme.of(context)
+                //                   .textTheme
+                //                   .bodyText1
+                //                   .copyWith(color: Colors.red)),
+                //           verticalSpaceSmall,
+                //         ],
+                //       )
+                //     : verticalSpaceMedium,
+                // AuthButton(
+                //   needBorder: false,
+                //   color: kMainColor,
+                //   onPressed: isVaildToSubmit
+                //       ? () {
+                //           FocusScope.of(context).unfocus();
+                //           onMainButtonPressed();
+                //         }
+                //       : null,
+                //   child: Text(
+                //     mainButtonTitle,
+                //     style: TextStyle(
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w500,
+                //         fontSize: 18),
+                //   ),
+                // ),
+                // verticalSpaceMedium,
+                // GestureDetector(
+                //   onTap: onToggleButtonPressed,
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         toggleQuestionText,
+                //         style: Theme.of(context)
+                //             .textTheme
+                //             .bodyText1
+                //             .copyWith(color: Colors.black54),
+                //       ),
+                //       horizontalSpaceSmall,
+                //       Text(
+                //         '${title == '로그인' ? '회원가입' : '로그인'}하기',
+                //         style: Theme.of(context).textTheme.bodyText1,
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // if (showTermsText) Text('이용정보 보호 약관'),
+
+                Container(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Center(
+                        child: Image.asset('assets/images/livLogo.png'))),
+
                 AuthButton(
                   needBorder: true,
                   color: Colors.white,
                   onPressed: onGooglePressed,
                   child: SocialAuthContent(
                     assetPath: "assets/images/google_icon.png",
-                    text: "구글로 시작하기",
+                    text: "Google로 계속하기",
                   ),
                 ),
                 verticalSpaceMedium,
@@ -160,7 +165,7 @@ class AuthLayout extends StatelessWidget {
                   onPressed: onKakaoPressed,
                   child: SocialAuthContent(
                     assetPath: "assets/images/kakao_icon.png",
-                    text: "카카오로 시작하기",
+                    text: "Kakao로 계속하기",
                   ),
                 ),
                 verticalSpaceMedium,
@@ -170,7 +175,7 @@ class AuthLayout extends StatelessWidget {
                   onPressed: onFacebookPressed,
                   child: SocialAuthContent(
                     assetPath: "assets/images/facebook_icon.png",
-                    text: "페이스북으로 시작하기",
+                    text: "Facebook으로 계속하기",
                     textColor: Colors.white,
                   ),
                 ),
@@ -182,7 +187,7 @@ class AuthLayout extends StatelessWidget {
                     onPressed: onApplePressed,
                     child: SocialAuthContent(
                       assetPath: "assets/images/apple_icon.png",
-                      text: "애플로 시작하기",
+                      text: "Apple로 계속하기",
                       textColor: Colors.white,
                       assetColor: Colors.white,
                     ),
@@ -200,7 +205,7 @@ class AuthLayout extends StatelessWidget {
                     child: Text('최초 로그인 시 개인보호정책에 동의한 것으로 간주됩니다',
                         style: Theme.of(context).textTheme.bodyText2.copyWith(
                             fontSize: 12,
-                                decoration: TextDecoration.underline,
+                            decoration: TextDecoration.underline,
                             textBaseline: TextBaseline.alphabetic)),
                   ),
                 ),

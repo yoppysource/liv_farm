@@ -5,6 +5,7 @@ import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/model/review.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
@@ -23,6 +24,7 @@ class ProductDetailViewModel extends FutureViewModel {
   ServerService _serverService =
       ServerService(apiPath: APIPath(resource: Resource.products));
   UserProviderService _userProviderService = locator<UserProviderService>();
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
   NavigationService _navigationService = locator<NavigationService>();
   ShoppingCartViewModel _shoppingCartViewModel =
       locator<ShoppingCartViewModel>();
@@ -65,24 +67,37 @@ class ProductDetailViewModel extends FutureViewModel {
       },
     );
     if (sheetResponse.confirmed) {
-      sheetResponse.responseData.forEach((k, v) async =>
-          await _shoppingCartViewModel.addToCart(productId: k.id, quantity: v));
+      sheetResponse.responseData.forEach((Product k, v) async {
+        await _analyticsService.logAddCart(
+            id: k.id,
+            productName: k.name,
+            productCategory: k.category.toString(),
+            quantity: v);
+
+        await _shoppingCartViewModel.addToCart(productId: k.id, quantity: v);
+      });
     }
-    // _shoppingCartViewModel.addToCart(.);
     if (product.category == ProductCategory.Salad && sheetResponse.confirmed) {
       SheetResponse sheetResponseForProtein =
           await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,
         variant: BottomSheetType.AddToCart,
         customData: {
-          'productList': _farmViewModel.data[ProductCategory.Protein]
+          'productList': _farmViewModel.data[ProductCategory.Protein],
+          'needDetailArrow': true,
         },
       );
       if (sheetResponseForProtein.confirmed) {
-        sheetResponse.responseData.forEach((k, v) async {
-          if (v > 0)
+        sheetResponseForProtein.responseData.forEach((k, v) async {
+          if (v > 0) {
+            await _analyticsService.logAddCart(
+                id: k.id,
+                productName: k.name,
+                productCategory: k.category.toString(),
+                quantity: v);
             await _shoppingCartViewModel.addToCart(
                 productId: k.id, quantity: v);
+          }
         });
       }
 
@@ -91,15 +106,22 @@ class ProductDetailViewModel extends FutureViewModel {
         isScrollControlled: true,
         variant: BottomSheetType.AddToCart,
         customData: {
-          'productList': _farmViewModel.data[ProductCategory.Dressing]
+          'productList': _farmViewModel.data[ProductCategory.Dressing],
+          'needDetailArrow': true,
         },
       );
 
       if (sheetResponse.confirmed) {
         sheetResponseForDressing.responseData.forEach((k, v) async {
-          if (v > 0)
+          if (v > 0) {
+            await _analyticsService.logAddCart(
+                id: k.id,
+                productName: k.name,
+                productCategory: k.category.toString(),
+                quantity: v);
             await _shoppingCartViewModel.addToCart(
                 productId: k.id, quantity: v);
+          }
         });
       }
     }

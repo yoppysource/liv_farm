@@ -16,7 +16,7 @@ class DeliveryReservationView extends StatelessWidget {
         child: Container(
           height: 60,
           decoration: BoxDecoration(
-            color: kMainPink,
+            color: kMainPink.withOpacity(0.95),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(

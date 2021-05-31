@@ -22,6 +22,7 @@ class AddressSelectView extends StatelessWidget {
         ),
         body: ListView(
           children: [
+            verticalSpaceSmall,
             Container(
               height: 50,
               color: Colors.white,
@@ -29,22 +30,29 @@ class AddressSelectView extends StatelessWidget {
                 padding: horizontalPaddingToScaffold,
                 child: InkWell(
                   onTap: model.onPressedSearch,
-                  child: Row(
+                  child: Stack(
                     children: [
-                      Icon(
-                        CupertinoIcons.search,
-                        color: Colors.black.withOpacity(0.75),
-                        size: 25,
+                      Align(
+                        alignment: Alignment.center,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Center(
+                            child: Text(
+                              '도로명 건물명 또는 지번으로 검색하기',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(fontSize: 16),
+                            ),
+                          ),
+                        ),
                       ),
-                      horizontalSpaceSmall,
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          '도로명 건물명 또는 지번으로 검색하기',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              .copyWith(fontSize: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          CupertinoIcons.search,
+                          color: Colors.black.withOpacity(0.75),
+                          size: 25,
                         ),
                       ),
                     ],

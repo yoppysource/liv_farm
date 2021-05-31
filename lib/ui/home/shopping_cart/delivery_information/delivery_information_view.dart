@@ -27,7 +27,8 @@ class DeliveryInformationView extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: kMainPink, width: 0.50),
+                  border: Border.all(
+                      color: kMainPink.withOpacity(0.95), width: 0.50),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -51,7 +52,7 @@ class DeliveryInformationView extends StatelessWidget {
                           child: Icon(
                             Icons.edit,
                             size: 25,
-                            color: kMainPink,
+                            color: kMainPink.withOpacity(0.95),
                           ),
                         ),
                       )
@@ -72,7 +73,8 @@ class DeliveryInformationView extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: kMainPink, width: 0.5),
+                  border: Border.all(
+                      color: kMainPink.withOpacity(0.95), width: 0.5),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -99,7 +101,7 @@ class DeliveryInformationView extends StatelessWidget {
                           child: Icon(
                             Icons.edit,
                             size: 25,
-                            color: kMainPink,
+                            color: kMainPink.withOpacity(0.95),
                           ),
                         ),
                       )

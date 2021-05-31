@@ -1,9 +1,12 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/model/order.dart';
+import 'package:liv_farm/model/product.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
+import 'package:liv_farm/ui/home/farm/product_detail/product_detail_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -17,8 +20,10 @@ class OrderHistoryViewModel extends FutureViewModel {
   ServerService _reviewsServerService =
       ServerService(apiPath: APIPath(resource: Resource.products));
 
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
   BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   UserProviderService _userProviderService = locator<UserProviderService>();
+  NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Future futureToRun() async {
@@ -39,6 +44,20 @@ class OrderHistoryViewModel extends FutureViewModel {
     } catch (e) {
       throw e;
     }
+  }
+
+  void navigateToProductDetail(Product product) {
+    _analyticsService.logViewItem(
+        itemId: product.id,
+        itemName: product.name,
+        itemCategory: product.category.toString(),
+        price: product.price.toDouble(),
+        currency: 'won');
+    _navigationService.navigateWithTransition(
+        ProductDetailView(
+          product: product,
+        ),
+        transition: 'fade');
   }
 
   Future<void> updateIsReviewedInOrder(String orderId) async {

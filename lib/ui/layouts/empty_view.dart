@@ -10,22 +10,24 @@ class EmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
+          shrinkWrap: true,
           children: [
+            verticalSpaceMassive,
             Icon(
               iconData,
               color: kMainGrey,
               size: 80,
             ),
             verticalSpaceMedium,
-            Text(
-              text,
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: kMainGrey, fontWeight: FontWeight.normal),
+            Center(
+              child: Text(
+                text,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    .copyWith(color: kMainGrey, fontWeight: FontWeight.normal),
+              ),
             )
           ],
         ),

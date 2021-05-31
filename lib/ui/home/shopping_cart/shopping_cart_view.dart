@@ -7,6 +7,7 @@ import 'package:liv_farm/ui/home/shopping_cart/delivery_information/delivery_inf
 import 'package:liv_farm/ui/home/shopping_cart/delivery_reservation/delivery_reservation_view.dart';
 import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
+import 'package:liv_farm/ui/shared/information_about_company_card.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/my_icons_icons.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
@@ -32,7 +33,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                       color: kMainGrey,
                       size: 80,
                     ),
-                    verticalSpaceMedium,
+                    verticalSpaceRegular,
                     Text(
                       '카트가 비어 있습니다',
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
@@ -44,7 +45,6 @@ class ShoppingCartView extends StatelessWidget with Formatter {
             )
           : Scaffold(
               appBar: AppBar(
-                backgroundColor: kMainIvory,
                 automaticallyImplyLeading: false,
                 elevation: 0.3,
                 title: GestureDetector(
@@ -78,7 +78,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                         horizontalSpaceTiny,
                         Icon(
                           Icons.keyboard_arrow_down_outlined,
-                          color: kMainPink,
+                          color: kMainPink.withOpacity(0.95),
                           size: 30,
                         ),
                       ],
@@ -92,7 +92,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                     padding: horizontalPaddingToScaffold,
                     child: ListView(
                       children: [
-                        verticalSpaceMedium,
+                        verticalSpaceRegular,
                         Column(
                           children: model.cart.items
                               .map(
@@ -102,7 +102,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                               .toList(),
                         ),
                         //default padding is 25, and padding on listTile  = 18  Thus, 7
-                        SizedBox(height: 7.0),
+                        SizedBox(height: 8),
                         MyCard(
                           title: '영수증',
                           child: Column(
@@ -189,9 +189,9 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                               ),
                               verticalSpaceSmall,
                               Divider(
-                                height: 5,
-                                thickness: 2,
-                                color: kMainLightPink,
+                                height: 1,
+                                thickness: 1,
+                                color: kMainLightPink.withOpacity(0.95),
                               ),
                               verticalSpaceSmall,
                               Row(
@@ -223,17 +223,86 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                             ],
                           ),
                         ),
-                        verticalSpaceMedium,
-                        CouponCard(),
-                        verticalSpaceMedium,
+                        verticalSpaceRegular,
+                        CouponCard(
+                          model: model,
+                        ),
+                        verticalSpaceRegular,
                         DeliveryInformationView(),
-                        verticalSpaceMedium,
+                        verticalSpaceRegular,
+                        MyCard(
+                          title: '배송지 정보',
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '주소',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              verticalSpaceSmall,
+                              GestureDetector(
+                                onTap: model.onPressedAddress,
+                                child: Container(
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: kMainPink.withOpacity(0.95),
+                                        width: 0.50),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                model.selectedAddress == null
+                                                    ? "주소를 선택해주세요"
+                                                    : '${model.selectedAddress.address} ${model.selectedAddress.addressDetail == null ? "" : model.selectedAddress.addressDetail.length > 7 ? "" : model.selectedAddress.addressDetail}',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 25,
+                                          width: 25,
+                                          child: Center(
+                                            child: Icon(
+                                              CupertinoIcons.location,
+                                              size: 25,
+                                              color:
+                                                  kMainPink.withOpacity(0.95),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              verticalSpaceSmall,
+                            ],
+                          ),
+                        ),
+                        verticalSpaceRegular,
                         DeliveryDateCard(
                           model: model,
                         ),
-                        verticalSpaceMedium,
+                        verticalSpaceRegular,
+                        InformationAboutCompanyCard(),
                         SizedBox(
-                          height: 80,
+                          height: 100,
                         )
                       ],
                     ),
@@ -241,13 +310,11 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
+                      borderRadius: bottomButtonBorderRadius,
                       child: Container(
                         height: 80,
                         child: Padding(
-                          padding: horizontalPaddingToScaffold,
+                          padding: EdgeInsets.symmetric(horizontal: 25),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Row(
@@ -374,7 +441,8 @@ class DeliveryDateCard extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(color: kMainPink, width: 0.5),
+                border:
+                    Border.all(color: kMainPink.withOpacity(0.95), width: 0.5),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
@@ -401,7 +469,7 @@ class DeliveryDateCard extends StatelessWidget {
                         child: Icon(
                           Icons.edit,
                           size: 25,
-                          color: kMainPink,
+                          color: kMainPink.withOpacity(0.95),
                         ),
                       ),
                     )
@@ -417,58 +485,74 @@ class DeliveryDateCard extends StatelessWidget {
 }
 
 class CouponCard extends StatelessWidget {
-  const CouponCard({
-    Key key,
-  }) : super(key: key);
+  final ShoppingCartViewModel model;
 
+  const CouponCard({Key key, this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MyCard(
       title: '쿠폰',
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-            color: kMainColor.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.black38, width: 0.2)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '쿠폰을 선택해주세요',
-                      style: TextStyle(fontSize: 14, color: kMainGrey),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+                color: kMainColor.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black38, width: 0.2)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Container(
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          model.selectedCoupon == null
+                              ? '쿠폰을 선택해주세요'
+                              : model.selectedCoupon.description ?? "할인쿠폰",
+                          style: TextStyle(fontSize: 14, color: kMainGrey),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  horizontalSpaceSmall,
+                  FlatButton(
+                      color: Colors.white,
+                      child: Text(
+                        '선택',
+                        style: TextStyle(color: kMainBlack),
+                      ),
+                      onPressed: model.onPressedCouponSelect,
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: kMainGrey,
+                              width: 0.3,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(5))),
+                ],
               ),
-              horizontalSpaceSmall,
-              FlatButton(
-                  color: Colors.white,
-                  child: Text(
-                    '선택',
-                    style: TextStyle(color: kMainBlack),
-                  ),
-                  onPressed: () {},
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: kMainGrey,
-                          width: 0.3,
-                          style: BorderStyle.solid),
-                      borderRadius: BorderRadius.circular(5))),
-            ],
+            ),
           ),
-        ),
+          verticalSpaceTiny,
+          model.showCouponAlert
+              ? Text(
+                  "상품금액이 할인 금액보다 더 커야합니다.",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(color: Colors.red),
+                )
+              : Container()
+        ],
       ),
     );
   }
@@ -487,11 +571,11 @@ class ItemListTile extends StatelessWidget with Formatter {
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: kSmallBorderRadius,
               child: Container(
                 color: Colors.white,
                 width: 80,
@@ -509,7 +593,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                 children: [
                   horizontalSpaceRegular,
                   SizedBox(
-                    width: 130,
+                    width: MediaQuery.of(context).size.width - 250,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
@@ -523,7 +607,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                           ),
                         ),
                         Text(
-                          getPriceFromInt(model.cart.items[0].product.price),
+                          getPriceFromInt(item.product.price),
                           style: Theme.of(context)
                               .textTheme
                               .subtitle2
@@ -555,7 +639,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                           iconSize: 30,
                           splashRadius: 20,
                           disabledColor: kMainGrey.withOpacity(0.7),
-                          color: kMainPink,
+                          color: kMainPink.withOpacity(0.95),
                           onPressed: item.quantity > 1
                               ? () {
                                   model.decreaseItemQuantity(item);
@@ -587,7 +671,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                           padding: EdgeInsets.zero,
                           iconSize: 30,
                           splashRadius: 20,
-                          color: kMainPink,
+                          color: kMainPink.withOpacity(0.95),
                           onPressed: () async {
                             await model.increaseItemQuantity(item);
                           },
@@ -615,7 +699,7 @@ class ItemListTile extends StatelessWidget with Formatter {
             ),
           ],
         ),
-        verticalSpaceRegular,
+        verticalSpaceSmall,
       ],
     );
   }

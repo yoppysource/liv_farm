@@ -56,7 +56,7 @@ class MyUser {
     if (json['coupons'] != null) {
       coupons = [];
       json['coupons'].forEach((v) {
-        coupons.add(new Coupon.fromJson(v));
+        if (!v['used']) coupons.add(new Coupon.fromJson(v));
       });
     }
     if (json['cart'] != null) cart = new Cart.fromJson(json['cart']);
@@ -74,9 +74,6 @@ class MyUser {
     data['updatedAt'] = DateTime.now().toIso8601String();
     if (this.addresses != null && this.addresses.isNotEmpty) {
       data['addresses'] = this.addresses.map((v) => v.toJson()).toList();
-    }
-    if (this.coupons != null && this.coupons.isNotEmpty) {
-      data['coupons'] = this.coupons.map((v) => v.toJson()).toList();
     }
     return data;
   }

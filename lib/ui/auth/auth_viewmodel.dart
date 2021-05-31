@@ -1,5 +1,6 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/auth_service/auth_service.dart';
 import 'package:liv_farm/services/auth_service/social_auth_service.dart';
 import 'package:liv_farm/services/server_service/APIException.dart';
@@ -13,14 +14,28 @@ abstract class AuthViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
   UserProviderService _userProviderService = locator<UserProviderService>();
   final _bottomSheetService = locator<BottomSheetService>();
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
   bool isInputVaildToSubmit = false;
-
   Future<void> onAuthPressed(AuthService _authService) async {
     try {
       await runBusyFuture(_authService.runAuth(), throwException: true);
+
+      _userProviderService.user.agreeToGetMail == null
+          ? await _analyticsService
+              .logSignUp(_userProviderService.user.platform)
+          : await _analyticsService
+              .logLogin(_userProviderService.user.platform);
+      bool isNewUser = _userProviderService.user.agreeToGetMail == null;
+
       if (_userProviderService.user.agreeToGetMail == null ||
           _userProviderService.user.agreeToGetMail == false) {
         await _showDialogsForNewUser();
+      }
+      if (isNewUser) {
+        await _bottomSheetService.showBottomSheet(
+            title: "신규 고객 할인 쿠폰",
+            description: "신규 가입을 축하합니다. 마이팜 -> 쿠폰함에서 가입 환영쿠폰을 확인하세요.",
+            confirmButtonTitle: "확인");
       }
 
       _navigationService.replaceWith(Routes.homeView);

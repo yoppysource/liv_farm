@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:iamport_flutter/model/payment_data.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/model/order.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
-import 'package:liv_farm/ui/home/home_view.dart';
 import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -12,13 +13,17 @@ import 'package:stacked_services/stacked_services.dart';
 class PurchaseViewModel extends BaseViewModel {
   final PaymentData paymentData;
   final Order order;
-  ServerService _serverService =
+  ServerService _ordersServerService =
       ServerService(apiPath: APIPath(resource: Resource.orders));
+  ServerService _couponServerSerivce =
+      ServerService(apiPath: APIPath(resource: Resource.coupons));
   bool isBusy = false;
   NavigationService _navigationService = locator<NavigationService>();
   DialogService _dialogService = locator<DialogService>();
+  UserProviderService _userProviderService = locator<UserProviderService>();
   ShoppingCartViewModel _shoppingCartViewModel =
       locator<ShoppingCartViewModel>();
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
   PurchaseViewModel(this.paymentData, this.order);
 
   void onPressedArrowBack() {
@@ -36,10 +41,23 @@ class PurchaseViewModel extends BaseViewModel {
     notifyListeners();
     if (result['imp_success'] == 'true') {
       try {
+        if (_shoppingCartViewModel.selectedCoupon != null &&
+            !_shoppingCartViewModel.showCouponAlert) {
+          dynamic res = await _couponServerSerivce.postData(
+              path: "/useCoupon/${_shoppingCartViewModel.selectedCoupon.id}",
+              data: Map());
+          debugPrint(res.toString());
+          _shoppingCartViewModel.selectedCoupon = null;
+        } else {
+          order.coupon = null;
+          _shoppingCartViewModel.selectedCoupon = null;
+        }
         final Map<String, dynamic> data =
-            await _serverService.postData(data: order.toJson());
+            await _ordersServerService.postData(data: order.toJson());
         print(data);
-        await _shoppingCartViewModel.syncCart();
+
+        await _userProviderService.syncUserFromServer();
+        _shoppingCartViewModel.rebuild();
         _navigationService.back();
         _dialogService.showDialog(
           title: '결제완료',
@@ -47,8 +65,15 @@ class PurchaseViewModel extends BaseViewModel {
           buttonTitle: '확인',
           barrierDismissible: false,
         );
+        await _analyticsService.logPurchase(
+          purchaseAmount: this.order.paidAmount.toDouble(),
+          couponDescription:
+              _shoppingCartViewModel.selectedCoupon?.description ?? 'Not used',
+          address: order.address.toString(),
+        );
       } catch (e) {
-        print(e);
+        debugPrint(e);
+
         _navigationService.back();
         _dialogService.showDialog(
           title: '결제오류',
@@ -58,6 +83,7 @@ class PurchaseViewModel extends BaseViewModel {
         );
       }
     } else {
+      print(result.toString());
       _navigationService.back();
       _dialogService.showDialog(
         title: '결제취소',

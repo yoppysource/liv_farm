@@ -23,6 +23,7 @@ class ServerService {
         },
       );
       final result = await json.decode(response.body);
+
       if (!response.statusCode.toString().startsWith("2"))
         throw APIException(
             response.statusCode, result["message"], result["error"]);

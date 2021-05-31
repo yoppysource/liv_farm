@@ -7,7 +7,7 @@ class ToastMessageService {
     Fluttertoast.showToast(
         msg: message,
         gravity: ToastGravity.TOP,
-        backgroundColor: Colors.white,
-        textColor: kMainDarkGreen);
+        backgroundColor: kMainDarkGreen,
+        textColor: Colors.white);
   }
 }

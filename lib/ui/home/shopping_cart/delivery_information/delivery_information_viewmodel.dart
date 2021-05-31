@@ -12,9 +12,14 @@ class DeliveryInformationViewModel extends BaseViewModel {
   ShoppingCartViewModel _shoppingCartViewModel =
       locator<ShoppingCartViewModel>();
 
-  String get name => _userProviderService.user?.name ?? '이름을 입력해주세요';
-  String get phoneNumber =>
-      _userProviderService.user?.phoneNumber ?? '전화번호를 입력해주세요';
+  String get name => (_userProviderService.user.name == null ||
+          _userProviderService.user.name == '')
+      ? '이름을 입력해주세요'
+      : _userProviderService.user.name;
+  String get phoneNumber => (_userProviderService.user.phoneNumber == null ||
+          _userProviderService.user.phoneNumber == '')
+      ? '전화번호를 입력해주세요'
+      : _userProviderService.user.phoneNumber;
 
   Future<void> callBottomSheetToGetName() async {
     SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(

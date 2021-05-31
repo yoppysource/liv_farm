@@ -25,7 +25,7 @@ class UserInformationView extends StatelessWidget {
             ),
             verticalSpaceSmall,
             Container(
-              height: 30,
+              height: 40,
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
@@ -38,7 +38,7 @@ class UserInformationView extends StatelessWidget {
                     Flexible(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(model.email,
+                        child: Text(model?.email ?? "Apple Account",
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
@@ -68,7 +68,7 @@ class UserInformationView extends StatelessWidget {
             GestureDetector(
               onTap: model.callBottomSheetToGetName,
               child: Container(
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: kMainPink, width: 0.4),
@@ -117,7 +117,7 @@ class UserInformationView extends StatelessWidget {
             GestureDetector(
               onTap: model.callBottomSheetToGetPhoneNumber,
               child: Container(
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: kMainPink, width: 0.4),
@@ -167,7 +167,7 @@ class UserInformationView extends StatelessWidget {
               onTap: () async =>
                   await model.callBottomSheetForSelectingGender(),
               child: Container(
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -224,7 +224,7 @@ class UserInformationView extends StatelessWidget {
               onTap: () async =>
                   await model.callDateTimePickerForBirthDay(context),
               child: Container(
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(
                   color: kMainPink,
                   borderRadius: BorderRadius.circular(10),

@@ -9,6 +9,8 @@
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../services/analytics_service.dart';
+import '../services/cart_provider_service.dart';
 import '../services/secure_storage_service.dart';
 import '../services/user_provider_service.dart';
 import '../ui/home/farm/farm_viewmodel.dart';
@@ -21,6 +23,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserProviderService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => BottomSheetService());
+  locator.registerLazySingleton(() => AnalyticsService());
+  locator.registerLazySingleton(() => CartProviderService());
   locator.registerSingleton(SecureStorageService());
   locator.registerSingleton(FarmViewModel());
   locator.registerSingleton(ShoppingCartViewModel());

@@ -7,7 +7,7 @@ import 'package:liv_farm/ui/home/farm/farm_view.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/product_detail_viewmodel.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/reviews/reviews_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
-import 'package:liv_farm/ui/shared/my_icons_icons.dart';
+import 'package:liv_farm/ui/shared/information_about_company_card.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 
@@ -38,7 +38,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
       builder: (context, model, child) => DefaultTabController(
         length: 2,
         child: Scaffold(
-          body: model.product == null || model.isBusy
+          body: (model.product == null || model.isBusy)
               ? Center(
                   child: CircularProgressIndicator(),
                 )
@@ -54,119 +54,102 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                 padding: EdgeInsets.all(0),
                                 sliver: SliverList(
                                     delegate: SliverChildListDelegate([
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            color: Colors.white,
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  model.product.thumbnailPath,
-                                              fit: BoxFit.fitWidth,
-                                              placeholder: (context, url) =>
-                                                  Image(
-                                                image:
-                                                    CachedNetworkImageProvider(
-                                                        model.product
-                                                            .thumbnailPath),
-                                                fit: BoxFit.fitWidth,
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                horizontalPaddingToScaffold,
-                                            child: IconButton(
-                                              padding: EdgeInsets.zero,
-                                              alignment: Alignment.centerLeft,
-                                              icon: Icon(
-                                                Icons.arrow_back_rounded,
-                                                color: Colors.black
-                                                    .withOpacity(0.75),
-                                                size: 32,
-                                              ),
-                                              onPressed: model.onBackPressed,
-                                            ),
-                                          ),
-                                        ],
+                                  Padding(
+                                    padding: horizontalPaddingToScaffold,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      alignment: Alignment.centerLeft,
+                                      icon: Icon(
+                                        Icons.arrow_back_rounded,
+                                        color: Colors.black.withOpacity(0.75),
+                                        size: 32,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 25),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              model.product?.intro ?? '',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2,
-                                            ),
-                                            verticalSpaceTiny,
-                                            Text(
-                                              model.product.name,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1
-                                                  .copyWith(
-                                                      color: kMainBlack
-                                                          .withOpacity(0.9)),
-                                            ),
-                                            verticalSpaceMedium,
-                                            Text(
-                                              '약 ' + model.product.weight,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2,
-                                            ),
-                                            verticalSpaceTiny,
-                                            Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    getPriceFromInt(
-                                                            model.product.price)
-                                                        .substring(
-                                                            0,
-                                                            getPriceFromInt(model
-                                                                        .product
-                                                                        .price)
-                                                                    .length -
-                                                                1),
+                                      onPressed: model.onBackPressed,
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.white,
+                                    child: CachedNetworkImage(
+                                      imageUrl: model.product.thumbnailPath,
+                                      fit: BoxFit.fitWidth,
+                                      placeholder: (context, url) => Image(
+                                        image: CachedNetworkImageProvider(
+                                            model.product.thumbnailPath),
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        verticalSpaceRegular,
+                                        Text(
+                                          model.product?.intro ?? '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                        ),
+                                        verticalSpaceTiny,
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            model.product.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle1
+                                                .copyWith(color: kMainBlack),
+                                          ),
+                                        ),
+                                        verticalSpaceMedium,
+                                        Text(
+                                          '약 ' + model.product.weight,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                        ),
+                                        verticalSpaceTiny,
+                                        Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                getPriceFromInt(
+                                                        model.product.price)
+                                                    .substring(
+                                                        0,
+                                                        getPriceFromInt(model
+                                                                    .product
+                                                                    .price)
+                                                                .length -
+                                                            1),
+                                                style: TextStyle(
+                                                    color: kMainBlack,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 22,
+                                                    letterSpacing: 1.2),
+                                              ),
+                                              SizedBox(width: 1.2),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2),
+                                                child: Text('원',
                                                     style: TextStyle(
                                                         color: kMainBlack,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 22,
-                                                        letterSpacing: 1.2),
-                                                  ),
-                                                  SizedBox(width: 1.2),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 2),
-                                                    child: Text('원',
-                                                        style: TextStyle(
-                                                            color: kMainBlack,
-                                                            fontSize: 18)),
-                                                  ),
-                                                ])
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                                        fontSize: 18)),
+                                              ),
+                                            ])
+                                      ],
+                                    ),
                                   ),
                                 ]))),
                             SliverAppBar(
@@ -211,6 +194,11 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                 CachedNetworkImage(
                                   imageUrl: model.product.descriptionImgPath,
                                 ),
+                                Image.asset('assets/images/brand.jpg'),
+                                InformationAboutCompanyCard(),
+                                SizedBox(
+                                  height: bottomBottomHeight,
+                                ),
                               ],
                             ),
                             ReviewsView(reviews: model.product.reviews),
@@ -218,37 +206,19 @@ class _ProductDetailViewState extends State<ProductDetailView>
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: GestureDetector(
-                        onTap: model.onCartTap,
-                        child: Container(
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset:
-                                    Offset(0, 1), // changes position of shadow
-                              ),
-                            ],
-                          ),
+                    if (!(widget.product.category == ProductCategory.Dressing ||
+                        widget.product.category == ProductCategory.Protein))
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: GestureDetector(
+                          onTap: widget.product.inventory == 0
+                              ? null
+                              : model.onCartTap,
                           child: Container(
-                            height: double.infinity,
-                            width: double.infinity,
+                            height: bottomBottomHeight,
                             decoration: BoxDecoration(
-                              color: kMainPink,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
+                              color: Colors.white,
+                              borderRadius: bottomButtonBorderRadius,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.3),
@@ -259,18 +229,38 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                 ),
                               ],
                             ),
-                            child: Center(
-                                child: Text(
-                              "장바구니에 담기",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 21,
+                            child: Container(
+                              height: double.infinity,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: widget.product.inventory == 0
+                                    ? Colors.black26
+                                    : kSubColor.withOpacity(0.9),
+                                borderRadius: bottomButtonBorderRadius,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: Offset(
+                                        0, 1), // changes position of shadow
+                                  ),
+                                ],
                               ),
-                            )),
+                              child: Center(
+                                  child: Text(
+                                widget.product.inventory == 0
+                                    ? "재배 중인 상품입니다"
+                                    : "장바구니에 담기",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 21,
+                                ),
+                              )),
+                            ),
                           ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
         ),

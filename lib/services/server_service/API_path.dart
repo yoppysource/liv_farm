@@ -10,7 +10,8 @@ enum Resource {
   items,
   orders,
   appinfo,
-  openingHour
+  openingHour,
+  events,
 }
 
 class APIPath {
@@ -34,5 +35,6 @@ class APIPath {
     Resource.orders: "/orders",
     Resource.appinfo: "/appinfo",
     Resource.openingHour: "/openingHour",
+    Resource.events: "/events",
   };
 }

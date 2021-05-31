@@ -1,36 +1,39 @@
 class Coupon {
-  String type;
   String id;
   String code;
   bool used;
   String category;
+  String description;
   int amount;
-  String expireDate;
+  DateTime expireDate;
 
   Coupon(
-      {this.type,
-      this.id,
+      {this.id,
       this.code,
       this.used,
       this.category,
       this.amount,
+      this.description,
       this.expireDate});
 
   Coupon.fromJson(Map<String, dynamic> json) {
-    if (!json['used']) {
-      type = json['type'];
-      id = json['_id'];
-      code = json['code'];
-      category = json['category'];
-      amount = json['amount'];
-      expireDate = json['expireDate'];
-    }
+    id = json['_id'];
+    code = json['code'];
+    category = json['category'];
+    amount = json['amount'];
+    used = json['used'];
+    description = json['description'];
+    if (json['expireDate'] != null)
+      expireDate = DateTime.parse(json['expireDate']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.id;
-    data['used'] = this.used;
+    data['code'] = this.code;
+    data['category'] = this.category;
+    data['amount'] = this.amount;
+    data['description'] = this.description;
     return data;
   }
 }

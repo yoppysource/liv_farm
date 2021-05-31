@@ -59,6 +59,7 @@ class DeliveryReservationViewModel extends FutureViewModel {
 
   Future callBottomSheetToGetDateTime() async {
     if (this.isBusy == true) return;
+    this.selectedDateTime = null;
 
     SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,

@@ -9,11 +9,12 @@ class MyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: kLargeBorderRadius,
       child: Card(
+        margin: EdgeInsets.zero,
         elevation: 0,
         child: Padding(
-          padding: horizontalPaddingToScaffold,
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

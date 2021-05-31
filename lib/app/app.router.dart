@@ -11,34 +11,35 @@ import 'package:flutter/material.dart';
 import 'package:iamport_flutter/model/payment_data.dart';
 import 'package:stacked/stacked.dart';
 
+import '../model/order.dart';
 import '../model/product.dart';
-import '../ui/auth/certification/certification_view.dart';
 import '../ui/auth/login/login_view.dart';
 import '../ui/auth/signup/signup_view.dart';
+import '../ui/home/coupon/coupon_view.dart';
 import '../ui/home/farm/product_detail/product_detail_view.dart';
 import '../ui/home/home_view.dart';
 import '../ui/home/shopping_cart/purchase/purchase_view.dart';
+import '../ui/home/video/video_view.dart';
 import '../ui/landing/landing_view.dart';
-import '../ui/landing/video_view.dart';
 
 class Routes {
   static const String landingView = '/';
   static const String loginView = '/login-view';
   static const String signupView = '/signup-view';
   static const String videoView = '/video-view';
-  static const String certificationView = '/certification-view';
   static const String productDetailView = '/product-detail-view';
   static const String homeView = '/home-view';
   static const String purchaseView = '/purchase-view';
+  static const String couponView = '/coupon-view';
   static const all = <String>{
     landingView,
     loginView,
     signupView,
     videoView,
-    certificationView,
     productDetailView,
     homeView,
     purchaseView,
+    couponView,
   };
 }
 
@@ -50,10 +51,10 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.loginView, page: LoginView),
     RouteDef(Routes.signupView, page: SignupView),
     RouteDef(Routes.videoView, page: VideoView),
-    RouteDef(Routes.certificationView, page: CertificationView),
     RouteDef(Routes.productDetailView, page: ProductDetailView),
     RouteDef(Routes.homeView, page: HomeView),
     RouteDef(Routes.purchaseView, page: PurchaseView),
+    RouteDef(Routes.couponView, page: CouponView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -88,12 +89,6 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
-    CertificationView: (data) {
-      return CupertinoPageRoute<dynamic>(
-        builder: (context) => const CertificationView(),
-        settings: data,
-      );
-    },
     ProductDetailView: (data) {
       var args = data.getArgs<ProductDetailViewArguments>(nullOk: false);
       return CupertinoPageRoute<dynamic>(
@@ -102,6 +97,7 @@ class StackedRouter extends RouterBase {
           product: args.product,
         ),
         settings: data,
+        fullscreenDialog: true,
       );
     },
     HomeView: (data) {
@@ -118,7 +114,14 @@ class StackedRouter extends RouterBase {
         builder: (context) => PurchaseView(
           key: args.key,
           paymentData: args.paymentData,
+          order: args.order,
         ),
+        settings: data,
+      );
+    },
+    CouponView: (data) {
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => const CouponView(),
         settings: data,
       );
     },
@@ -152,5 +155,6 @@ class ProductDetailViewArguments {
 class PurchaseViewArguments {
   final Key key;
   final PaymentData paymentData;
-  PurchaseViewArguments({this.key, this.paymentData});
+  final Order order;
+  PurchaseViewArguments({this.key, this.paymentData, this.order});
 }

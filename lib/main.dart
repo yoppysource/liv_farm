@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/secret.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/ui/home/home_view.dart';
 import 'package:liv_farm/ui/landing/landing_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/setup_bottom_sheet.dart';
@@ -16,6 +18,7 @@ import 'app/app.router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   GestureBinding.instance.resamplingEnabled = true;
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       navigatorKey: StackedService.navigatorKey,
+      navigatorObservers: [locator<AnalyticsService>().getAnalyticsObserver()],
       onGenerateRoute: StackedRouter().onGenerateRoute,
       supportedLocales: [
         const Locale('ko', 'KO'),
@@ -61,8 +65,8 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Spoqa Han Sans',
               color: Color(0xff333333)),
         ),
-        scaffoldBackgroundColor: kMainIvory,
-        accentColor: kMainPink,
+        primaryColor: kSubColor,
+        accentColor: kSubColor,
         fontFamily: 'Spoqa Han Sans',
         textTheme: TextTheme(
           subtitle1: TextStyle(
@@ -79,7 +83,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Spoqa Han Sans',
               color: Color(0xff333333)),
           bodyText2: TextStyle(
-              fontSize: 14.0,
+              fontSize: 15.0,
               fontFamily: 'Spoqa Han Sans',
               color: Color(0xff828282)),
         ),

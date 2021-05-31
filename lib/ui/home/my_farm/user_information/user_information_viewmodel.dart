@@ -15,9 +15,9 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
   BottomSheetService _bottomSheetService = locator<BottomSheetService>();
 
   String get name =>
-      getStringOrDefaultString(_userProviderService.user.name, '성함');
+      getStringOrDefaultString(_userProviderService.user.name, true);
   String get phoneNumber =>
-      getStringOrDefaultString(_userProviderService.user.phoneNumber, '전화번호');
+      getStringOrDefaultString(_userProviderService.user.phoneNumber, false);
   String get email => _userProviderService.user.email;
   String get logoPathForPlatform {
     switch (_userProviderService.user.platform) {
@@ -39,9 +39,9 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
       ? '생년월일을 입력해주세요'
       : getStringFromDatetime(_userProviderService.user.birthday);
 
-  String getStringOrDefaultString(String value, String title) {
+  String getStringOrDefaultString(String value, bool isName) {
     if (value == null || value == '') {
-      return "$title을/를 입력해주세요";
+      return isName ? "이름을 입력해주세요" : "전화번호를 입력해주세요";
     } else {
       return value;
     }

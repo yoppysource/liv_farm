@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/services/secure_storage_service.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
@@ -33,6 +34,8 @@ abstract class AuthService {
         await _serverService.postData(data: data, path: path, isForLogin: true);
     await saveTokenToLocalStorage(body["token"]);
     ServerService.accessToken = body["token"];
+    debugPrint(ServerService.accessToken);
+
     _userService.setUserFromJson(body["data"]["data"]);
   }
 }

@@ -96,7 +96,6 @@ class AddressSelectViewModel extends BaseViewModel {
 
   Future callBottomSheetToGetAddressDetail() async {
     SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
-        isScrollControlled: false,
         variant: BottomSheetType.Write,
         customData: {
           'maxLength': 20,

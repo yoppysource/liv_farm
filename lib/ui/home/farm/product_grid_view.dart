@@ -29,65 +29,122 @@ class ProductGridView extends StatelessWidget with Formatter {
           model.onProductTap(productList[index]);
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Card(
-            color: kMainIvory,
-            elevation: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      imageUrl: productList[index].thumbnailPath,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fadeInDuration: Duration(milliseconds: 50),
-                      fit: isOneItemForRow ? BoxFit.fitWidth : BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 5, left: 10, right: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                '${productList[index].name}',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              '${getPriceFromInt(productList[index].price)}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black.withOpacity(0.6),
-                                      letterSpacing: 0.7),
-                            )
-                          ],
-                        ),
+          padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
+          child: Stack(
+            children: [
+              Card(
+                color: Colors.white,
+                elevation: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: CachedNetworkImage(
+                        imageUrl: productList[index].thumbnailPath,
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fadeInDuration: Duration(milliseconds: 50),
+                        fit: isOneItemForRow ? BoxFit.fitWidth : BoxFit.cover,
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                verticalSpaceTiny,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '${productList[index].name}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        .copyWith(
+                                            color: Color(0xff333333),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                                verticalSpaceTiny,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${getPriceFromInt(productList[index].price)}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color:
+                                                  Colors.black.withOpacity(0.6),
+                                              letterSpacing: 0.7),
+                                    ),
+                                    Text(
+                                      '${productList[index].weight}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                          ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              if (productList[index].inventory == 0)
+                Container(
+                  color: Colors.grey.withOpacity(0.2),
+                ),
+              if (productList[index].inventory == 0)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        height: 40,
+                        child: Image.asset(
+                          'assets/images/growing_icon.png',
+                          color: Colors.black.withOpacity(0.6),
+                        )),
+                  ),
+                )
+              // if (productList[index].inventory == 0)
+              //   Align(
+              //     alignment: Alignment.topLeft,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(8.0),
+              //       child: Row(
+              //         children: [
+              //           Text(
+              //             '재배 중인 상품입니다',
+              //             style: Theme.of(context)
+              //                 .textTheme
+              //                 .bodyText2
+              //                 .copyWith(fontSize: 14),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   )
+            ],
           ),
         ),
       ),

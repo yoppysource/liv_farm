@@ -16,9 +16,7 @@ class ReviewsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return (reviews == null || this.reviews.isEmpty)
         ? EmptyView(
-            iconData: Icons.rate_review_outlined,
-            text: "아직 등록된 리뷰가 없습니다",
-          )
+            iconData: Icons.rate_review_outlined, text: "아직 등록된 리뷰가 없습니다")
         : Padding(
             padding: horizontalPaddingToScaffold,
             child: ListView.builder(
@@ -37,34 +35,37 @@ class ReviewCard extends StatelessWidget with Formatter {
   const ReviewCard({Key key, this.review}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MyCard(
-      title:
-          '${review.createdAt == null ? '' : getStringFromDatetime(review.createdAt)}',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RatingBarIndicator(
-                rating: review.rating,
-                itemBuilder: (context, index) => Icon(
-                  Icons.star,
-                  color: kMainPink,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: MyCard(
+        title:
+            '${review.createdAt == null ? '' : getStringFromDatetime(review.createdAt)}',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RatingBarIndicator(
+                  rating: review.rating,
+                  itemBuilder: (context, index) => Icon(
+                    Icons.star,
+                    color: kMainPink,
+                  ),
+                  itemCount: 5,
+                  itemSize: 20.0,
+                  direction: Axis.horizontal,
                 ),
-                itemCount: 5,
-                itemSize: 20.0,
-                direction: Axis.horizontal,
-              ),
-              Text("${review?.userName[0] ?? "김"}** 고객님")
-            ],
-          ),
-          verticalSpaceRegular,
-          Text(
-            review.review,
-            style: Theme.of(context).textTheme.bodyText2,
-          )
-        ],
+                Text("${review?.userName[0] ?? "김"}** 고객님")
+              ],
+            ),
+            verticalSpaceRegular,
+            Text(
+              review.review,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ],
+        ),
       ),
     );
   }

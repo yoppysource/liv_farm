@@ -3,7 +3,7 @@ import 'package:stacked/stacked.dart';
 
 class PickDateTimeBottomSheetViewModel extends BaseViewModel {
   final Map<DateTime, List<TimeOfDay>> data;
-  final String defaultString;
+  String defaultString;
   static const String KEY_selectedDate = 'selectedDate';
   static const String KEY_deliveryGuideMessage = 'deliveryGuide';
   DateTime selectedDateTime;
@@ -45,6 +45,7 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
     if (index != 0) {
       selectedDateTime = data.keys.elementAt(index - 1);
     }
+    if (index == 0) {}
     notifyListeners();
   }
 

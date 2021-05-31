@@ -58,6 +58,7 @@ class Product {
     nameInEng = json['nameInEng'];
     price = json['price'];
     location = json['location'];
+    intro = json['intro'];
     descriptionImgPath =
         Uri(scheme: scheme, port: hostPORT, host: hostIP).toString() +
             json['descriptionImgPath'];
@@ -66,7 +67,11 @@ class Product {
             json['thumbnailPath'];
     detailImgPath = json['detailImgPath']
             ?.map((e) =>
-                Uri(scheme: scheme, host: hostIP, path: basePATH).toString() +
+                Uri(
+                  scheme: scheme,
+                  port: hostPORT,
+                  host: hostIP,
+                ).toString() +
                 e)
             ?.toList() ??
         <String>[];

@@ -63,6 +63,7 @@ class Order {
     data['user'] = this.user.id;
     data['deliveryReservationMessage'] = this.deliveryReservationMessage;
     data['payMethod'] = this.payMethod;
+    data['createdAt'] = this.createdAt.toIso8601String();
     data['scheduledDate'] = this.scheduledDate?.toIso8601String() ?? '';
     return data;
   }

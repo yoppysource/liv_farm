@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/landing/landing_viewmodel.dart';
+import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 
 //The role of landing page
@@ -18,6 +19,7 @@ class LandingView extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.7,
             child: Image.asset(
               "assets/images/livLogo.png",
+              color: kSubColor,
             ),
           ),
         ),

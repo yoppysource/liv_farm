@@ -92,7 +92,7 @@ class _TimeListState extends State<TimeList> {
           final hour = hours[index];
 
           return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 5.0),
             child: TimeButton(
               borderColor: kMainGrey,
               activeBorderColor: kMainGreen,

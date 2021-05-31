@@ -18,58 +18,63 @@ class MyFarmView extends StatelessWidget {
           body: ListView(
             padding: horizontalPaddingToScaffold,
             children: [
-              verticalSpaceMedium,
+              verticalSpaceRegular,
               UserInformationView(),
-              verticalSpaceMedium,
-              Column(
-                children: [
-                  MyFarmTile(
-                    text: '쿠폰함',
-                    onPressed: () {},
-                  ),
-                  verticalSpaceTiny,
-                  MyFarmTile(
-                    text: '배송지 설정',
-                    onPressed: model.onPressedAddressSelect,
-                  ),
-                  verticalSpaceTiny,
-                  MyFarmTile(
-                    text: '고객센터',
-                    onPressed: model.onTapCustomerService,
-                  ),
-                  verticalSpaceTiny,
-                  MyFarmTile(
-                    text: '개인정보약관',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PolicyPage()));
-                    },
-                  ),
-                  verticalSpaceTiny,
-                  MyFarmTile(
-                    text: 'License',
-                    onPressed: () {
-                      showLicensePage(
-                          context: context,
-                          applicationIcon: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.asset('assets/images/symbol.png')),
-                          applicationName: "LivFarm",
-                          applicationLegalese:
-                              'COPYRIGHTⓒ 2021. Future Connect all rights reserved');
-                    },
-                  ),
-                  verticalSpaceTiny,
-                  MyFarmTile(
-                      text: '로그아웃',
+              verticalSpaceRegular,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    MyFarmTile(
+                      text: '쿠폰함',
                       onPressed: () async {
-                        await model.onTapLogout();
-                      }),
-                  verticalSpaceTiny,
-                ],
+                        await model.onPressedCouponSelect();
+                      },
+                    ),
+                    verticalSpaceTiny,
+                    MyFarmTile(
+                      text: '배송지 설정',
+                      onPressed: model.onPressedAddressSelect,
+                    ),
+                    verticalSpaceTiny,
+                    MyFarmTile(
+                      text: '고객센터',
+                      onPressed: model.onTapCustomerService,
+                    ),
+                    verticalSpaceTiny,
+                    MyFarmTile(
+                      text: '개인정보약관',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PolicyPage()));
+                      },
+                    ),
+                    verticalSpaceTiny,
+                    MyFarmTile(
+                      text: 'License',
+                      onPressed: () {
+                        showLicensePage(
+                            context: context,
+                            applicationIcon: Container(
+                                height: 100,
+                                width: 100,
+                                child: Image.asset('assets/images/symbol.png')),
+                            applicationName: "LivFarm",
+                            applicationLegalese:
+                                'COPYRIGHTⓒ 2021. Future Connect all rights reserved');
+                      },
+                    ),
+                    verticalSpaceTiny,
+                    MyFarmTile(
+                        text: '로그아웃',
+                        onPressed: () async {
+                          await model.onTapLogout();
+                        }),
+                    verticalSpaceRegular,
+                  ],
+                ),
               ),
             ],
           ),

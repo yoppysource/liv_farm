@@ -1,6 +1,7 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
 import 'package:liv_farm/model/product.dart';
+import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/server_service/APIException.dart';
 import 'package:liv_farm/services/server_service/API_path.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
@@ -10,17 +11,26 @@ import 'package:stacked_services/stacked_services.dart';
 
 class FarmViewModel
     extends FutureViewModel<Map<ProductCategory, List<Product>>> {
+  AnalyticsService _analyticsService = locator<AnalyticsService>();
   ServerService _serverService =
       ServerService(apiPath: APIPath(resource: Resource.products));
   DialogService _dialogService = locator<DialogService>();
   NavigationService _navigationService = locator<NavigationService>();
+  ServerService _eventServerService =
+      ServerService(apiPath: APIPath(resource: Resource.events));
 
   @override
   Future<Map<ProductCategory, List<Product>>> futureToRun() async {
-    Map<String, dynamic> data = await _serverService.getData();
-    List productData = data['data'] as List;
-    List productList = productData.map((e) => Product.fromJson(e)).toList();
-    return createMapByCategory(productList);
+    try {
+      Map<String, dynamic> data = await _serverService.getData();
+      Map<String, dynamic> eventData = await _eventServerService.getData();
+      this.eventsList = eventData['data'] as List;
+      List productData = data['data'] as List;
+      List productList = productData.map((e) => Product.fromJson(e)).toList();
+      return createMapByCategory(productList);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -32,6 +42,8 @@ class FarmViewModel
       // _dialogService.showDialog(title: "??", description: error.toString());
     }
   }
+
+  List eventsList = [];
 
   Map<ProductCategory, List<Product>> createMapByCategory(
       List<Product> productList) {
@@ -66,7 +78,28 @@ class FarmViewModel
     notifyListeners();
   }
 
+  void navigateToProductDetailViewBySearchingProduct(Product product) {
+    _analyticsService.logSearch(product.name);
+    _analyticsService.logViewItem(
+        itemId: product.id,
+        itemName: product.name,
+        itemCategory: product.category.toString(),
+        price: product.price.toDouble(),
+        currency: 'won');
+    _navigationService.navigateWithTransition(
+        ProductDetailView(
+          product: product,
+        ),
+        transition: 'fade');
+  }
+
   void onProductTap(Product product) {
+    _analyticsService.logViewItem(
+        itemId: product.id,
+        itemName: product.name,
+        itemCategory: product.category.toString(),
+        price: product.price.toDouble(),
+        currency: 'won');
     _navigationService.navigateWithTransition(
         ProductDetailView(
           product: product,
