@@ -1,5 +1,7 @@
+import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/model/review.dart';
 import 'package:liv_farm/secret.dart';
+import 'package:liv_farm/services/user_provider_service.dart';
 
 enum ProductCategory {
   Vegetable,
@@ -10,7 +12,10 @@ enum ProductCategory {
 }
 
 class Product {
-  int inventory;
+  UserProviderService _userProviderService = locator<UserProviderService>();
+  bool get isPartner =>
+      _userProviderService.user != null &&
+      _userProviderService.user.role == 'partner';
   double ratingsAverage;
   int ratingsQuantity;
   String name;
@@ -28,7 +33,6 @@ class Product {
   int discountedPrice;
 
   Product({
-    this.inventory,
     this.ratingsAverage,
     this.ratingsQuantity,
     this.name,
@@ -48,15 +52,15 @@ class Product {
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    inventory = json['inventory'];
     ratingsAverage = json['ratingsAverage']?.toDouble() ?? 4.5;
     ratingsQuantity = json['ratingsQuantity'] ?? 0;
-    discountedPrice = json['discountedPrice'] ?? json['price'];
+   
     category =
         ProductCategory.values[json['category']] ?? ProductCategory.Vegetable;
     name = json['name'];
     nameInEng = json['nameInEng'];
-    price = json['price'];
+    price =isPartner ?  json['partnerPrice']: json['price'];
+ discountedPrice = isPartner ?json['partnerPrice'] : json['discountedPrice'] ?? json['price'];
     location = json['location'];
     intro = json['intro'];
     descriptionImgPath =

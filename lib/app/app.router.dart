@@ -11,13 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:iamport_flutter/model/payment_data.dart';
 import 'package:stacked/stacked.dart';
 
+import '../model/address.dart';
+import '../model/inventory.dart';
 import '../model/order.dart';
-import '../model/product.dart';
 import '../ui/auth/login/login_view.dart';
 import '../ui/auth/signup/signup_view.dart';
 import '../ui/home/coupon/coupon_view.dart';
 import '../ui/home/farm/product_detail/product_detail_view.dart';
 import '../ui/home/home_view.dart';
+import '../ui/home/shopping_cart/purchase/purchase_option_view.dart';
 import '../ui/home/shopping_cart/purchase/purchase_view.dart';
 import '../ui/home/video/video_view.dart';
 import '../ui/landing/landing_view.dart';
@@ -31,6 +33,7 @@ class Routes {
   static const String homeView = '/home-view';
   static const String purchaseView = '/purchase-view';
   static const String couponView = '/coupon-view';
+  static const String purchaseOptionView = '/purchase-option-view';
   static const all = <String>{
     landingView,
     loginView,
@@ -40,6 +43,7 @@ class Routes {
     homeView,
     purchaseView,
     couponView,
+    purchaseOptionView,
   };
 }
 
@@ -55,6 +59,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.homeView, page: HomeView),
     RouteDef(Routes.purchaseView, page: PurchaseView),
     RouteDef(Routes.couponView, page: CouponView),
+    RouteDef(Routes.purchaseOptionView, page: PurchaseOptionView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -94,7 +99,7 @@ class StackedRouter extends RouterBase {
       return CupertinoPageRoute<dynamic>(
         builder: (context) => ProductDetailView(
           key: args.key,
-          product: args.product,
+          inventory: args.inventory,
         ),
         settings: data,
         fullscreenDialog: true,
@@ -125,6 +130,23 @@ class StackedRouter extends RouterBase {
         settings: data,
       );
     },
+    PurchaseOptionView: (data) {
+      var args = data.getArgs<PurchaseOptionViewArguments>(
+        orElse: () => PurchaseOptionViewArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => PurchaseOptionView(
+          key: args.key,
+          orderName: args.orderName,
+          amount: args.amount,
+          address: args.address,
+          orderRequestMessage: args.orderRequestMessage,
+          option: args.option,
+          bookingOrderMessage: args.bookingOrderMessage,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -147,8 +169,8 @@ class SignupViewArguments {
 /// ProductDetailView arguments holder class
 class ProductDetailViewArguments {
   final Key key;
-  final Product product;
-  ProductDetailViewArguments({this.key, @required this.product});
+  final Inventory inventory;
+  ProductDetailViewArguments({this.key, @required this.inventory});
 }
 
 /// PurchaseView arguments holder class
@@ -157,4 +179,23 @@ class PurchaseViewArguments {
   final PaymentData paymentData;
   final Order order;
   PurchaseViewArguments({this.key, this.paymentData, this.order});
+}
+
+/// PurchaseOptionView arguments holder class
+class PurchaseOptionViewArguments {
+  final Key key;
+  final String orderName;
+  final int amount;
+  final Address address;
+  final String orderRequestMessage;
+  final String option;
+  final String bookingOrderMessage;
+  PurchaseOptionViewArguments(
+      {this.key,
+      this.orderName,
+      this.amount,
+      this.address,
+      this.orderRequestMessage,
+      this.option,
+      this.bookingOrderMessage});
 }

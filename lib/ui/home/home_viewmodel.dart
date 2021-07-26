@@ -1,7 +1,6 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
-import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -9,8 +8,6 @@ class HomeViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   UserProviderService _userProviderService = locator<UserProviderService>();
   DialogService _dialogService = locator<DialogService>();
-  ShoppingCartViewModel shoppingCartViewModel =
-      locator<ShoppingCartViewModel>();
   int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;

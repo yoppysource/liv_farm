@@ -2,6 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/home/farm/farm_view.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/product_detail_viewmodel.dart';
@@ -12,9 +13,9 @@ import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 
 class ProductDetailView extends StatefulWidget {
-  final Product product;
+  final Inventory inventory;
 
-  const ProductDetailView({Key key, @required this.product}) : super(key: key);
+  const ProductDetailView({Key key, @required this.inventory}) : super(key: key);
 
   @override
   _ProductDetailViewState createState() => _ProductDetailViewState();
@@ -34,7 +35,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductDetailViewModel>.reactive(
-      viewModelBuilder: () => ProductDetailViewModel(product: widget.product),
+      viewModelBuilder: () => ProductDetailViewModel(inventory: widget.inventory),
       builder: (context, model, child) => DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -201,17 +202,17 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                 ),
                               ],
                             ),
-                            ReviewsView(reviews: model.product.reviews),
+                            ReviewsView(reviews: model.product.reviews?.reversed?.toList() ?? [],productDetailViewModel: model,),
                           ],
                         ),
                       ),
                     ),
-                    if (!(widget.product.category == ProductCategory.Dressing ||
-                        widget.product.category == ProductCategory.Protein))
+                    if (!(widget.inventory.product.category == ProductCategory.Dressing ||
+                        widget.inventory.product.category == ProductCategory.Protein))
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: GestureDetector(
-                          onTap: widget.product.inventory == 0
+                          onTap: widget.inventory.inventory == 0
                               ? null
                               : model.onCartTap,
                           child: Container(
@@ -233,7 +234,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                               height: double.infinity,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: widget.product.inventory == 0
+                                color: widget.inventory.inventory == 0
                                     ? Colors.black26
                                     : kSubColor.withOpacity(0.9),
                                 borderRadius: bottomButtonBorderRadius,
@@ -249,7 +250,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                               ),
                               child: Center(
                                   child: Text(
-                                widget.product.inventory == 0
+                                widget.inventory.inventory == 0
                                     ? "재배 중인 상품입니다"
                                     : "장바구니에 담기",
                                 style: TextStyle(

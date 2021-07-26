@@ -71,7 +71,7 @@ class SignupView extends StatelessWidget with $SignupView {
           onMainButtonPressed: model.onMainButtonPressed,
           onToggleButtonPressed: model.onBackButtonPressed,
           onBackButtonPressed: model.onBackButtonPressed,
-          onFacebookPressed: model.onFacebookPressed,
+          // onFacebookPressed: model.onFacebookPressed,
           onKakaoPressed: model.onKakaoPressed,
           onApplePressed: model.onApplePressed,
           onGooglePressed: model.onGooglePressed,

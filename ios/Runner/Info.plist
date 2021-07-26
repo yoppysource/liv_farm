@@ -110,6 +110,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>리브팜이 사용자와 가까운 농장으로 안내하기 위해 위치정보를 가져옵니다. 동의하시겠습니까?</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

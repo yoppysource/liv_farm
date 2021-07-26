@@ -7,7 +7,6 @@ import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/secret.dart';
 import 'package:liv_farm/services/analytics_service.dart';
-import 'package:liv_farm/ui/home/home_view.dart';
 import 'package:liv_farm/ui/landing/landing_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/setup_bottom_sheet.dart';
 import 'package:liv_farm/ui/shared/styles.dart';

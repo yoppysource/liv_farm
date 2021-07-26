@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
-import 'package:liv_farm/app/app.locator.dart';
-import 'package:liv_farm/ui/shared/styles.dart';
-import 'package:stacked_services/stacked_services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:liv_farm/ui/home/video/streaming_view.dart';
+import 'package:liv_farm/ui/shared/styles.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoView extends StatefulWidget {
   static String streamingTag;
@@ -22,7 +20,7 @@ class _VideoViewState extends State<VideoView> {
     _videoPlayerController = VideoPlayerController.asset(
         'assets/videos/video.mp4',
         videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
-    // _pageController = PageController();
+    _pageController = PageController(initialPage: 0);
     if (mounted) {
       _videoPlayerController.initialize().then((_) {
         _videoPlayerController.setVolume(0);
@@ -39,99 +37,108 @@ class _VideoViewState extends State<VideoView> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: _videoPlayerController.value.initialized
-            ?
-            // PageView(
-            //     scrollDirection: Axis.vertical,
-            //     controller: _pageController,
-            //     children: [
-            SizedBox.expand(
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: _videoPlayerController.value.size?.width ?? 0,
-                          height:
-                              _videoPlayerController.value.size?.height ?? 0,
-                          child: VideoPlayer(_videoPlayerController),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: InkWell(
-                        onTap: () async {
-                          if (VideoView.streamingTag == null) {
-                            locator<DialogService>().showDialog(
-                              title: '안내',
-                              description: "일시적인 오류가 발생했습니다. \n다음에 다시 시도해주세요",
-                              buttonTitle: "확인",
-                            );
-                          } else {
-                            await canLaunch(
-                                    "https://www.youtube.com/watch?v=${VideoView.streamingTag ?? ''}")
-                                ? await launch(
-                                    "https://www.youtube.com/watch?v=${VideoView.streamingTag}")
-                                : locator<DialogService>().showDialog(
-                                    title: '안내',
-                                    description:
-                                        "일시적인 오류가 발생했습니다. \n다음에 다시 시도해주세요",
-                                    buttonTitle: "확인",
-                                  );
-                          }
-                          _pageController.nextPage(
-                              curve: Curves.easeIn,
-                              duration: Duration(milliseconds: 500));
-                        },
-                        child: Container(
-                          height: bottomBottomHeight,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: bottomButtonBorderRadius,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset:
-                                    Offset(0, 1), // changes position of shadow
-                              ),
-                            ],
+            ? PageView(
+                scrollDirection: Axis.vertical,
+                controller: _pageController,
+                children: [
+                  SizedBox.expand(
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: SizedBox(
+                              width:
+                                  _videoPlayerController.value.size?.width ??
+                                      0,
+                              height:
+                                  _videoPlayerController.value.size?.height ??
+                                      0,
+                              child: VideoPlayer(_videoPlayerController),
+                            ),
                           ),
-                          child: Padding(
-                            padding: horizontalPaddingToScaffold,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: Text(
-                                      '농장 실시간 구경하러 가기',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: InkWell(
+                            onTap: () {
+                              // if (VideoView.streamingTag == null) {
+                              //   locator<DialogService>().showDialog(
+                              //     title: '안내',
+                              //     description: "일시적인 오류가 발생했습니다. \n다음에 다시 시도해주세요",
+                              //     buttonTitle: "확인",
+                              //   );
+                              // } else {
+                              //   await canLaunch(
+                              //           "https://www.youtube.com/watch?v=${VideoView.streamingTag ?? ''}")
+                              //       ? await launch(
+                              //           "https://www.youtube.com/watch?v=${VideoView.streamingTag}")
+                              //       : locator<DialogService>().showDialog(
+                              //           title: '안내',
+                              //           description:
+                              //               "일시적인 오류가 발생했습니다. \n다음에 다시 시도해주세요",
+                              //           buttonTitle: "확인",
+                              //         );
+                              // }
+                              _pageController.nextPage(
+                                  curve: Curves.easeIn,
+                                  duration: Duration(milliseconds: 500));
+                            },
+                            child: Container(
+                              height: bottomBottomHeight,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: bottomButtonBorderRadius,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: Offset(
+                                        0, 1), // changes position of shadow
                                   ),
-                                  horizontalSpaceTiny,
-                                  Container(
-                                      child: Icon(
-                                    CupertinoIcons.arrow_right,
-                                    size: 18,
-                                    color: Color(0xff333333),
-                                  ))
                                 ],
+                              ),
+                              child: Padding(
+                                padding: horizontalPaddingToScaffold,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          '농장 실시간 구경하러 가기',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .copyWith(
+                                                  fontWeight:
+                                                      FontWeight.bold),
+                                        ),
+                                      ),
+                                      horizontalSpaceTiny,
+                                      Container(
+                                          child: Icon(
+                                        CupertinoIcons.arrow_down,
+                                        size: 18,
+                                        color: Color(0xff333333),
+                                      ))
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                      ],
+                    ),
+                  ),
+                  SizedBox.expand(
+                    child: StreamingView(pageController: _pageController,),
+                  ),
+                ],
               )
             // YoutubePlayerBuilder(
             //     onExitFullScreen: () {
@@ -187,8 +194,7 @@ class _VideoViewState extends State<VideoView> {
             //         ),
             //       );
             //     }),
-            //   ],
-            // )
+
             : Container(),
       ),
     );

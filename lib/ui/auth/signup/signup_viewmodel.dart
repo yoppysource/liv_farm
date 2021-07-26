@@ -27,7 +27,7 @@ class SignupViewModel extends AuthViewModel {
     isInputVaildToSubmit = false;
     if (!emailValue.contains("@") && emailValue.length > 6)
       setValidationMessage("이메일 형식이 올바르지 않습니다.");
-    if (passwordValue.isNotEmpty && passwordValue.length < 8)
+    if (passwordValue.isNotEmpty && passwordValue.length < 6)
       setValidationMessage("비밀번호가 너무 짧습니다.");
     if (passwordConfirmValue.isNotEmpty &&
         passwordConfirmValue != passwordValue)

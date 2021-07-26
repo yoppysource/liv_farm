@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liv_farm/app/app.locator.dart';
+import 'package:liv_farm/services/cart_provider_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
 import 'package:liv_farm/ui/home/farm/farm_view.dart';
 import 'package:liv_farm/ui/home/home_viewmodel.dart';
 import 'package:liv_farm/ui/home/my_farm/my_farm_view.dart';
 import 'package:liv_farm/ui/home/order_history/order_history_view.dart';
 import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_view.dart';
-import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:liv_farm/ui/home/video/video_view.dart';
 import 'package:liv_farm/ui/shared/my_icons_icons.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
@@ -78,17 +78,19 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   label: '마이팜'),
               BottomNavigationBarItem(
-                  icon: ViewModelBuilder<ShoppingCartViewModel>.reactive(
+                  icon: ViewModelBuilder<CartProviderService>.reactive(
                     disposeViewModel: false,
                     initialiseSpecialViewModelsOnce: true,
-                    viewModelBuilder: () => locator<ShoppingCartViewModel>(),
+                    viewModelBuilder: () => locator<CartProviderService>(),
                     builder: (context, model, child) => Badge(
                         position: BadgePosition.topEnd(top: -15, end: -10),
                         animationDuration: Duration(milliseconds: 500),
                         animationType: BadgeAnimationType.fade,
                         badgeColor: kMainGreen,
                         badgeContent: Text(
-                          model.cartLength.toString(),
+                          model.cart == null
+                              ? '0'
+                              : model.cart.items?.length.toString() ?? '0',
                           style: TextStyle(color: Colors.white),
                         ),
                         child: Icon(MyIcons.shopping_cart)),

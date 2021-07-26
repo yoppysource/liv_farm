@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/add_to_cart_bottom_sheet/add_to_cart_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/bottom_sheet_type.dart';
+import 'package:liv_farm/ui/shared/bottom_sheet/change_password_bottom_sheet/change_password_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/customer_service_bottom_sheet/customer_service_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/gender_select_bottom_sheet/gender_select_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/pick_date_time_bottom_sheet/pick_date_time_bottom_sheet_view.dart';
+import 'package:liv_farm/ui/shared/bottom_sheet/point_input_bottom_sheet/write_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/review_bottom_sheet/review_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/write_bottom_sheet/write_bottom_sheet_view.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
@@ -33,6 +35,11 @@ void setupBottomSheetUi() {
             request: sheetRequest, completer: completer),
     BottomSheetType.Review: (context, sheetRequest, completer) =>
         ReviewBottomSheetView(request: sheetRequest, completer: completer),
+    BottomSheetType.ChangePassword: (context, sheetRequest, completer) =>
+        ChangePasswordBottomSheetView(request: sheetRequest, completer: completer),
+        BottomSheetType.PointInput: (context, sheetRequest, completer) => 
+        PointInputBottomSheetView(request: sheetRequest, completer: completer),
+    
   };
 
   bottomSheetService.setCustomSheetBuilders(builders);

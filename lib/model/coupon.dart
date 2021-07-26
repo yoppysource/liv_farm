@@ -17,7 +17,7 @@ class Coupon {
       this.expireDate});
 
   Coupon.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
+    id = json['id'];
     code = json['code'];
     category = json['category'];
     amount = json['amount'];
@@ -29,7 +29,7 @@ class Coupon {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.id;
+    data['id'] = this.id;
     data['code'] = this.code;
     data['category'] = this.category;
     data['amount'] = this.amount;

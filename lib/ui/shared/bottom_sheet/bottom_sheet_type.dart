@@ -6,4 +6,6 @@ enum BottomSheetType {
   GetGender,
   CustomerService,
   Review,
+  ChangePassword,
+  PointInput,
 }

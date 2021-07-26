@@ -1,32 +1,30 @@
-import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:liv_farm/model/product.dart';
+import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/ui/home/farm/farm_viewmodel.dart';
-import 'package:liv_farm/ui/home/farm/product_detail/product_detail_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
 class ProductGridView extends StatelessWidget with Formatter {
-  final List<Product> productList;
+  final List<Inventory> inventoryList;
   final FarmViewModel model;
 
-  const ProductGridView({Key key, this.productList, this.model})
+  const ProductGridView({Key key, this.inventoryList, this.model})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isOneItemForRow = productList.length < 4;
+    bool isOneItemForRow = inventoryList.length < 4;
 
     return GridView.builder(
-      itemCount: productList.length,
+      itemCount: inventoryList.length,
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           childAspectRatio: isOneItemForRow ? 1 : 0.5,
           crossAxisCount: isOneItemForRow ? 1 : 2),
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
-          model.onProductTap(productList[index]);
+          model.onProductTap(inventoryList[index]);
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 16),
@@ -41,7 +39,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                     Expanded(
                       flex: 4,
                       child: CachedNetworkImage(
-                        imageUrl: productList[index].thumbnailPath,
+                        imageUrl: inventoryList[index].product.thumbnailPath,
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         fadeInDuration: Duration(milliseconds: 50),
                         fit: isOneItemForRow ? BoxFit.fitWidth : BoxFit.cover,
@@ -62,7 +60,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                                 FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    '${productList[index].name}',
+                                    '${inventoryList[index].product.name}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle2
@@ -78,7 +76,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${getPriceFromInt(productList[index].price)}',
+                                      '${getPriceFromInt(inventoryList[index].product.price)}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1
@@ -89,7 +87,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                                               letterSpacing: 0.7),
                                     ),
                                     Text(
-                                      '${productList[index].weight}',
+                                      '${inventoryList[index].product.weight}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText1
@@ -109,11 +107,11 @@ class ProductGridView extends StatelessWidget with Formatter {
                   ],
                 ),
               ),
-              if (productList[index].inventory == 0)
+              if (inventoryList[index].inventory == 0)
                 Container(
                   color: Colors.grey.withOpacity(0.2),
                 ),
-              if (productList[index].inventory == 0)
+              if (inventoryList[index].inventory == 0)
                 Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -126,7 +124,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                         )),
                   ),
                 )
-              // if (productList[index].inventory == 0)
+              // if (inventoryList[index].product.inventory == 0)
               //   Align(
               //     alignment: Alignment.topLeft,
               //     child: Padding(

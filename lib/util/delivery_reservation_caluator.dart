@@ -14,11 +14,17 @@ class DeliveryReservationCaluator {
   final bool isOpenToday;
   final String openHourStr;
   final String closeHourStr;
+  Map<DateTime, List<TimeOfDay>> dateTimePairedWithTimeOfDayList;
+  get openHourOnApp => openHourStr.split(':')[1] == '00'
+      ? openHourStr.split(':')[0]
+      : openHourStr;
 
   DeliveryReservationCaluator(this.now, this.isOpenSaturday, this.isOpenSunday,
-      this.isOpenToday, this.openHourStr, this.closeHourStr);
+      this.isOpenToday, this.openHourStr, this.closeHourStr) {
+    getDateTimePairedWithTimeOfDayList();
+  }
 
-  Map<DateTime, List<TimeOfDay>> getDateTimePairedWithTimeOfDayList() {
+  void getDateTimePairedWithTimeOfDayList() {
     Map<DateTime, List<TimeOfDay>> dateTimePairedWithTimeOfDayList = {};
     if (isPossibleToBuyNow(this.now)) {
       TimeOfDay startTime =
@@ -37,7 +43,7 @@ class DeliveryReservationCaluator {
     dateTimePairedWithTimeOfDayList[getNextDateBySkippingHolidays(secondDate)] =
         [openHour, closeHour];
 
-    return dateTimePairedWithTimeOfDayList;
+    this.dateTimePairedWithTimeOfDayList = dateTimePairedWithTimeOfDayList;
   }
 
   TimeOfDay get openHour => TimeOfDay(
@@ -70,5 +76,23 @@ class DeliveryReservationCaluator {
     TimeOfDay nowTimeOfDay = TimeOfDay(hour: now.hour, minute: now.minute);
     return (nowTimeOfDay.after(this.openHour) &&
         nowTimeOfDay.before(this.closeHour));
+  }
+
+  String getWeekDaysName(DateTime dateTime) {
+    if (dateTime.weekday == 1) {
+      return '월';
+    } else if (dateTime.weekday == 2) {
+      return '화';
+    } else if (dateTime.weekday == 3) {
+      return '수';
+    } else if (dateTime.weekday == 4) {
+      return '목';
+    } else if (dateTime.weekday == 5) {
+      return '금';
+    } else if (dateTime.weekday == 6) {
+      return '토';
+    } else {
+      return '일';
+    }
   }
 }

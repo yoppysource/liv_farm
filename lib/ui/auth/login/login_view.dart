@@ -28,6 +28,7 @@ class LoginView extends StatelessWidget with $LoginView {
           busy: model.isBusy,
           title: '로그인',
           toggleQuestionText: '아직 계정이 없으신가요?',
+          onForgetPasswordButtonPressed: model.onForgetPasswordButtonPressed,
           mainButtonTitle: "로그인",
           form: Column(
             children: [
@@ -60,7 +61,7 @@ class LoginView extends StatelessWidget with $LoginView {
           onMainButtonPressed: model.onMainButtonPressed,
           onBackButtonPressed: model.onBackButtonPressed,
           onToggleButtonPressed: model.onToggleButtonPressed,
-          onFacebookPressed: model.onFacebookPressed,
+          // onFacebookPressed: model.onFacebookPressed,
           onKakaoPressed: model.onKakaoPressed,
           onApplePressed: model.onApplePressed,
           onGooglePressed: model.onGooglePressed,

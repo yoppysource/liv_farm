@@ -1,103 +1,132 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import 'package:liv_farm/secret.dart';
 import 'package:liv_farm/services/server_service/APIException.dart';
-import 'package:liv_farm/services/server_service/API_path.dart';
+import 'package:http/http.dart' as http;
+
+enum Resource {
+  users,
+  products,
+  reviews,
+  coupons,
+  carts,
+  items,
+  orders,
+  events,
+  appinfo,
+  stores,
+  openingHour,
+  auth,
+}
 
 class ServerService {
-  final APIPath apiPath;
-  static String accessToken;
+  static String accessToken = '';
+  final Map<Resource, String> resourcePath = {
+    Resource.users: "/users",
+    Resource.auth: "/auth",
+    Resource.products: "/products",
+    Resource.reviews: "/reviews",
+    Resource.coupons: "/coupons",
+    Resource.carts: "/carts",
+    Resource.events: "/events",
+    Resource.stores: '/stores',
+    Resource.orders: "/orders",
+    Resource.appinfo: "/appInfo",
+    Resource.openingHour: "/openingHour",
+  };
 
-  ServerService({this.apiPath});
+  Uri getUri({Resource resource, String path = '/'}) => Uri(
+        scheme: scheme,
+        host: hostIP,
+        // port: hostPORT,
+        path: "$basePATH${this.resourcePath[resource]}$path",
+      );
 
-  Future<Map<String, dynamic>> postData(
-      {Map<String, dynamic> data, path = "/", isForLogin = false}) async {
+  Future<T> postData<T>(
+      {Resource resource,
+      path = "/",
+      isOtherDataNeed = false,
+      Map<String, dynamic> data}) async {
     try {
-      final endpoint = apiPath.uri.toString() + path;
+      final Uri endpoint = getUri(resource: resource, path: path);
       final http.Response response = await http.post(
         endpoint,
         body: jsonEncode(data),
         headers: {
           'Content-Type': "application/json",
-          'Authorization': '${valueForJWT(accessToken) ?? ''}'
+          'Authorization': '${valueForJWT(accessToken)}'
         },
       );
-      final result = await json.decode(response.body);
-
+    
+      final result = await jsonDecode(response.body) as Map<String, dynamic>;
       if (!response.statusCode.toString().startsWith("2"))
-        throw APIException(
-            response.statusCode, result["message"], result["error"]);
-      print(result);
-      if (isForLogin) return new Map<String, dynamic>.from(result);
-      return new Map<String, dynamic>.from(result['data']);
+        throw APIException(response.statusCode, result["message"]);
+      if (isOtherDataNeed) return result as T;
+      return result['data']['data'] as T;
     } catch (e) {
+      debugPrint(e.toString());
       rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> getData({path = "/"}) async {
+  Future<T> getData<T>({Resource resource, path = "/"}) async {
     try {
-      final endpoint = apiPath.uri.toString() + path;
+      final Uri endpoint = getUri(resource: resource, path: path);
       final response = await http.get(
         endpoint,
         headers: {
           'Content-Type': "application/json",
-          'Authorization': '${valueForJWT(accessToken) ?? ''}'
+          'Authorization': '${valueForJWT(accessToken)}'
         },
       );
       final result = await json.decode(response.body);
       if (!response.statusCode.toString().startsWith("2"))
-        throw APIException(
-            response.statusCode, result["message"], result["error"]);
-      return new Map<String, dynamic>.from(result['data']);
+        throw APIException(response.statusCode, result["message"]);
+        return result['data']['data'];      
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       rethrow;
     }
   }
 
-  Future<Map<String, dynamic>> patchData(
-      {Map<String, dynamic> data, path = "/"}) async {
-    print(data);
+  Future<T> patchData<T>(
+      {Resource resource, path = "/", Map<String, dynamic> data}) async {
     try {
-      final endpoint = apiPath.uri.toString() + path;
+      final Uri endpoint = getUri(resource: resource, path: path);
       final response = await http.patch(
         endpoint,
         body: jsonEncode(data),
         headers: {
           'Content-Type': "application/json",
-          'Authorization': '${valueForJWT(accessToken) ?? ''}'
+          'Authorization': '${valueForJWT(accessToken)}'
         },
       );
       final result = await json.decode(response.body);
       if (!response.statusCode.toString().startsWith("2"))
-        throw APIException(
-            response.statusCode, result["message"], result["error"]);
-      print(result);
-      return new Map<String, dynamic>.from(result);
+        throw APIException(response.statusCode, result["message"]);
+      return result['data']['data'] as T;
     } catch (e) {
-      return e;
+      rethrow;
     }
   }
 
-  Future<void> deleteData({Map<String, dynamic> data, path = "/"}) async {
+  Future<void> deleteData(
+      {Resource resource,
+      path = "/",
+      Map<String, dynamic> data = const {}}) async {
     try {
-      final endpoint = apiPath.uri.toString() + path;
+      final Uri endpoint = getUri(resource: resource, path: path);
       final response = await http.delete(
         endpoint,
         headers: {
           'Content-Type': "application/json",
-          'Authorization': '${valueForJWT(accessToken) ?? ''}'
+          'Authorization': '${valueForJWT(accessToken)}'
         },
       );
-
-      if (!response.statusCode.toString().startsWith("2")) {
-        final result = await json.decode(response.body);
-        throw APIException(
-            response.statusCode, result["message"], result["error"]);
-      }
+      if (!response.statusCode.toString().startsWith("2"))
+        throw APIException(response.statusCode, "오류가 발생했습니다");
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

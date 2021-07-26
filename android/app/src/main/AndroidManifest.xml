@@ -4,6 +4,10 @@
     package="com.future_connect.liv_farm">
     <queries>
         <package android:name="com.kakao.talk" />
+        <package android:name="com.kakao.onetalk" />
+        <package android:name="com.android.chrome" />
+        <package android:name="com.chrome.beta" />
+        <package android:name="com.chrome.dev" />
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.BROWSABLE" />
@@ -76,7 +80,7 @@
             android:value="2" />
     </application>
 <!--    <uses-feature android:name="android.hardware.location.gps" />-->
-<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
 

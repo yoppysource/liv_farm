@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/bottom_sheet_type.dart';
-
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/platform_widget/platform_date_picker.dart';
-import 'package:stacked/stacked.dart';
-
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 

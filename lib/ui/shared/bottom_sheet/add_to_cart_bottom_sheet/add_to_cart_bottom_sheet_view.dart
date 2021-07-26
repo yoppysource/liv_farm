@@ -23,7 +23,7 @@ class AddToCartBottomSheetView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddToCartBottomSheetViewModel>.reactive(
       viewModelBuilder: () =>
-          AddToCartBottomSheetViewModel(request.customData['productList']),
+          AddToCartBottomSheetViewModel(request.customData['inventoryList']),
       builder: (context, model, child) => GestureDetector(
         child: Container(
           decoration: BoxDecoration(
@@ -37,8 +37,8 @@ class AddToCartBottomSheetView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
-                  children: model.mapProductToQuantity.entries.map((entry) {
-                    return ItemListTile(product: entry.key, model: model);
+                  children: model.mapInventoryToQuantity.entries.map((entry) {
+                    return ItemListTile(inventory: entry.key, model: model);
                   }).toList(),
                 ),
                 Row(
@@ -51,10 +51,10 @@ class AddToCartBottomSheetView extends StatelessWidget {
                         onPressed: () =>
                             completer(SheetResponse(confirmed: false)),
                         child: Text(
-                          (request.customData['productList'][0].category ==
+                          (request.customData['inventoryList'][0].product.category ==
                                       ProductCategory.Dressing ||
-                                  request.customData['productList'][0]
-                                          .category ==
+                                  request.customData['inventoryList'][0]
+                                          .product.category ==
                                       ProductCategory.Protein)
                               ? '선택안함'
                               : '뒤로가기',
@@ -69,7 +69,7 @@ class AddToCartBottomSheetView extends StatelessWidget {
                         color: kMainPink,
                         onPressed: () => completer(SheetResponse(
                             confirmed: true,
-                            responseData: model.mapProductToQuantity)),
+                            responseData: model.mapInventoryToQuantity)),
                       ),
                     ),
                   ],

@@ -3,9 +3,8 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:liv_farm/model/item.dart';
+import 'package:liv_farm/model/cart.dart';
 import 'package:liv_farm/model/order.dart';
-import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/home/farm/farm_view.dart';
 import 'package:liv_farm/ui/home/order_history/order_history_viewmodel.dart';
 import 'package:liv_farm/ui/layouts/empty_view.dart';
@@ -171,7 +170,7 @@ class OrderCard extends StatelessWidget with Formatter {
                           height: 120,
                           width: 120,
                           child: CachedNetworkImage(
-                            imageUrl: _item.product.thumbnailPath,
+                            imageUrl: _item.inventory.product.thumbnailPath,
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                             fadeInDuration: Duration(milliseconds: 50),
@@ -191,7 +190,7 @@ class OrderCard extends StatelessWidget with Formatter {
                                 children: [
                                   FittedBox(
                                     fit: BoxFit.scaleDown,
-                                    child: Text(_item.product.name,
+                                    child: Text(_item.inventory.product.name,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1),
@@ -203,7 +202,7 @@ class OrderCard extends StatelessWidget with Formatter {
                                   ),
                                 ],
                               ),
-                              Text(getPriceFromInt(_item.product.price),
+                              Text(getPriceFromInt(_item.inventory.product.price),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1
@@ -268,7 +267,7 @@ class OrderCard extends StatelessWidget with Formatter {
                                       ),
                                     ),
                                     onTap: () async => await model.createReview(
-                                        _item.product.id, this.order.id),
+                                        _item.inventory.product.id, this.order.id),
                                   ),
                                 ),
                                 horizontalSpaceRegular,
@@ -290,7 +289,7 @@ class OrderCard extends StatelessWidget with Formatter {
                                     ),
                                     onTap: () {
                                       model.navigateToProductDetail(
-                                          _item.product);
+                                          _item.inventory);
                                     },
                                   ),
                                 ),
@@ -306,6 +305,7 @@ class OrderCard extends StatelessWidget with Formatter {
             if (this.isCurrentOrder == true)
               Column(
                 children: [
+                   if(this.order.option == 'delivery')
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -332,7 +332,7 @@ class OrderCard extends StatelessWidget with Formatter {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        '배송예정시간',
+                        '수령예정시간',
                         style: Theme.of(context).textTheme.subtitle2.copyWith(
                             color: kMainGrey,
                             fontSize: 16,
@@ -340,7 +340,7 @@ class OrderCard extends StatelessWidget with Formatter {
                       ),
                       verticalSpaceTiny,
                       Text(
-                        order.deliveryReservationMessage?.toString() ?? '',
+                        order.bookingOrderMessage?.toString() ?? '',
                         style: Theme.of(context).textTheme.subtitle2.copyWith(
                               fontSize: 16,
                             ),

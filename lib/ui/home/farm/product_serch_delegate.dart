@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:liv_farm/model/product.dart';
-
+import 'package:liv_farm/model/inventory.dart';
 class ProductSearchDelegate extends SearchDelegate<String> {
-  final List<Product> products;
+  final List<Inventory> inventories;
 
-  ProductSearchDelegate(this.products);
+  ProductSearchDelegate(this.inventories);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -35,25 +34,25 @@ class ProductSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final List<Product> productSearchList = query.isEmpty
-        ? products
-        : products.where((product) {
-            return product.name.contains(query);
+    final List<Inventory> productSearchList = query.isEmpty
+        ? inventories
+        : inventories.where((inventory) {
+            return inventory.product.name.contains(query);
           }).toList();
     return ListView.builder(
         itemCount: productSearchList.length,
         itemBuilder: (context, index) {
           return ListTile(
             onTap: () {
-              query = productSearchList[index].name;
+              query = productSearchList[index].product.name;
               Navigator.of(context).pop(query);
             },
             leading: Image(
               image: CachedNetworkImageProvider(
-                  productSearchList[index].thumbnailPath),
+                  productSearchList[index].product.thumbnailPath),
             ),
             title: Text(
-              '${productSearchList[index].name}',
+              '${productSearchList[index].product.name}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
           );

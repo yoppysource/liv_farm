@@ -4,6 +4,7 @@ import 'package:liv_farm/model/address.dart';
 
 class MyUser {
   bool agreeToGetMail;
+  bool isEmailConfirmed;
   String role;
   int point;
   String id;
@@ -39,7 +40,8 @@ class MyUser {
     if (json['gender'] != null) gender = json['gender'];
     if (json['role'] != null) role = json['role'];
     point = json['point'];
-    id = json['_id'];
+    id = json['id'];
+    isEmailConfirmed = json['isEmailConfirmed'];
     if (json['name'] != null) name = json['name'];
     if (json['email'] != null) email = json['email'];
     snsId = json["snsId"];
@@ -66,13 +68,14 @@ class MyUser {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['agreeToGetMail'] = this.agreeToGetMail ?? false;
+    data['isEmailConfirmed'] = this.isEmailConfirmed;
     if (this.phoneNumber != null) data['phoneNumber'] = this.phoneNumber;
     if (this.gender != null) data['gender'] = this.gender;
     if (this.birthday != null)
       data['birthday'] = this.birthday.toIso8601String();
     if (this.name != null) data['name'] = this.name;
     data['updatedAt'] = DateTime.now().toIso8601String();
-    if (this.addresses != null && this.addresses.isNotEmpty) {
+    if (this.addresses != null) {
       data['addresses'] = this.addresses.map((v) => v.toJson()).toList();
     }
     return data;

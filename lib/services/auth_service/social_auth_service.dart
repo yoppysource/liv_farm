@@ -26,28 +26,28 @@ class KakaoAuthService extends AuthService {
   }
 }
 
-class FacebookAuthService extends AuthService {
-  @override
-  final path = '/socialLogin';
+// class FacebookAuthService extends AuthService {
+//   @override
+//   final path = '/socialLogin';
 
-  @override
-  Future<Map<String, dynamic>> getInitialData() async {
-    final FacebookLogin plugin = FacebookLogin(debug: false);
-    final result = await plugin.logIn(permissions: [
-      FacebookPermission.email,
-    ]);
-    final email = await plugin.getUserEmail();
-    if (result.status == FacebookLoginStatus.success) {
-      return createInitialData(
-          snsId: result.accessToken.userId.toString(),
-          email: email,
-          platform: "facebook");
-    } else {
-      print(result);
-      throw Exception();
-    }
-  }
-}
+//   @override
+//   Future<Map<String, dynamic>> getInitialData() async {
+//     final FacebookLogin plugin = FacebookLogin(debug: false);
+//     final result = await plugin.logIn(permissions: [
+//       FacebookPermission.email,
+//     ]);
+//     final email = await plugin.getUserEmail();
+//     if (result.status == FacebookLoginStatus.success) {
+//       return createInitialData(
+//           snsId: result.accessToken.userId.toString(),
+//           email: email,
+//           platform: "facebook");
+//     } else {
+//       print(result);
+//       throw Exception();
+//     }
+//   }
+// }
 
 class AppleAuthService extends AuthService {
   @override

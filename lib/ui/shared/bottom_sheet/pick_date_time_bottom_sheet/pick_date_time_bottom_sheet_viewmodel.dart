@@ -6,6 +6,7 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
   String defaultString;
   static const String KEY_selectedDate = 'selectedDate';
   static const String KEY_deliveryGuideMessage = 'deliveryGuide';
+  List<String> weekDayNameList = ['월','화','수', '목', '금','토', '일'];
   DateTime selectedDateTime;
   TimeOfDay selectedTimeOfDay;
   DateTime finalDateTime;
@@ -18,25 +19,7 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
       ? defaultString
       : selectedTimeOfDay == null
           ? "시간을 선택해 주세요"
-          : "${finalDateTime.day}(${getWeekDaysName(finalDateTime)}) ${finalDateTime.hour}시${finalDateTime.minute == 0 ? '' : " " + finalDateTime.minute.toString() + '분'}에 수확하여 30분 내로 배송";
-
-  String getWeekDaysName(DateTime dateTime) {
-    if (dateTime.weekday == 1) {
-      return '월';
-    } else if (dateTime.weekday == 2) {
-      return '화';
-    } else if (dateTime.weekday == 3) {
-      return '수';
-    } else if (dateTime.weekday == 4) {
-      return '목';
-    } else if (dateTime.weekday == 5) {
-      return '금';
-    } else if (dateTime.weekday == 6) {
-      return '토';
-    } else {
-      return '일';
-    }
-  }
+          : "${finalDateTime.day}일(${weekDayNameList[finalDateTime.weekday-1]}) ${finalDateTime.hour}시${finalDateTime.minute == 0 ? '' : " " + finalDateTime.minute.toString() + '분'}에 받기";
 
   void onPressedDateButton(int index) {
     selectedIndex = index;

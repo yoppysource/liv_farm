@@ -32,7 +32,7 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '배송 시간 선택',
+                  '시간 선택',
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 verticalSpaceMedium,
@@ -48,13 +48,13 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                       model: model,
                       index: 1,
                       label:
-                          '${model.data.keys.elementAt(0).day}(${model.getWeekDaysName(model.data.keys.elementAt(0))})',
+                          '${model.data.keys.elementAt(0).day}(${model.weekDayNameList[model.data.keys.elementAt(0).weekday-1]})',
                     ),
                     DateButton(
                       model: model,
                       index: 2,
                       label:
-                          '${model.data.keys.elementAt(1).day}(${model.getWeekDaysName(model.data.keys.elementAt(1))})',
+                          '${model.data.keys.elementAt(1).day}(${model.weekDayNameList[model.data.keys.elementAt(1).weekday-1]})',
                     ),
                   ],
                 ),
@@ -80,7 +80,7 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                           ),
                 verticalSpaceMedium,
                 Text(
-                  '배송 안내',
+                  '시간 안내',
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 verticalSpaceRegular,

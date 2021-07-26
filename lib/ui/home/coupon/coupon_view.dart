@@ -3,6 +3,7 @@ import 'package:liv_farm/ui/home/coupon/coupon_viewmodel.dart';
 import 'package:liv_farm/ui/home/coupon/coupon_widget.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 
 class CouponView extends StatelessWidget {
@@ -11,156 +12,143 @@ class CouponView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CouponViewModel>.reactive(
-      builder: (context, model, child) => Scaffold(
-        body: Stack(
-          children: [
-            SafeArea(
-              child: ListView(
-                padding: horizontalPaddingToScaffold,
-                children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    alignment: Alignment.centerLeft,
-                    icon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: Colors.black.withOpacity(0.75),
-                      size: 32,
+      builder: (context, model, child) => LoadingOverlay(
+        isLoading: model.isBusy,
+        child: Scaffold(
+          body: Stack(
+            children: [
+              SafeArea(
+                child: ListView(
+                  padding: horizontalPaddingToScaffold,
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.centerLeft,
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.black.withOpacity(0.75),
+                        size: 32,
+                      ),
+                      onPressed: model.onBackPressed,
                     ),
-                    onPressed: model.onBackPressed,
-                  ),
-                  verticalSpaceSmall,
-                  MyCard(
-                    title: "쿠폰 등록",
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: kMainColor.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(10),
-                          border:
-                              Border.all(color: Colors.black38, width: 0.2)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: GestureDetector(
-                          onTap: () async {
-                            await model.registerCoupon();
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Container(
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Center(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        '쿠폰코드를 입력해주세요',
-                                        style: TextStyle(
-                                            fontSize: 14, color: kMainGrey),
+                    verticalSpaceSmall,
+                    MyCard(
+                      title: "쿠폰 등록",
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: kMainColor.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                            border:
+                                Border.all(color: Colors.black38, width: 0.2)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: GestureDetector(
+                            onTap: () async {
+                              await model.registerCoupon();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          '쿠폰코드를 입력해주세요',
+                                          style: TextStyle(
+                                              fontSize: 14, color: kMainGrey),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              horizontalSpaceSmall,
-                              FlatButton(
-                                  color: Colors.white,
-                                  child: Text(
-                                    '입력',
-                                    style: TextStyle(color: kMainBlack),
-                                  ),
-                                  onPressed: () async {
-                                    await model.registerCoupon();
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: kMainGrey,
-                                          width: 0.3,
-                                          style: BorderStyle.solid),
-                                      borderRadius: BorderRadius.circular(5))),
-                            ],
+                                horizontalSpaceSmall,
+                                FlatButton(
+                                    color: Colors.white,
+                                    child: Text(
+                                      '입력',
+                                      style: TextStyle(color: kMainBlack),
+                                    ),
+                                    onPressed: () async {
+                                      await model.registerCoupon();
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: kMainGrey,
+                                            width: 0.3,
+                                            style: BorderStyle.solid),
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  verticalSpaceSmall,
-                  MyCard(
-                    title: "쿠폰함",
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        model.couponList.isEmpty
-                            ? SizedBox(
-                                height: 200,
-                                width: MediaQuery.of(context).size.width,
-                                child: Center(
-                                  child: Text('현재 등록하신 쿠폰이 없습니다'),
+                    verticalSpaceSmall,
+                    MyCard(
+                      title: "쿠폰함",
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          model.couponList.isEmpty
+                              ? SizedBox(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child: Text('현재 등록하신 쿠폰이 없습니다'),
+                                  ),
+                                )
+                              : Container(
+                                  height: (MediaQuery.of(context).size.height *
+                                          0.8) -
+                                      200,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 20),
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: model.couponList.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                              onTap: () =>
+                                                  model.selectCoupon(index),
+                                              child: Container(
+                                                child: CouponWidget(
+                                                  coupon:
+                                                      model.couponList[index],
+                                                  selected:
+                                                      model.selectedIndex ==
+                                                          index,
+                                                ),
+                                              ));
+                                        }),
+                                  ),
                                 ),
-                              )
-                            : Container(
-                                height:
-                                    (MediaQuery.of(context).size.height * 0.8) -
-                                        200,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: model.couponList.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                            onTap: () =>
-                                                model.selectCoupon(index),
-                                            child: Container(
-                                              child: CouponWidget(
-                                                coupon: model.couponList[index],
-                                                selected: model.selectedIndex ==
-                                                    index,
-                                              ),
-                                            ));
-                                      }),
-                                ),
-                              ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            if (model.selectedIndex != null)
-              AnimatedAlign(
-                duration: Duration(milliseconds: 10000),
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: model.onPressedApply,
-                  child: Container(
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 1), // changes position of shadow
-                        ),
-                      ],
-                    ),
+                    )
+                  ],
+                ),
+              ),
+              if (model.selectedIndex != null)
+                AnimatedAlign(
+                  duration: Duration(milliseconds: 10000),
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: model.onPressedApply,
                     child: Container(
-                      height: double.infinity,
-                      width: double.infinity,
+                      height: 70,
                       decoration: BoxDecoration(
-                        color: kMainPink,
+                        color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
@@ -174,19 +162,39 @@ class CouponView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Center(
-                          child: Text(
-                        "쿠폰 적용하기",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 21,
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: kMainPink,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset:
+                                  Offset(0, 1), // changes position of shadow
+                            ),
+                          ],
                         ),
-                      )),
+                        child: Center(
+                            child: Text(
+                          "쿠폰 적용하기",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 21,
+                          ),
+                        )),
+                      ),
                     ),
                   ),
-                ),
-              )
-          ],
+                )
+            ],
+          ),
         ),
       ),
       viewModelBuilder: () => CouponViewModel(),
