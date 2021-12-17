@@ -1,7 +1,6 @@
 import 'package:liv_farm/services/auth_service/auth_service.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:kakao_flutter_sdk/user.dart';
 

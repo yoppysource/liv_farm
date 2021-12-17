@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/model/product.dart';
-import 'package:liv_farm/ui/home/farm/farm_view.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/product_detail_viewmodel.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/reviews/reviews_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/information_about_company_card.dart';
+import 'package:liv_farm/ui/shared/my_tap_item.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 

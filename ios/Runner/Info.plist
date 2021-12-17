@@ -35,6 +35,16 @@
 				<string>fb483794755920034</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.futureConnect.livFarm</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>livfarm.page.link</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -110,6 +120,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>물품을 스캔하기 위해서 카메라를 사용해야 합니다</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>리브팜이 사용자와 가까운 농장으로 안내하기 위해 위치정보를 가져옵니다. 동의하시겠습니까?</string>
 	<key>UILaunchStoryboardName</key>

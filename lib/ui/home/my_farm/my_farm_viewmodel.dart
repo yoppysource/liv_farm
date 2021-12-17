@@ -1,5 +1,7 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
+import 'package:liv_farm/secret.dart';
+import 'package:liv_farm/services/in_offine_store_service.dart';
 import 'package:liv_farm/services/secure_storage_service.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
@@ -9,12 +11,13 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class MyFarmViewModel extends BaseViewModel {
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  NavigationService _navigationService = locator<NavigationService>();
-  BottomSheetService _bottomSheetService = locator<BottomSheetService>();
-  DialogService _dialogService = locator<DialogService>();
-  ServerService _serverService = locator<ServerService>();
-  SecureStorageService _secureStorageService = locator<SecureStorageService>();
+  final UserProviderService _userProviderService = locator<UserProviderService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final ServerService _serverService = locator<ServerService>();
+  final SecureStorageService _secureStorageService = locator<SecureStorageService>();
+  final InOffineStoreService _inOffineStoreService = locator<InOffineStoreService>();
   bool isBusy = false;
   Future<void> onTapLogout() async {
     await _userProviderService.logout();
@@ -64,8 +67,8 @@ class MyFarmViewModel extends BaseViewModel {
             isOtherDataNeed: true);
         if (data['token'] != null) {
           ServerService.accessToken = data['token'];
-          await _secureStorageService.deleteTokenFromStorage();
-          await _secureStorageService.storeTokenToStorage(token: data['token']);
+          await _secureStorageService.deleteValueFromStorage();
+          await _secureStorageService.storeValueToStorage(key: KEY_JWT, value: data['token']);
           await _dialogService.showDialog(
             title: '안내',
             description: '비밀번호가 변경되었습니다',
@@ -95,6 +98,12 @@ class MyFarmViewModel extends BaseViewModel {
   }
 
   void onPressedAddressSelect() {
+    _inOffineStoreService.isOffineMode ?_dialogService.showDialog(
+            title: '배송지',
+            description: "매장 내 스캔을 하실 때는 사용할 수 없는 기능입니다.",
+            buttonTitle: '확인',
+            barrierDismissible: false,
+          ):
     _navigationService.navigateToView(AddressSelectView());
   }
 }

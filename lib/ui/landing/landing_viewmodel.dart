@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
+import 'package:liv_farm/secret.dart';
+import 'package:liv_farm/services/dynamic_link_service.dart';
+import 'package:liv_farm/services/in_offine_store_service.dart';
 import 'package:liv_farm/services/secure_storage_service.dart';
 import 'package:liv_farm/services/server_service/APIException.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
@@ -17,26 +20,42 @@ import 'package:store_redirect/store_redirect.dart';
 enum Version { fit, needToBeUpdated, fail }
 
 class LandingViewModel extends FutureViewModel {
-  ServerService _serverService = locator<ServerService>();
-  NavigationService _navigationService = locator<NavigationService>();
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  DialogService _dialogService = locator<DialogService>();
-  SecureStorageService _secureStorageService = locator<SecureStorageService>();
-  StoreProviderService _storeProviderService = locator<StoreProviderService>();
+  final ServerService _serverService = locator<ServerService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final UserProviderService _userProviderService =
+      locator<UserProviderService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final SecureStorageService _secureStorageService =
+      locator<SecureStorageService>();
+  final StoreProviderService _storeProviderService =
+      locator<StoreProviderService>();
+  final DynamicLinkService _dynamicLinkService = locator<DynamicLinkService>();
+  final InOffineStoreService _inOffineStoreService =
+      locator<InOffineStoreService>();
   @override
   Future futureToRun() async {
     //First, check version information
+    // There should be case for reload when user 
+    // login/sign up after the application already have run
+    // In that case the user must be something else and only refetch the inventory data is needed
+    if (_userProviderService?.user == null) {
     Version versionCheck = await _checkVersion();
     if (versionCheck != Version.fit)
-      await _showDialogForVersionCheckResult(versionCheck);
+    await _showDialogForVersionCheckResult(versionCheck);
     //Second, check user has JWT Token and it is vaild
     await _setAppInitially();
+    }
+    await _getInventoriesFromStore();
     return _navigationService.replaceWith(Routes.homeView);
   }
 
   Future<void> _setAppInitially() async {
-    String jwt = await _secureStorageService.getTokenFromStorage();
-
+    await _dynamicLinkService.handleDynamicLinks();
+    String storeId =
+        await _secureStorageService.getValueFromStorage(key: KEY_IN_STORE);
+    if (storeId != null && storeId != '')
+      await _inOffineStoreService.switchToOffineMode(storeId);
+    String jwt = await _secureStorageService.getValueFromStorage(key: KEY_JWT);
     if (jwt == '' || jwt == null) {
       //1) 로그인이 안되있을 경우
       await _storeProviderService.getStoreDataFromServer();
@@ -70,20 +89,26 @@ class LandingViewModel extends FutureViewModel {
           await _userProviderService.logout();
           return _navigationService.replaceWith(Routes.homeView);
         }
-        if (_userProviderService.user?.addresses?.isNotEmpty ?? false) {
-          await _storeProviderService.getStoreDataFromServer(
-              coordinates:
-                  _userProviderService.user?.addresses[0]?.coordinates ?? null,
-              address:
-                  _userProviderService.user?.addresses[0]?.address ?? null);
-        } else {
-          await _storeProviderService.getStoreDataFromServer();
-        }
       } on APIException catch (e) {
         debugPrint(e.message);
         _dialogService.showDialog(
             title: "안내", description: e.message, buttonTitle: "확인");
       }
+    }
+  }
+
+  Future<void> _getInventoriesFromStore() async {
+    String storeId = _inOffineStoreService.storeId;
+    if (_inOffineStoreService.isOffineMode && storeId != null)
+      return await _storeProviderService
+          .getInventoriesWhenUserIsInStore(storeId);
+    if (_userProviderService.user?.addresses?.isNotEmpty ?? false) {
+      await _storeProviderService.getStoreDataFromServer(
+          coordinates:
+              _userProviderService.user?.addresses[0]?.coordinates ?? null,
+          address: _userProviderService.user?.addresses[0]?.address ?? null);
+    } else {
+      await _storeProviderService.getStoreDataFromServer();
     }
   }
 
@@ -130,7 +155,7 @@ class LandingViewModel extends FutureViewModel {
     await _dialogService.showDialog(
       title: '알림',
       description: version == Version.fail
-          ? '오류가 발생했습니다. 인터넷 연결을 확인해주세요.'
+          ? '현재 서버 점검 중입니다. 잠시 후에 다시 시도해주세요. 불편을 드려 죄송합니다'
           : '사용하시는 버전이 너무 낮습니다.\n안전한 쇼핑을 위해 앱을 업데이트 해주세요.',
       buttonTitle: '확인',
       barrierDismissible: false,

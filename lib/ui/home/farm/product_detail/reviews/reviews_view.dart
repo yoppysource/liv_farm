@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:liv_farm/model/review.dart';
-import 'package:liv_farm/ui/home/farm/product_detail/product_detail_view.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/product_detail_viewmodel.dart';
 import 'package:liv_farm/ui/layouts/empty_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';

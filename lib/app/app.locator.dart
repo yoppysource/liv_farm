@@ -11,12 +11,13 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../services/analytics_service.dart';
 import '../services/cart_provider_service.dart';
+import '../services/dynamic_link_service.dart';
+import '../services/in_offine_store_service.dart';
 import '../services/location_service.dart';
 import '../services/secure_storage_service.dart';
 import '../services/server_service/server_service.dart';
 import '../services/store_provider_service.dart';
 import '../services/user_provider_service.dart';
-import '../ui/home/farm/farm_viewmodel.dart';
 
 final locator = StackedLocator.instance;
 
@@ -29,7 +30,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => CartProviderService());
   locator.registerLazySingleton(() => StoreProviderService());
   locator.registerLazySingleton(() => LocationService());
+  locator.registerLazySingleton(() => DynamicLinkService());
+  locator.registerLazySingleton(() => InOffineStoreService());
   locator.registerSingleton(SecureStorageService());
   locator.registerSingleton(ServerService());
-  locator.registerSingleton(FarmViewModel());
 }

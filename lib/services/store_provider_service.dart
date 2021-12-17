@@ -126,41 +126,51 @@ class StoreProviderService {
       }
       this.isPossibleToBuy = storeData['isPossibleToBuy'];
       this.store = Store.fromJson(storeData['data']['data']);
-      if (this.store != null) {
-        inventoryMapByCategory = {
-          ProductCategory.Vegetable: <Inventory>[],
-          ProductCategory.Salad: <Inventory>[],
-          ProductCategory.Grouped: <Inventory>[],
-          ProductCategory.Protein: <Inventory>[],
-          ProductCategory.Dressing: <Inventory>[],
-        };
-        this.store.inventories.forEach((element) {
-          switch (element.product.category) {
-            case ProductCategory.Vegetable:
-              return inventoryMapByCategory[ProductCategory.Vegetable]
-                  .add(element);
-            case ProductCategory.Salad:
-              return inventoryMapByCategory[ProductCategory.Salad].add(element);
-            case ProductCategory.Grouped:
-              return inventoryMapByCategory[ProductCategory.Grouped]
-                  .add(element);
-            case ProductCategory.Protein:
-              return inventoryMapByCategory[ProductCategory.Protein]
-                  .add(element);
-            case ProductCategory.Dressing:
-              return inventoryMapByCategory[ProductCategory.Dressing]
-                  .add(element);
-            default:
-              return inventoryMapByCategory[ProductCategory.Vegetable]
-                  .add(element);
-          }
-        });
-      }
+      _setInventories();
     } on APIException catch (e) {
       _dialogService.showDialog(title: "오류", description: e.message);
     } catch (e) {
       debugPrint(e);
       throw e;
+    }
+  }
+
+  Future<void> getInventoriesWhenUserIsInStore(String storeId) async {
+    dynamic storeData = await _serverService.getData(
+        resource: Resource.stores, path: '/inStore/$storeId');
+    this.isPossibleToBuy = true;
+    this.store = Store.fromJson(storeData);
+    _setInventories();
+  }
+
+  void _setInventories() {
+    if (this.store != null) {
+      inventoryMapByCategory = {
+        ProductCategory.Vegetable: <Inventory>[],
+        ProductCategory.Salad: <Inventory>[],
+        ProductCategory.Grouped: <Inventory>[],
+        ProductCategory.Protein: <Inventory>[],
+        ProductCategory.Dressing: <Inventory>[],
+      };
+      this.store.inventories.forEach((element) {
+        switch (element.product.category) {
+          case ProductCategory.Vegetable:
+            return inventoryMapByCategory[ProductCategory.Vegetable]
+                .add(element);
+          case ProductCategory.Salad:
+            return inventoryMapByCategory[ProductCategory.Salad].add(element);
+          case ProductCategory.Grouped:
+            return inventoryMapByCategory[ProductCategory.Grouped].add(element);
+          case ProductCategory.Protein:
+            return inventoryMapByCategory[ProductCategory.Protein].add(element);
+          case ProductCategory.Dressing:
+            return inventoryMapByCategory[ProductCategory.Dressing]
+                .add(element);
+          default:
+            return inventoryMapByCategory[ProductCategory.Vegetable]
+                .add(element);
+        }
+      });
     }
   }
 

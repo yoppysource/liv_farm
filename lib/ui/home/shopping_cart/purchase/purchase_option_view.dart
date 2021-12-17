@@ -52,7 +52,7 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                       verticalSpaceRegular,
                         ConfirmOrderListTile(
                         title: '수령 방법',
-                        content: this.option=='delivery'? '배달받기': '매장에서 찾기',
+                        content: this.option =='inStore' ? "매장 내 구매":option=='delivery'? '배달받기': '매장에서 찾기',
                       ),
                       verticalSpaceRegular,
                       Row(
@@ -93,11 +93,11 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                       verticalSpaceRegular,
                         ],
                       ),
-                      ConfirmOrderListTile(
+                       if(this.option !='inStore')ConfirmOrderListTile(
                           title: '배송/포장 메세지',
                           content: this.orderRequestMessage ?? '없음'),
                       verticalSpaceRegular,
-                      ConfirmOrderListTile(
+                      if(this.option !='inStore')ConfirmOrderListTile(
                         title: '수령 시간',
                         content: this.bookingOrderMessage,
                       ),

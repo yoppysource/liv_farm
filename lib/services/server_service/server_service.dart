@@ -38,7 +38,7 @@ class ServerService {
   Uri getUri({Resource resource, String path = '/'}) => Uri(
         scheme: scheme,
         host: hostIP,
-        // port: hostPORT,
+        port: hostPORT,
         path: "$basePATH${this.resourcePath[resource]}$path",
       );
 
@@ -57,7 +57,7 @@ class ServerService {
           'Authorization': '${valueForJWT(accessToken)}'
         },
       );
-    
+
       final result = await jsonDecode(response.body) as Map<String, dynamic>;
       if (!response.statusCode.toString().startsWith("2"))
         throw APIException(response.statusCode, result["message"]);
@@ -71,6 +71,7 @@ class ServerService {
 
   Future<T> getData<T>({Resource resource, path = "/"}) async {
     try {
+      print(path.toString());
       final Uri endpoint = getUri(resource: resource, path: path);
       final response = await http.get(
         endpoint,
@@ -82,9 +83,10 @@ class ServerService {
       final result = await json.decode(response.body);
       if (!response.statusCode.toString().startsWith("2"))
         throw APIException(response.statusCode, result["message"]);
-        return result['data']['data'];      
+      return result['data']['data'];
     } catch (e) {
       debugPrint(e.toString());
+      debugPrint(e.message);
       rethrow;
     }
   }

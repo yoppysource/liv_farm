@@ -12,6 +12,7 @@ import 'package:liv_farm/ui/shared/address_appbar/address_appbar_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/information_about_company_card.dart';
 import 'package:liv_farm/ui/shared/my_icons_icons.dart';
+import 'package:liv_farm/ui/shared/offline_store_appbar/offline_store_appbar.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
@@ -51,7 +52,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
               isLoading: model.isBusy,
               progressIndicator: CircularProgressIndicator(),
               child: Scaffold(
-                  appBar: PreferredSize(child:  AddressAppBarView(), preferredSize: new Size.fromHeight(50),),
+                  appBar: PreferredSize(child:  model.isOffineMode ? OfflineStoreAppbarView() : AddressAppBarView(), preferredSize: new Size.fromHeight(50),),
                   body: Stack(
                     children: [
                       Padding(
@@ -77,8 +78,12 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                             ),
                             verticalSpaceRegular,
                             ReceiptCard(model: model),
-                            verticalSpaceRegular,
-                            DeliveryInformationView(),
+                         
+                            if(!model.isOffineMode) 
+                            Column(
+                              children: [
+                                verticalSpaceRegular,
+                                 DeliveryInformationView(),
                             verticalSpaceRegular,
                             if(model.store.takeOut)
                             Column(
@@ -100,6 +105,10 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                             DeliveryDateCard(
                               model: model,
                             ),
+
+                              ],
+                            ),
+                           
                             verticalSpaceRegular,
                             InformationAboutCompanyCard(),
                             SizedBox(

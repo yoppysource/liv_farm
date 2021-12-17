@@ -1,20 +1,32 @@
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
+import 'package:liv_farm/services/in_offine_store_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends BaseViewModel {
-  NavigationService _navigationService = locator<NavigationService>();
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  DialogService _dialogService = locator<DialogService>();
-  int _currentIndex = 0;
+  final NavigationService _navigationService = locator<NavigationService>();
+  final UserProviderService _userProviderService =
+      locator<UserProviderService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final InOffineStoreService _inOffineStoreService =
+      locator<InOffineStoreService>();
+
+  bool get isOffineMode => _inOffineStoreService.isOffineMode;
+  int _currentIndex;
 
   int get currentIndex => _currentIndex;
   bool isIndexSelected(int index) => _currentIndex == index;
   bool _reverse = false;
   get isLogined => _userProviderService.isLogined;
   bool get reverse => _reverse;
+
+  HomeViewModel() {
+    _currentIndex = setInitalIndex();
+  }
+
+  int setInitalIndex() => isOffineMode ? 1 : 0;
 
   Future<void> setIndex(int value) async {
     if (!isLogined && value > 1) {

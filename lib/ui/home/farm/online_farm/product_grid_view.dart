@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/inventory.dart';
-import 'package:liv_farm/ui/home/farm/farm_viewmodel.dart';
+import 'package:liv_farm/ui/home/farm/online_farm/online_farm_viewmodel.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
 class ProductGridView extends StatelessWidget with Formatter {
   final List<Inventory> inventoryList;
-  final FarmViewModel model;
-
+  final OnlineFarmViewModel model;
   const ProductGridView({Key key, this.inventoryList, this.model})
       : super(key: key);
 

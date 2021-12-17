@@ -1,8 +1,10 @@
-import 'package:kopo/kopo.dart';
+// import 'package:kopo/kopo.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/model/address.dart';
+import 'package:liv_farm/services/in_offine_store_service.dart';
 import 'package:liv_farm/services/store_provider_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
+import 'package:liv_farm/ui/home/shopping_cart/address_select/daum_postcode_search_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -11,7 +13,8 @@ class AddressSelectViewModel extends BaseViewModel {
   UserProviderService _userProviderService = locator<UserProviderService>();
   DialogService _dialogService = locator<DialogService>();
   StoreProviderService _storeProviderService = locator<StoreProviderService>();
-  KopoModel _kopoModel;
+  InOffineStoreService _inOffineStoreService = locator<InOffineStoreService>();
+  // KopoModel _kopoModel;
   List<Address> get addresses => _userProviderService.user.addresses;
   bool isBusy = false;
 
@@ -30,7 +33,7 @@ class AddressSelectViewModel extends BaseViewModel {
           address: newAddress.address,
           coordinates: newAddress?.coordinates ?? []);
     } else {
-       await _storeProviderService.getStoreDataFromServer();
+      await _storeProviderService.getStoreDataFromServer();
     }
     isBusy = false;
     notifyListeners();
@@ -38,12 +41,14 @@ class AddressSelectViewModel extends BaseViewModel {
 
   Future onPressedSearch() async {
     try {
-      _kopoModel = await _navigationService.navigateToView(Kopo());
-      if (_kopoModel != null) {
+      dynamic data =
+          await _navigationService.navigateToView(DaumPostcodeSearchView());
+      print(data);
+      if (data != null) {
         isBusy = true;
         notifyListeners();
         await _storeProviderService.getStoreDataFromServer(
-            address: _kopoModel.address, fromAddressSearch: true);
+            address: data['address'], fromAddressSearch: true);
         isBusy = false;
         notifyListeners();
         _navigationService.back();
@@ -83,30 +88,4 @@ class AddressSelectViewModel extends BaseViewModel {
       notifyListeners();
     }
   }
-
-  // Future<String> callBottomSheetToGetAddressDetail() async {
-  //   SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
-  //       variant: BottomSheetType.Write,
-  //       customData: {
-  //         'maxLength': 20,
-  //         'keyboardType': TextInputType.streetAddress,
-  //         'hintText': '상세주소를 입력해주세요'
-  //       },
-  //       title: '상세주소');
-  //   if (_sheetResponse.confirmed) {
-  //     return _sheetResponse.responseData['input'].trim();
-  //   } else {
-  //     DialogResponse res = await _dialogService.showConfirmationDialog(
-  //         title: "알림",
-  //         description: "상세주소는 안전한 배송을 위해서 필수사항입니다.정말 건너뛰시겠습니까?",
-  //         barrierDismissible: false,
-  //         confirmationTitle: "기입하기",
-  //         cancelTitle: "건너뛰기");
-  //     if (res.confirmed) {
-  //       return callBottomSheetToGetAddressDetail();
-  //     } else {
-  //       return '';
-  //     }
-  //   }
-  // }
 }

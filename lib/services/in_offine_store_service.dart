@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:liv_farm/app/app.locator.dart';
+import 'package:liv_farm/secret.dart';
+import 'package:liv_farm/services/secure_storage_service.dart';
+
+class InOffineStoreService {
+  bool _isOffineMode = false;
+  String storeId;
+  bool get isOffineMode => _isOffineMode;
+  final SecureStorageService _secureStorageService =
+      locator<SecureStorageService>();
+
+  InOffineStoreService() {
+    this._isOffineMode = false;
+  }
+
+  Future<void> switchToOffineMode(String storeId) async {
+    try {
+      await _secureStorageService.storeValueToStorage(
+          key: KEY_IN_STORE, value: storeId);
+      _isOffineMode = true;
+      this.storeId = storeId;
+    } catch (e) {
+      debugPrint(e.toString());
+      throw e;
+    }
+  }
+
+  Future<void> backToOnlineMode() async {
+    try {
+      await _secureStorageService.deleteValueFromStorage(
+          key: KEY_IN_STORE);
+      _isOffineMode = false;
+      this.storeId = null;
+    } catch (e) {
+      debugPrint(e.toString());
+      throw e;
+    }
+  }
+}

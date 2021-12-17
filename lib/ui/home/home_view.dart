@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
-import 'package:liv_farm/ui/home/farm/farm_view.dart';
+import 'package:liv_farm/ui/home/farm/offline_farm/offline_farm_view.dart';
+import 'package:liv_farm/ui/home/farm/online_farm/online_farm_view.dart';
 import 'package:liv_farm/ui/home/home_viewmodel.dart';
 import 'package:liv_farm/ui/home/my_farm/my_farm_view.dart';
 import 'package:liv_farm/ui/home/order_history/order_history_view.dart';
@@ -121,7 +122,7 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         return VideoView();
       case 1:
-        return FarmView();
+        return model.isOffineMode ? OfflineFarmView():  OnlineFarmView();
       case 2:
         return OrderHistoryView();
       case 3:
@@ -129,7 +130,7 @@ class _HomeViewState extends State<HomeView> {
       case 4:
         return ShoppingCartView();
       default:
-        return FarmView();
+        return model.isOffineMode ? OfflineFarmView():  OnlineFarmView();
     }
   }
 }

@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.1.1+28
+version: 2.1.3+30
 # 버전 수정
 
 environment:
@@ -41,7 +41,6 @@ dependencies:
   flutter_secure_storage: "^3.3.5"
   # Auth Package
   kakao_flutter_sdk: ^0.5.4
-  flutter_login_facebook: ^0.5.0
   sign_in_with_apple: ^2.5.4
   google_sign_in: ^4.5.9
   #In async call
@@ -62,7 +61,7 @@ dependencies:
   #Badge
   badges: ^1.1.6
   #Get Address using kakao API
-  kopo: ^0.1.3
+  # kopo: ^0.1.3
   #Star rating
   flutter_rating_bar: ^3.2.0+1
   #Image slider
@@ -73,6 +72,10 @@ dependencies:
   firebase_core: ^0.7.0
   location: ^3.2.4
   observable_ish: ^2.1.5
+  firebase_dynamic_links: ^0.7.0+1
+  qr_code_scanner: ^0.3.5
+  permission_handler: ^5.1.0+2
+  flutter_inappwebview: ^4.0.0+4
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +94,7 @@ flutter:
     - assets/images/
     - assets/videos/
     - assets/files/
+    - assets/daum_search.html
   fonts:
     - family: "Spoqa Han Sans"
       fonts:

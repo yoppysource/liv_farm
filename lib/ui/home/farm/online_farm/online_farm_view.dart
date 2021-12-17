@@ -3,22 +3,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/inventory.dart';
 import 'package:liv_farm/model/product.dart';
-import 'package:liv_farm/ui/home/farm/events/events_banner_view.dart';
-import 'package:liv_farm/ui/home/farm/farm_viewmodel.dart';
-import 'package:liv_farm/ui/home/farm/product_grid_view.dart';
-import 'package:liv_farm/ui/home/farm/product_serch_delegate.dart';
+import 'package:liv_farm/ui/home/farm/online_farm/online_farm_viewmodel.dart';
+import 'package:liv_farm/ui/home/farm/online_farm/product_grid_view.dart';
+import 'package:liv_farm/ui/home/farm/online_farm/product_serch_delegate.dart';
 import 'package:liv_farm/ui/shared/address_appbar/address_appbar_view.dart';
+import 'package:liv_farm/ui/shared/my_tap_item.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
+import 'event_banner/event_banner_viewmodel.dart';
 
-class FarmView extends StatefulWidget {
-  const FarmView({Key key}) : super(key: key);
+class OnlineFarmView extends StatefulWidget {
+  const OnlineFarmView({Key key}) : super(key: key);
 
   @override
-  _FarmViewState createState() => _FarmViewState();
+  _OnlineFarmViewState createState() => _OnlineFarmViewState();
 }
 
-class _FarmViewState extends State<FarmView> with TickerProviderStateMixin {
+class _OnlineFarmViewState extends State<OnlineFarmView> with TickerProviderStateMixin {
   ScrollController _scrollViewController;
   TabController _tabController;
 
@@ -39,19 +40,15 @@ class _FarmViewState extends State<FarmView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<FarmViewModel>.reactive(
-      viewModelBuilder: () => FarmViewModel(),
+    return ViewModelBuilder<OnlineFarmViewModel>.reactive(
+      viewModelBuilder: () => OnlineFarmViewModel(),
       builder: (context, model, child) => DefaultTabController(
         length: 3,
         child: SafeArea(
           child: Scaffold(
             appBar: PreferredSize(child:  AddressAppBarView(), preferredSize: new Size.fromHeight(50),
             ),
-            body: model.eventsDataList == null
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : NestedScrollView(
+            body: NestedScrollView(
                     controller: _scrollViewController,
                     headerSliverBuilder:
                         (BuildContext context, bool innerBoxIsScrolled) {
@@ -139,8 +136,7 @@ class _FarmViewState extends State<FarmView> with TickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width,
                                   height:
                                       MediaQuery.of(context).size.width * 0.6,
-                                  child: EventsBannerView(
-                                      eventsList: model.eventsDataList),
+                                  child: EventBannerView(),
                                 ),
                               ],
                             ),
@@ -198,23 +194,6 @@ class _FarmViewState extends State<FarmView> with TickerProviderStateMixin {
           ),
         ),
       ),
-    );
-  }
-}
-
-class MyTabItem extends StatelessWidget {
-  final String label;
-
-  const MyTabItem({Key key, this.label}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(label,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                color: Color(0xff333333),
-              )),
     );
   }
 }

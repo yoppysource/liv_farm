@@ -23,7 +23,7 @@ class Address {
     data['address'] = this.address;
     data['addressDetail'] = this.addressDetail;
     data['postcode'] = this.postcode;
-    if(this.coordinates != null)
+    if(this.coordinates != null )
     data['coordinates'] = List<dynamic>.from(coordinates.map((x) => x));
     return data;
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
 import 'package:liv_farm/services/analytics_service.dart';
@@ -13,12 +14,13 @@ import 'package:stacked_services/stacked_services.dart';
 
 abstract class AuthViewModel extends FormViewModel {
   final _navigationService = locator<NavigationService>();
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  ServerService _serverService = locator<ServerService>();
-  StoreProviderService _storeProviderService = locator<StoreProviderService>();
-  final _bottomSheetService = locator<BottomSheetService>();
-  final _dialogService = locator<DialogService>();
-  AnalyticsService _analyticsService = locator<AnalyticsService>();
+  final UserProviderService _userProviderService =
+      locator<UserProviderService>();
+  final ServerService _serverService = locator<ServerService>();
+  // StoreProviderService _storeProviderService = locator<StoreProviderService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final AnalyticsService _analyticsService = locator<AnalyticsService>();
   bool isInputVaildToSubmit = false;
   bool isBusy = false;
   Future<void> onAuthPressed(AuthService _authService) async {
@@ -59,14 +61,14 @@ abstract class AuthViewModel extends FormViewModel {
         _navigationService.replaceWith(Routes.homeView);
         return;
       }
-      if (_userProviderService.user?.addresses?.isNotEmpty ?? false) {
-        await _storeProviderService.getStoreDataFromServer(
-            coordinates:
-                _userProviderService.user?.addresses[0]?.coordinates ?? null,
-            address: _userProviderService.user?.addresses[0]?.address ?? null);
-      } else {
-        await _storeProviderService.getStoreDataFromServer();
-      }
+      // if (_userProviderService.user?.addresses?.isNotEmpty ?? false) {
+      //   await _storeProviderService.getStoreDataFromServer(
+      //       coordinates:
+      //           _userProviderService.user?.addresses[0]?.coordinates ?? null,
+      //       address: _userProviderService.user?.addresses[0]?.address ?? null);
+      // } else {
+      //   await _storeProviderService.getStoreDataFromServer();
+      // }
       //TODO: 위치정보 받아서 Store 갱신해주기
       // if (_userProviderService.user.addresses.isNotEmpty &&
       //     _userProviderService.user.addresses[0].address != '') {
@@ -90,7 +92,7 @@ abstract class AuthViewModel extends FormViewModel {
       //         locationData: locationMap);
       //   }
       // }
-      _navigationService.replaceWith(Routes.homeView);
+      _navigationService.replaceWith(Routes.landingView);
     } on APIException catch (e) {
       isBusy = false;
       _dialogService.showDialog(
@@ -103,7 +105,8 @@ abstract class AuthViewModel extends FormViewModel {
       // setValidationMessage(e.message);
       notifyListeners();
     } catch (e) {
-           isBusy = false;
+      debugPrint(e.toString());
+      isBusy = false;
       _dialogService.showDialog(
         title: '로그인 오류',
         description: "오류가 발생했습니다. 다음에 다시 시도해주세요",

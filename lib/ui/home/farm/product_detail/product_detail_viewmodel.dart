@@ -9,9 +9,9 @@ import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
 import 'package:liv_farm/services/server_service/APIException.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
+import 'package:liv_farm/services/store_provider_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
-import 'package:liv_farm/ui/home/farm/farm_viewmodel.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -19,14 +19,14 @@ import 'package:stacked_services/stacked_services.dart';
 class ProductDetailViewModel extends FutureViewModel {
   Inventory inventory;
   Product product;
-  BottomSheetService _bottomSheetService = locator<BottomSheetService>();
-  FarmViewModel _farmViewModel = locator<FarmViewModel>();
-  DialogService _dialogService = locator<DialogService>();
-  ServerService _serverService = locator<ServerService>();
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  AnalyticsService _analyticsService = locator<AnalyticsService>();
-  NavigationService _navigationService = locator<NavigationService>();
-  CartProviderService _cartProviderService = locator<CartProviderService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final ServerService _serverService = locator<ServerService>();
+  final UserProviderService _userProviderService = locator<UserProviderService>();
+  final AnalyticsService _analyticsService = locator<AnalyticsService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final CartProviderService _cartProviderService = locator<CartProviderService>();
+  final StoreProviderService _storeProviderService = locator<StoreProviderService>();
 
   ProductDetailViewModel({@required this.inventory});
 
@@ -123,7 +123,7 @@ class ProductDetailViewModel extends FutureViewModel {
         variant: BottomSheetType.AddToCart,
         customData: {
           'inventoryList':
-              _farmViewModel.inventoryMapByCategory[ProductCategory.Protein],
+              _storeProviderService.inventoryMapByCategory[ProductCategory.Protein],
           'needDetailArrow': true,
         },
       );
@@ -148,8 +148,7 @@ class ProductDetailViewModel extends FutureViewModel {
         isScrollControlled: true,
         variant: BottomSheetType.AddToCart,
         customData: {
-          'inventoryList':
-              _farmViewModel.inventoryMapByCategory[ProductCategory.Dressing],
+          'inventoryList': _storeProviderService.inventoryMapByCategory[ProductCategory.Dressing],
           'needDetailArrow': true,
         },
       );

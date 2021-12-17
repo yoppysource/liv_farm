@@ -19,7 +19,6 @@ class AuthLayout extends StatelessWidget {
   final Function onGooglePressed;
   final Function onApplePressed;
   final Function onKakaoPressed;
-  final Function onFacebookPressed;
   final String validationMessage;
   final bool busy;
   final bool isVaildToSubmit;
@@ -36,7 +35,6 @@ class AuthLayout extends StatelessWidget {
     @required this.onGooglePressed,
     @required this.onApplePressed,
     @required this.onKakaoPressed,
-    @required this.onFacebookPressed,
     this.mainButtonTitle = 'CONTINUE',
     this.showTermsText = false,
     this.busy = false,

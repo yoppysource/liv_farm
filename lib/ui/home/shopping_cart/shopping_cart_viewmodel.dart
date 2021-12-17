@@ -8,6 +8,7 @@ import 'package:liv_farm/model/coupon.dart';
 import 'package:liv_farm/model/order.dart';
 import 'package:liv_farm/model/store.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
+import 'package:liv_farm/services/in_offine_store_service.dart';
 import 'package:liv_farm/services/server_service/server_service.dart';
 import 'package:liv_farm/services/store_provider_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
@@ -29,7 +30,8 @@ class ShoppingCartViewModel extends ReactiveViewModel {
   CartProviderService _cartProviderService = locator<CartProviderService>();
   ServerService _serverService = locator<ServerService>();
   StoreProviderService _storeProviderService = locator<StoreProviderService>();
-
+  final InOffineStoreService _inOffineStoreService =
+      locator<InOffineStoreService>();
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_cartProviderService];
   final DateTime _now = DateTime.now();
@@ -40,9 +42,10 @@ class ShoppingCartViewModel extends ReactiveViewModel {
   bool get takeOut => store.takeOut && _cartProviderService.takeout;
   bool get showBannerText => _userProviderService.user.addresses.isNotEmpty;
   int get availablePoint => _userProviderService.user.point;
+  bool get isOffineMode => _inOffineStoreService.isOffineMode;
   int pointInput = 0;
   String get bannerText {
-    if (impossibleToBuyBasedOnLocation) {
+    if (impossibleToBuyBasedOnLocation && isOffineMode != true) {
       return "배송이 불가능한 지역입니다";
     } else {
       return "${_storeProviderService.store.name}에서 수확합니다";
@@ -123,7 +126,8 @@ class ShoppingCartViewModel extends ReactiveViewModel {
 
   int get _couponDiscountAmount {
     if (_cartProviderService.selectedCoupon != null &&
-        _cartProviderService.selectedCoupon.amount < this._totalDiscountedPriceIncludePoint) {
+        _cartProviderService.selectedCoupon.amount <
+            this._totalDiscountedPriceIncludePoint) {
       return _cartProviderService.selectedCoupon.amount;
     } else {
       return 0;
@@ -136,9 +140,7 @@ class ShoppingCartViewModel extends ReactiveViewModel {
               _totalDiscountedPriceIncludePoint);
 
   bool get isInputPointAmountExceedDiscountedPrice =>
-      (this.pointInput != 0 &&
-                this.pointInput >= _totalDiscountedPrice
-              );
+      (this.pointInput != 0 && this.pointInput >= _totalDiscountedPrice);
   void onPressedDeliveryOption(bool takeout) {
     if (_cartProviderService.takeout != takeout) {
       _cartProviderService.takeout = takeout;
@@ -265,7 +267,14 @@ class ShoppingCartViewModel extends ReactiveViewModel {
   }
 
   Future<void> onPressedAddress() async {
-    await _navigationService.navigateToView(AddressSelectView());
+    _inOffineStoreService.isOffineMode
+        ? _dialogService.showDialog(
+            title: '배송지',
+            description: "매장 내 스캔을 하실 때는 사용할 수 없는 기능입니다.",
+            buttonTitle: '확인',
+            barrierDismissible: false,
+          )
+        : _navigationService.navigateToView(AddressSelectView());
     notifyListeners();
   }
 
@@ -275,13 +284,23 @@ class ShoppingCartViewModel extends ReactiveViewModel {
           _userProviderService.user.name != '' &&
           _userProviderService.user.phoneNumber != '');
 
-  bool get isPossibleToPurchase =>
-      (this.selectedAddress != null) &&
-      isPhoneNumberAndNameExisted &&
-      !impossibleToBuyBasedOnLocation &&
-      this.finalPrice >= 1000;
+  bool get isPossibleToPurchase {
+    if (this.isOffineMode == true && this.finalPrice >= 1000) return true;
+    return (this.selectedAddress != null) &&
+        isPhoneNumberAndNameExisted &&
+        !impossibleToBuyBasedOnLocation &&
+        this.finalPrice >= 1000;
+  }
+
   //Onpressed On order
   String get purchaseButtonMessage {
+    if (this.isOffineMode == true) {
+    if (this.finalPrice < 1000) {
+      return "최소 금액은 1000원 이상입니다";
+    } else {
+      return "결제하기";
+    }
+    }
     if (this.selectedAddress == null) {
       return "상단에서 배송지를 입력해주세요";
     } else if (impossibleToBuyBasedOnLocation) {
@@ -321,7 +340,7 @@ class ShoppingCartViewModel extends ReactiveViewModel {
           address: this.selectedAddress,
           orderRequestMessage: _cartProviderService.orderRequestMessage,
           bookingOrderMessage: this.bookingOrderMessage,
-          option: this.takeOut ? 'takeOut' : 'delivery',
+          option: this.isOffineMode ? "inStore" : this.takeOut ? 'takeOut' : 'delivery',
         ),
         transition: 'fade');
     if (result == null) {
@@ -342,13 +361,14 @@ class ShoppingCartViewModel extends ReactiveViewModel {
               'amount': finalPrice,
               // 'amount': 10,
               'customData': {
-                "option": this.takeOut ? "takeOut" : "delivery",
-                "storeAddress": _storeProviderService.store.address ?? '',
+                "option": this.isOffineMode ? "inStore" : this.takeOut ? "takeOut" : "delivery",
+                "storeAddress": _storeProviderService.store?.address ?? '',
                 "bookingOrderMessage": bookingOrderMessage ?? '',
                 "orderRequestMessage":
-                    _cartProviderService.orderRequestMessage ?? '',
+                    _cartProviderService?.orderRequestMessage ?? '',
                 "customerId": _userProviderService.user.id,
                 "cartId": cart.id,
+                "items": describeItems(),
               },
               'merchantUid': "$orderId",
               'buyerName': "${_userProviderService.user.name}",
@@ -367,7 +387,7 @@ class ShoppingCartViewModel extends ReactiveViewModel {
                 orderTitle:
                     "${this.cart.items[0].inventory.product.name} 포함 ${this.cart.items.length}건에 대한 주문",
                 status: 0,
-                option: this.takeOut ? "takeOut" : "delivery",
+                option: this.isOffineMode ? "inStore" : this.takeOut ? "takeOut" : "delivery",
                 bookingOrderMessage: this.bookingOrderMessage,
                 address: this.selectedAddress,
                 createdAt: DateTime.now(),
@@ -376,8 +396,10 @@ class ShoppingCartViewModel extends ReactiveViewModel {
                 paidAmount: this.finalPrice,
                 user: _userProviderService.user,
                 payMethod: "card",
-                usedPoint:(this.pointInput == 0 ||
-                        isInputPointAmountExceedDiscountedPrice) ? 0: this.pointInput,
+                usedPoint: (this.pointInput == 0 ||
+                        isInputPointAmountExceedDiscountedPrice)
+                    ? 0
+                    : this.pointInput,
                 scheduledDate: _cartProviderService.bookingOrderDateTime,
                 orderRequestMessage: _cartProviderService.orderRequestMessage,
                 coupon: (selectedCoupon == null ||
@@ -386,5 +408,13 @@ class ShoppingCartViewModel extends ReactiveViewModel {
                     : selectedCoupon)),
         transition: 'fade');
     notifyListeners();
+  }
+  String describeItems() {
+    String description = '';
+    for(Item item in cart.items){
+      description += item.inventory.product.name;
+      description += " ${item.quantity} ,";
+    }
+    return description;
   }
 }
