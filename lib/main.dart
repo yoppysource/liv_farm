@@ -18,7 +18,7 @@ import 'app/app.router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  GestureBinding.instance.resamplingEnabled = true;
+  //GestureBinding.instance!.resamplingEnabled = true;
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -26,35 +26,37 @@ void main() async {
   KakaoContext.clientId = kakaoClientId;
   setupLocator();
   setupBottomSheetUi();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       navigatorKey: StackedService.navigatorKey,
-      navigatorObservers: [locator<AnalyticsService>().getAnalyticsObserver()],
+      navigatorObservers: [locator<AnalyticsService>().observer],
       onGenerateRoute: StackedRouter().onGenerateRoute,
-      supportedLocales: [
-        const Locale('ko', 'KO'),
+      supportedLocales: const [
+        Locale('ko', 'KO'),
       ],
       debugShowCheckedModeBanner: false,
       title: 'LivFarm',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
+        primarySwatch: Colors.lightGreen,
+        appBarTheme: const AppBarTheme(
           color: kMainIvory,
           iconTheme: IconThemeData(
             color: kMainPink,
           ),
           elevation: 0.0,
         ),
-        dialogTheme: DialogTheme(
+        dialogTheme: const DialogTheme(
           titleTextStyle: TextStyle(
               fontSize: 18.0,
               fontFamily: 'Spoqa Han Sans',
@@ -65,9 +67,8 @@ class MyApp extends StatelessWidget {
               color: Color(0xff333333)),
         ),
         primaryColor: kSubColor,
-        accentColor: kSubColor,
         fontFamily: 'Spoqa Han Sans',
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           subtitle1: TextStyle(
               fontSize: 30.0,
               fontFamily: 'Spoqa Han Sans',
@@ -87,7 +88,7 @@ class MyApp extends StatelessWidget {
               color: Color(0xff828282)),
         ),
       ),
-      home: LandingView(),
+      home: const LandingView(),
     );
   }
 }

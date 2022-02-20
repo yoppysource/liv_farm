@@ -3,80 +3,82 @@ import 'package:liv_farm/model/coupon.dart';
 import 'package:liv_farm/model/address.dart';
 
 class MyUser {
-  bool agreeToGetMail;
-  bool isEmailConfirmed;
-  String role;
-  int point;
-  String id;
-  String email;
-  String snsId;
-  String platform;
-  String name;
-  DateTime birthday;
-  String gender;
-  String phoneNumber;
-  List<Address> addresses;
-  List<Coupon> coupons;
-  Cart cart;
+  late final String id;
+  late final String role;
+  late final bool isEmailConfirmed;
+  late final int point;
+  late final List<Coupon> coupons;
+  late final Cart cart;
+  String? platform;
+  String? email; // Email can be null because of apple login;;
+  String? snsId;
+  DateTime? birthday;
+  String? name;
+  bool? agreeToGetMail;
+  String? gender;
+  String? phoneNumber;
+  List<Address>? addresses;
 
   MyUser(
       {this.agreeToGetMail,
-      this.role,
-      this.point,
-      this.id,
-      this.email,
+      required this.role,
+      required this.point,
+      required this.id,
+      required this.email,
       this.snsId,
       this.birthday,
-      this.platform,
+      required this.platform,
       this.name,
       this.gender,
       this.phoneNumber,
       this.addresses,
-      this.coupons,
-      this.cart});
+      required this.coupons,
+      required this.cart});
 
   MyUser.fromJson(Map<String, dynamic> json) {
-    agreeToGetMail = json['agreeToGetMail'];
-    if (json['gender'] != null) gender = json['gender'];
-    if (json['role'] != null) role = json['role'];
+    cart = Cart.fromJson(json['cart']);
+    role = json['role'];
     point = json['point'];
-    id = json['id'];
     isEmailConfirmed = json['isEmailConfirmed'];
+    id = json['_id'];
+    if (json["snsId"] != null) snsId = json["snsId"];
+    if (json["platform"] != null) platform = json["platform"];
+    if (json['agreeToGetMail'] != null) agreeToGetMail = json['agreeToGetMail'];
+    if (json['gender'] != null) gender = json['gender'];
     if (json['name'] != null) name = json['name'];
     if (json['email'] != null) email = json['email'];
-    snsId = json["snsId"];
-    platform = json["platform"];
-    if (json["birthday"] != null)
-      this.birthday = DateTime.tryParse(json["birthday"]);
-    phoneNumber = json["phoneNumber"];
+    if (json["birthday"] != null) {
+      birthday = DateTime.tryParse(json["birthday"]);
+    }
+    if (json['phoneNumber'] != null) phoneNumber = json["phoneNumber"];
     if (json['addresses'] != null) {
       addresses = [];
       json['addresses'].forEach((v) {
-        addresses.add(new Address.fromJson(v));
+        addresses!.add(Address.fromJson(v));
       });
     }
     if (json['coupons'] != null) {
       coupons = [];
       json['coupons'].forEach((v) {
-        if (!v['used']) coupons.add(new Coupon.fromJson(v));
+        if (!v['used']) coupons.add(Coupon.fromJson(v));
       });
     }
-    if (json['cart'] != null) cart = new Cart.fromJson(json['cart']);
   }
 
 //ToJson must be relevant to the updating. Thus it is worth to secure the data which is not allowed to change.
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['agreeToGetMail'] = this.agreeToGetMail ?? false;
-    data['isEmailConfirmed'] = this.isEmailConfirmed;
-    if (this.phoneNumber != null) data['phoneNumber'] = this.phoneNumber;
-    if (this.gender != null) data['gender'] = this.gender;
-    if (this.birthday != null)
-      data['birthday'] = this.birthday.toIso8601String();
-    if (this.name != null) data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['agreeToGetMail'] = agreeToGetMail ?? false;
+    data['isEmailConfirmed'] = isEmailConfirmed;
+    if (phoneNumber != null) data['phoneNumber'] = phoneNumber;
+    if (gender != null) data['gender'] = gender;
+    if (birthday != null) {
+      data['birthday'] = birthday!.toIso8601String();
+    }
+    if (name != null) data['name'] = name;
     data['updatedAt'] = DateTime.now().toIso8601String();
-    if (this.addresses != null) {
-      data['addresses'] = this.addresses.map((v) => v.toJson()).toList();
+    if (addresses != null) {
+      data['addresses'] = addresses!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -1,13 +1,14 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:flutter/material.dart';
 
 class AnalyticsService {
-  final FirebaseAnalytics _analytics = FirebaseAnalytics();
-  FirebaseAnalyticsObserver getAnalyticsObserver() =>
-      FirebaseAnalyticsObserver(analytics: _analytics);
-  Future setUserProperties({@required userEmail}) async {
-    await _analytics.setUserId(userEmail);
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  final FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
+  // final FirebaseAnalytics _analytics = FirebaseAnalytics();
+  // FirebaseAnalyticsObserver getAnalyticsObserver() =>
+  //     FirebaseAnalyticsObserver(analytics: _analytics);
+  Future setUserProperties({required userEmail}) async {
+    await _analytics.setUserId(id: userEmail);
   }
 
   Future logLogin(String loginMethod) async {
@@ -19,42 +20,41 @@ class AnalyticsService {
   }
 
   Future logAddCart(
-      {@required String id,
-      @required String productName,
-      @required String productCategory,
-      @required int quantity}) async {
-    await _analytics.logAddToCart(
-        itemId: id.toString(),
-        itemName: productName,
-        itemCategory: productCategory,
-        quantity: quantity);
+      {required String id,
+      required String productName,
+      required String productCategory,
+      required int quantity}) async {
+    await _analytics.logAddToCart(items: [
+      AnalyticsEventItem(
+          itemId: id,
+          itemName: productName,
+          itemCategory: productCategory,
+          quantity: quantity)
+    ]);
   }
 
-  Future logPurchase(
-      {@required double purchaseAmount,
-      @required couponDescription,
-      @required address}) async {
-    await _analytics.logEcommercePurchase(
-        value: purchaseAmount,
-        coupon: couponDescription,
-        location: address,
-        currency: 'won');
+  Future<void> logPurchase({
+    required double purchaseAmount,
+    required String couponDescription,
+  }) async {
+    await _analytics.logPurchase(
+        value: purchaseAmount, coupon: couponDescription, currency: 'won');
   }
 
   Future logViewItem({
-    @required String itemId,
-    @required String itemName,
-    @required String itemCategory,
-    double price,
-    String currency,
-    double value,
+    required String itemId,
+    required String itemName,
+    required String itemCategory,
   }) async {
     await _analytics.logViewItem(
-        itemId: itemId,
-        itemName: itemName,
-        itemCategory: itemCategory,
-        price: price,
-        currency: currency);
+      items: [
+        AnalyticsEventItem(
+          itemId: itemId,
+          itemName: itemName,
+          itemCategory: itemCategory,
+        )
+      ],
+    );
   }
 
   Future logSearch(String seachTerm) async {

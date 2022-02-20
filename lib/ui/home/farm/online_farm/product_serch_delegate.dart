@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/inventory.dart';
+
 class ProductSearchDelegate extends SearchDelegate<String> {
   final List<Inventory> inventories;
 
@@ -10,7 +11,7 @@ class ProductSearchDelegate extends SearchDelegate<String> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.close),
+        icon: const Icon(Icons.close),
         onPressed: () {
           query = '';
         },
@@ -21,9 +22,9 @@ class ProductSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          close(context, null);
+          close(context, '');
         });
   }
 
@@ -52,7 +53,7 @@ class ProductSearchDelegate extends SearchDelegate<String> {
                   productSearchList[index].product.thumbnailPath),
             ),
             title: Text(
-              '${productSearchList[index].product.name}',
+              productSearchList[index].product.name,
               style: Theme.of(context).textTheme.bodyText1,
             ),
           );

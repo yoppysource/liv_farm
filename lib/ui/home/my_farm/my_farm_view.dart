@@ -8,7 +8,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 
 class MyFarmView extends StatelessWidget {
-  const MyFarmView({Key key}) : super(key: key);
+  const MyFarmView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MyFarmView extends StatelessWidget {
               padding: horizontalPaddingToScaffold,
               children: [
                 verticalSpaceRegular,
-                UserInformationView(),
+                const UserInformationView(),
                 verticalSpaceRegular,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -41,11 +41,9 @@ class MyFarmView extends StatelessWidget {
                       ),
                       verticalSpaceTiny,
                       MyFarmTile(
-                          text: '비밀번호 변경',
-                          onPressed: ()  {
-                            model.onPressChangePassword();
-                          }),
-                   
+                        text: '비밀번호 변경',
+                        onPressed: model.onPressChangePassword,
+                      ),
                       verticalSpaceTiny,
                       MyFarmTile(
                         text: '고객센터',
@@ -58,7 +56,7 @@ class MyFarmView extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PolicyPage()));
+                                  builder: (context) => const PolicyPage()));
                         },
                       ),
                       verticalSpaceTiny,
@@ -67,10 +65,11 @@ class MyFarmView extends StatelessWidget {
                         onPressed: () {
                           showLicensePage(
                               context: context,
-                              applicationIcon: Container(
+                              applicationIcon: SizedBox(
                                   height: 100,
                                   width: 100,
-                                  child: Image.asset('assets/images/symbol.png')),
+                                  child:
+                                      Image.asset('assets/images/symbol.png')),
                               applicationName: "LivFarm",
                               applicationLegalese:
                                   'COPYRIGHTⓒ 2021. Future Connect all rights reserved');
@@ -100,13 +99,14 @@ class MyFarmTile extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  const MyFarmTile({Key key, this.text, this.onPressed}) : super(key: key);
+  const MyFarmTile({Key? key, required this.text, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
-      child: Container(
+      onTap: () => onPressed(),
+      child: SizedBox(
         height: 50,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,11 +117,11 @@ class MyFarmTile extends StatelessWidget {
                 text,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyText1!
                     .copyWith(color: Colors.black87),
               ),
             ),
-            Center(
+            const Center(
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: kMainPink,

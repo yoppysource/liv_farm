@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:liv_farm/model/inventory.dart';
-import 'package:liv_farm/model/product.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/product_detail_viewmodel.dart';
 import 'package:liv_farm/ui/home/farm/product_detail/reviews/reviews_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
@@ -15,7 +14,8 @@ import 'package:stacked/stacked.dart';
 class ProductDetailView extends StatefulWidget {
   final Inventory inventory;
 
-  const ProductDetailView({Key key, @required this.inventory}) : super(key: key);
+  const ProductDetailView({Key? key, required this.inventory})
+      : super(key: key);
 
   @override
   _ProductDetailViewState createState() => _ProductDetailViewState();
@@ -23,8 +23,8 @@ class ProductDetailView extends StatefulWidget {
 
 class _ProductDetailViewState extends State<ProductDetailView>
     with Formatter, SingleTickerProviderStateMixin {
-  ScrollController _scrollViewController;
-  TabController _tabController;
+  late ScrollController _scrollViewController;
+  late TabController _tabController;
   @override
   void initState() {
     _scrollViewController = ScrollController();
@@ -35,12 +35,13 @@ class _ProductDetailViewState extends State<ProductDetailView>
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductDetailViewModel>.reactive(
-      viewModelBuilder: () => ProductDetailViewModel(inventory: widget.inventory),
+      viewModelBuilder: () =>
+          ProductDetailViewModel(inventory: widget.inventory),
       builder: (context, model, child) => DefaultTabController(
         length: 2,
         child: Scaffold(
-          body: (model.product == null || model.isBusy)
-              ? Center(
+          body: (model.isBusy)
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Stack(
@@ -52,7 +53,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                             (BuildContext context, bool innerBoxIsScrolled) {
                           return <Widget>[
                             SliverPadding(
-                                padding: EdgeInsets.all(0),
+                                padding: const EdgeInsets.all(0),
                                 sliver: SliverList(
                                     delegate: SliverChildListDelegate([
                                   Padding(
@@ -79,7 +80,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                         fit: BoxFit.fitWidth,
                                       ),
                                       errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                   Padding(
@@ -94,7 +95,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                       children: [
                                         verticalSpaceRegular,
                                         Text(
-                                          model.product?.intro ?? '',
+                                          model.product.intro,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText2,
@@ -106,7 +107,7 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                             model.product.name,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .subtitle1
+                                                .subtitle1!
                                                 .copyWith(color: kMainBlack),
                                           ),
                                         ),
@@ -133,16 +134,16 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                                                     .price)
                                                                 .length -
                                                             1),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: kMainBlack,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 22,
                                                     letterSpacing: 1.2),
                                               ),
-                                              SizedBox(width: 1.2),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 2),
+                                              const SizedBox(width: 1.2),
+                                              const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 2),
                                                 child: Text('원',
                                                     style: TextStyle(
                                                         color: kMainBlack,
@@ -168,14 +169,14 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                   indicatorColor: kMainColor.withOpacity(0.55),
                                   tabBarIndicatorSize: TabBarIndicatorSize.tab,
                                   indicatorRadius: 30,
-                                  insets: EdgeInsets.symmetric(
+                                  insets: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 5),
                                 ),
                                 indicatorWeight: 0,
                                 labelPadding:
-                                    EdgeInsets.symmetric(vertical: 20),
+                                    const EdgeInsets.symmetric(vertical: 20),
                                 tabs: [
-                                  MyTabItem(
+                                  const MyTabItem(
                                     label: '상세정보',
                                   ),
                                   MyTabItem(
@@ -196,72 +197,73 @@ class _ProductDetailViewState extends State<ProductDetailView>
                                   imageUrl: model.product.descriptionImgPath,
                                 ),
                                 Image.asset('assets/images/brand.jpg'),
-                                InformationAboutCompanyCard(),
-                                SizedBox(
+                                const InformationAboutCompanyCard(),
+                                const SizedBox(
                                   height: bottomBottomHeight,
                                 ),
                               ],
                             ),
-                            ReviewsView(reviews: model.product.reviews?.reversed?.toList() ?? [],productDetailViewModel: model,),
+                            ReviewsView(
+                              reviews: model.reviews ?? [],
+                              productDetailViewModel: model,
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    if (!(widget.inventory.product.category == ProductCategory.Dressing ||
-                        widget.inventory.product.category == ProductCategory.Protein))
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: GestureDetector(
-                          onTap: widget.inventory.inventory == 0
-                              ? null
-                              : model.onCartTap,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: GestureDetector(
+                        onTap: model.inventory.inventory == 0
+                            ? null
+                            : model.onTapAddToCart,
+                        child: Container(
+                          height: bottomBottomHeight,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: bottomButtonBorderRadius,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(
+                                    0, 1), // changes position of shadow
+                              ),
+                            ],
+                          ),
                           child: Container(
-                            height: bottomBottomHeight,
+                            height: double.infinity,
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: model.inventory.inventory == 0
+                                  ? Colors.black26
+                                  : kSubColor.withOpacity(0.9),
                               borderRadius: bottomButtonBorderRadius,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.3),
                                   spreadRadius: 1,
                                   blurRadius: 1,
-                                  offset: Offset(
+                                  offset: const Offset(
                                       0, 1), // changes position of shadow
                                 ),
                               ],
                             ),
-                            child: Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: widget.inventory.inventory == 0
-                                    ? Colors.black26
-                                    : kSubColor.withOpacity(0.9),
-                                borderRadius: bottomButtonBorderRadius,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 1,
-                                    blurRadius: 1,
-                                    offset: Offset(
-                                        0, 1), // changes position of shadow
-                                  ),
-                                ],
+                            child: Center(
+                                child: Text(
+                              model.inventory.inventory == 0
+                                  ? "재배 중인 상품입니다"
+                                  : "장바구니에 담기",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 21,
                               ),
-                              child: Center(
-                                  child: Text(
-                                widget.inventory.inventory == 0
-                                    ? "재배 중인 상품입니다"
-                                    : "장바구니에 담기",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 21,
-                                ),
-                              )),
-                            ),
+                            )),
                           ),
                         ),
-                      )
+                      ),
+                    )
                   ],
                 ),
         ),

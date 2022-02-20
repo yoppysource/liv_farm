@@ -6,24 +6,24 @@ class TimeButton extends StatefulWidget {
   final String time;
   final TimeTapCallback onSelect;
   final bool value;
-  final Color borderColor;
-  final Color activeBorderColor;
-  final Color backgroundColor;
-  final Color activeBackgroundColor;
+  final Color? borderColor;
+  final Color? activeBorderColor;
+  final Color? backgroundColor;
+  final Color? activeBackgroundColor;
   final TextStyle textStyle;
   final TextStyle activeTextStyle;
 
   const TimeButton(
-      {Key key,
-      this.time,
-      this.onSelect,
+      {Key? key,
+      required this.time,
+      required this.onSelect,
       this.value = false,
       this.borderColor,
       this.activeBorderColor,
       this.backgroundColor,
       this.activeBackgroundColor,
-      this.textStyle,
-      this.activeTextStyle})
+      required this.textStyle,
+      required this.activeTextStyle})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class TimeButton extends StatefulWidget {
 }
 
 class _TimeButtonState extends State<TimeButton> {
-  bool isSelected;
+  late bool isSelected;
 
   @override
   void initState() {

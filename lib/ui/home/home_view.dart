@@ -6,19 +6,18 @@ import 'package:flutter/services.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
 import 'package:liv_farm/services/toast_service.dart';
-import 'package:liv_farm/ui/home/farm/offline_farm/offline_farm_view.dart';
 import 'package:liv_farm/ui/home/farm/online_farm/online_farm_view.dart';
+import 'package:liv_farm/ui/home/home_main/home_main_view.dart';
 import 'package:liv_farm/ui/home/home_viewmodel.dart';
 import 'package:liv_farm/ui/home/my_farm/my_farm_view.dart';
 import 'package:liv_farm/ui/home/order_history/order_history_view.dart';
 import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_view.dart';
-import 'package:liv_farm/ui/home/video/video_view.dart';
 import 'package:liv_farm/ui/shared/my_icons_icons.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key key}) : super(key: key);
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -58,22 +57,22 @@ class _HomeViewState extends State<HomeView> {
             currentIndex: model.currentIndex,
             onTap: model.setIndex,
             items: [
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(
                     CupertinoIcons.home,
                   ),
                   label: '홈'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(
                     MyIcons.plant,
                   ),
                   label: '농장'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(
                     CupertinoIcons.square_favorites_alt,
                   ),
                   label: '주문내역'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(
                     CupertinoIcons.person,
                   ),
@@ -85,16 +84,14 @@ class _HomeViewState extends State<HomeView> {
                     viewModelBuilder: () => locator<CartProviderService>(),
                     builder: (context, model, child) => Badge(
                         position: BadgePosition.topEnd(top: -15, end: -10),
-                        animationDuration: Duration(milliseconds: 500),
+                        animationDuration: const Duration(milliseconds: 500),
                         animationType: BadgeAnimationType.fade,
                         badgeColor: kMainGreen,
                         badgeContent: Text(
-                          model.cart == null
-                              ? '0'
-                              : model.cart.items?.length.toString() ?? '0',
-                          style: TextStyle(color: Colors.white),
+                          model.bottomNavigationBarItemText,
+                          style: const TextStyle(color: Colors.white),
                         ),
-                        child: Icon(MyIcons.shopping_cart)),
+                        child: const Icon(MyIcons.shopping_cart)),
                   ),
                   label: '장바구니')
             ],
@@ -105,11 +102,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Future<bool> _systemBackButtonPressed() async {
+  Future _systemBackButtonPressed() async {
     if (!isSystemButtonPressed) {
       isSystemButtonPressed = true;
       ToastMessageService.showToast(message: '앱을 종료하실려면 한번 더 눌러주세요.');
-      await Future.delayed(Duration(seconds: 2), () {
+      await Future.delayed(const Duration(seconds: 2), () {
         isSystemButtonPressed = false;
       });
     } else {
@@ -120,17 +117,17 @@ class _HomeViewState extends State<HomeView> {
   Widget _getViewForIndex(int index, HomeViewModel model) {
     switch (index) {
       case 0:
-        return VideoView();
+        return const HomeMainView();
       case 1:
-        return model.isOffineMode ? OfflineFarmView():  OnlineFarmView();
+        return const OnlineFarmView();
       case 2:
-        return OrderHistoryView();
+        return const OrderHistoryView();
       case 3:
-        return MyFarmView();
+        return const MyFarmView();
       case 4:
-        return ShoppingCartView();
+        return const ShoppingCartView();
       default:
-        return model.isOffineMode ? OfflineFarmView():  OnlineFarmView();
+        return const OnlineFarmView();
     }
   }
 }

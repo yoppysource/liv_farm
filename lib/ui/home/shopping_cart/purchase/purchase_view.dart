@@ -13,7 +13,8 @@ class PurchaseView extends StatelessWidget {
   final PaymentData paymentData;
   final Order order;
 
-  const PurchaseView({Key key, this.paymentData, this.order}) : super(key: key);
+  const PurchaseView({Key? key, required this.paymentData, required this.order})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +22,14 @@ class PurchaseView extends StatelessWidget {
       builder: (context, model, child) => LoadingOverlay(
         isLoading: model.isBusy,
         color: kMainGrey,
-        progressIndicator: CircularProgressIndicator(),
+        progressIndicator: const CircularProgressIndicator(),
         child: IamportPayment(
             appBar: AppBar(
               title: Text(
                 '결제하기',
                 style: Theme.of(context)
                     .textTheme
-                    .subtitle2
+                    .subtitle2!
                     .copyWith(fontWeight: FontWeight.normal),
               ),
               leading: GestureDetector(
@@ -37,18 +38,16 @@ class PurchaseView extends StatelessWidget {
               ),
             ),
             /* 웹뷰 로딩 컴포넌트 */
-            initialChild: Container(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-                      child: Text('잠시만 기다려주세요...',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-                  ],
-                ),
+            initialChild: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                    child: Text('잠시만 기다려주세요...',
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ),
+                ],
               ),
             ),
             /* [필수입력] 가맹점 식별코드 */

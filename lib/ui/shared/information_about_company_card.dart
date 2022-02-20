@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'my_card.dart';
 
 class InformationAboutCompanyCard extends StatelessWidget {
+  const InformationAboutCompanyCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MyCard(
       title: "회사정보",
       child: Column(
-        children: [
+        children: const [
           InnerText(
             title: '(주)퓨처커넥트',
             content: '',
@@ -58,32 +60,31 @@ class InnerText extends StatelessWidget {
   final String title;
   final String content;
 
-  const InnerText({Key key, this.title, this.content}) : super(key: key);
+  const InnerText({Key? key, required this.title, required this.content})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * 0.25,
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: Colors.black87,
             ),
           ),
         ),
-        Container(
-          child: Text(
-            content,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.normal,
-              color: Colors.black54,
-            ),
+        Text(
+          content,
+          style: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.normal,
+            color: Colors.black54,
           ),
         ),
       ],

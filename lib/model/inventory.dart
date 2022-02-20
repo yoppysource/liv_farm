@@ -1,22 +1,27 @@
+import 'package:liv_farm/model/option_group.dart';
 import 'package:liv_farm/model/product.dart';
 
 class Inventory {
-  int inventory;
-  int rank;
-  bool isOnShelf;
-  bool hidden;
-  String store;
-  Product product;
-  String id;
+  late final int inventory;
+  late final int rank;
+  late final bool isOnShelf;
+  late final bool hidden;
+  late final String store;
+  late final Product product;
+  late final String id;
+  late final List<OptionGroup> optionGroups;
+  late final bool recommended;
 
   Inventory(
-      {this.inventory,
-      this.rank,
-      this.isOnShelf,
-      this.hidden,
-      this.store,
-      this.product,
-      this.id});
+      {required this.inventory,
+      required this.rank,
+      required this.isOnShelf,
+      required this.hidden,
+      required this.store,
+      required this.product,
+      required this.id,
+      required this.optionGroups,
+      required this.recommended});
 
   Inventory.fromJson(Map<String, dynamic> json) {
     inventory = json['inventory'];
@@ -24,22 +29,26 @@ class Inventory {
     isOnShelf = json['isOnShelf'];
     hidden = json['hidden'];
     store = json['store'];
-    product =
-        json['product'] != null ? new Product.fromJson(json['product']) : null;
+    product = Product.fromJson(json['product']);
+    optionGroups = [];
+    json['optionGroups'].forEach((v) {
+      optionGroups.add(OptionGroup.fromJson(v));
+    });
     id = json['id'];
+    recommended = json['recommended'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['inventory'] = this.inventory;
-    data['rank'] = this.rank;
-    data['isOnShelf'] = this.isOnShelf;
-    data['hidden'] = this.hidden;
-    data['store'] = this.store;
-    if (this.product != null) {
-      data['product'] = this.product.toJson();
-    }
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['inventory'] = inventory;
+    data['rank'] = rank;
+    data['isOnShelf'] = isOnShelf;
+    data['hidden'] = hidden;
+    data['store'] = store;
+    data['product'] = product.toJson();
+    data['id'] = id;
+    data['optionGroups'] = optionGroups.map((v) => v.toJson()).toList();
+    data['recommended'] = recommended;
     return data;
   }
 }

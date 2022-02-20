@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
-class BookingOrderView extends StatelessWidget {
+class OrderTimeView extends StatelessWidget {
   final ShoppingCartViewModel model;
 
-  const BookingOrderView({Key key, this.model}) : super(key: key);
+  const OrderTimeView({Key? key, required this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,14 +26,14 @@ class BookingOrderView extends StatelessWidget {
             children: [
               Flexible(
                 child: model.isBusy
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : FittedBox(
                         fit: BoxFit.fitWidth,
-                        child: Text(model.bookingOrderMessage ?? "",
+                        child: Text(model.orderTimeMessage,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyText1!
                                 .copyWith(color: Colors.white, fontSize: 17)),
                       ),
               ),
@@ -45,7 +45,7 @@ class BookingOrderView extends StatelessWidget {
                     onPressed: () {},
                     iconSize: 25,
                     padding: EdgeInsets.zero,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.calendar_today_outlined,
                       color: Colors.white,
                     ),

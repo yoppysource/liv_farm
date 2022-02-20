@@ -3,6 +3,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
 class PolicyPage extends StatelessWidget {
+  const PolicyPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,64 +1,72 @@
 import 'package:liv_farm/model/inventory.dart';
-import 'package:liv_farm/model/item.dart';
+import 'package:liv_farm/model/option_group.dart';
 
 class Cart {
-  List<Item> items;
-  int totalPrice;
-  int totalDiscountedPrice;
-  String id;
-  String storeId;
+  late final List<Item> items;
+  late final int totalPrice;
+  late final int? totalDiscountedPrice;
+  late final String id;
+  String? storeId;
 
   Cart(
-      {this.items,
-      this.totalPrice,
-      this.totalDiscountedPrice,
-      this.id,
-      this.storeId});
+      {required this.items,
+      required this.totalPrice,
+      required this.totalDiscountedPrice,
+      required this.id,
+      required this.storeId});
 
   Cart.fromJson(Map<String, dynamic> json) {
     if (json['items'] != null) {
       items = [];
       json['items'].forEach((v) {
-        items.add(new Item.fromJson(v));
+        items.add(Item.fromJson(v));
       });
     }
-    storeId = json['storeId'];
+    if (json['storeId'] != null) storeId = json['storeId'];
     totalPrice = json['totalPrice'];
     totalDiscountedPrice = json['totalDiscountedPrice'];
     id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (items.isNotEmpty) {
+      data['items'] = items.map((v) => v.toJson()).toList();
     }
-    data['storeId'] = this.storeId;
-
-    data['totalPrice'] = this.totalPrice;
-    data['totalDiscountedPrice'] = this.totalDiscountedPrice ?? 0;
-    data['id'] = this.id;
+    data['storeId'] = storeId;
+    data['totalPrice'] = totalPrice;
+    data['totalDiscountedPrice'] = totalDiscountedPrice ?? 0;
+    data['id'] = id;
     return data;
   }
 }
 
 class Item {
-  int quantity;
-  String id;
-  Inventory inventory;
+  late int quantity;
+  String? id;
+  late final Inventory inventory;
+  late final List<Option> options;
 
-  Item({this.quantity, this.id, this.inventory});
+  Item(
+      {required this.quantity,
+      this.id,
+      required this.inventory,
+      required this.options});
 
   Item.fromJson(Map<String, dynamic> json) {
     quantity = json['quantity'];
-    id = json['id'];
-    inventory = new Inventory.fromJson(json['inventory']);
+    id = json['_id'];
+    inventory = Inventory.fromJson(json['inventory']);
+    options =
+        List.from(json['options']).map((e) => Option.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['quantity'] = this.quantity;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['inventory'] = inventory.id;
+    data['quantity'] = quantity;
+    data['id'] = id;
+    data['options'] = options.map((e) => e.toJson()).toList();
     return data;
   }
 }

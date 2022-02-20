@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/app/app.router.dart';
 import 'package:liv_farm/services/auth_service/user_input_auth_service.dart';
-import 'package:liv_farm/services/server_service/server_service.dart';
+import 'package:liv_farm/services/server_service/api_exception.dart';
+import 'package:liv_farm/services/server_service/client_service.dart';
 import 'package:liv_farm/ui/auth/auth_viewmodel.dart';
 import 'package:liv_farm/ui/shared/bottom_sheet/bottom_sheet_type.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -9,32 +11,34 @@ import 'package:stacked_services/stacked_services.dart';
 import 'login_view.form.dart';
 
 class LoginViewModel extends AuthViewModel {
-  final _navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   final UserInputAuthService _userInputAuthService =
       UserInputAuthService(isSignup: false);
-  BottomSheetService _bottomSheetService = locator<BottomSheetService>();
-  DialogService _dialogService = locator<DialogService>();
-  ServerService _serverService = locator<ServerService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final ClientService _serverService = locator<ClientService>();
 
   @override
   Future<void> onMainButtonPressed() async {
-    _userInputAuthService.email = emailValue?.trim();
-    _userInputAuthService.password = passwordValue?.trim();
+    _userInputAuthService.email = emailValue?.trim() ?? '';
+    _userInputAuthService.password = passwordValue?.trim() ?? '';
     await onAuthPressed(_userInputAuthService);
   }
 
-  Future<void> onForgetPasswordButtonPressed() async {
-    SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
+  Future onForgetPasswordButtonPressed() async {
+    SheetResponse? _sheetResponse = await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,
         variant: BottomSheetType.Write,
-        customData: {
+        data: {
           'maxLength': 50,
+          'keyboardType': TextInputType.emailAddress,
+          'hintText': '이메일 입력',
         },
         title: '가입하신 이메일을 입력해주세요');
-    if (_sheetResponse.confirmed) {
-      String userEmail = _sheetResponse.responseData['input'].trim();
-      if (userEmail == null || userEmail == '' || !userEmail.contains('@')) {
-        return await _dialogService.showDialog(
+    if (_sheetResponse != null && _sheetResponse.confirmed) {
+      String userEmail = _sheetResponse.data['input'].trim();
+      if (userEmail == '' || !userEmail.contains('@')) {
+        return _dialogService.showDialog(
           title: '오류',
           description: "유효하지 않은 이메일 형식입니다",
           buttonTitle: '확인',
@@ -44,11 +48,12 @@ class LoginViewModel extends AuthViewModel {
         try {
           isBusy = true;
           notifyListeners();
-          Map<String, dynamic> data = await _serverService.postData(
+          Map<String, dynamic> data = await _serverService.sendRequest(
+              method: HttpMethod.post,
               resource: Resource.auth,
-              path: '/passwordResetEmail',
+              endPath: '/passwordResetEmail',
               data: {"email": userEmail});
-                isBusy = false;
+          isBusy = false;
           notifyListeners();
           return await _dialogService.showDialog(
             title: '비밀번호 초기화',
@@ -56,7 +61,7 @@ class LoginViewModel extends AuthViewModel {
             buttonTitle: '확인',
             barrierDismissible: true,
           );
-        } catch (e) {
+        } on APIException catch (e) {
           isBusy = false;
           notifyListeners();
           return await _dialogService.showDialog(
@@ -77,12 +82,18 @@ class LoginViewModel extends AuthViewModel {
   @override
   void setFormStatus() {
     isInputVaildToSubmit = false;
-    if (!emailValue.contains("@") && emailValue.length > 6)
+    if (emailValue != null &&
+        !emailValue!.contains("@") &&
+        emailValue!.length > 6) {
       setValidationMessage("이메일 형식이 올바르지 않습니다.");
-    if (passwordValue.isNotEmpty && passwordValue.length < 6)
+    }
+    if (passwordValue != null &&
+        passwordValue!.isNotEmpty &&
+        passwordValue!.length < 6) {
       setValidationMessage("비밀번호가 너무 짧습니다.");
-    if (emailValue.isNotEmpty &&
-        passwordValue.isNotEmpty &&
+    }
+    if (emailValue!.isNotEmpty &&
+        passwordValue!.isNotEmpty &&
         validationMessage == null) isInputVaildToSubmit = true;
   }
 }

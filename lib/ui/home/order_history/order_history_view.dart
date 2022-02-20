@@ -15,7 +15,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 
 class OrderHistoryView extends StatefulWidget {
-  const OrderHistoryView({Key key}) : super(key: key);
+  const OrderHistoryView({Key? key}) : super(key: key);
 
   @override
   _OrderHistoryViewState createState() => _OrderHistoryViewState();
@@ -23,8 +23,8 @@ class OrderHistoryView extends StatefulWidget {
 
 class _OrderHistoryViewState extends State<OrderHistoryView>
     with SingleTickerProviderStateMixin, Formatter {
-  ScrollController _scrollViewController;
-  TabController _tabController;
+  late ScrollController _scrollViewController;
+  late TabController _tabController;
   @override
   void initState() {
     _scrollViewController = ScrollController();
@@ -36,7 +36,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
   Widget build(BuildContext context) {
     return ViewModelBuilder<OrderHistoryViewModel>.reactive(
       builder: (context, model, child) => LoadingOverlay(
-        progressIndicator: CircularProgressIndicator(),
+        progressIndicator: const CircularProgressIndicator(),
         isLoading: model.isBusy,
         color: kMainGrey,
         child: SafeArea(
@@ -62,12 +62,12 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
                         indicatorColor: kMainColor.withOpacity(0.55),
                         tabBarIndicatorSize: TabBarIndicatorSize.tab,
                         indicatorRadius: 30,
-                        insets:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        insets: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 5),
                       ),
                       indicatorWeight: 0,
-                      labelPadding: EdgeInsets.symmetric(vertical: 20),
-                      tabs: [
+                      labelPadding: const EdgeInsets.symmetric(vertical: 20),
+                      tabs: const [
                         MyTabItem(
                           label: '진행 중',
                         ),
@@ -83,7 +83,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
                 controller: _tabController,
                 children: <Widget>[
                   model.yetCompleteOrderList.isEmpty
-                      ? EmptyView(
+                      ? const EmptyView(
                           iconData: CupertinoIcons.square_favorites_alt,
                           text: "진행 중인 주문 내역이 없습니다",
                         )
@@ -99,11 +99,12 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
                                 return OrderCard(
                                   order: order,
                                   isCurrentOrder: true,
+                                  model: model,
                                 );
                               }),
                         ),
                   model.completeOrderList.isEmpty
-                      ? EmptyView(
+                      ? const EmptyView(
                           iconData: CupertinoIcons.check_mark,
                           text: "완료된 주문 내역이 없습니다",
                         )
@@ -134,21 +135,26 @@ class OrderCard extends StatelessWidget with Formatter {
   final Order order;
   final bool isCurrentOrder;
 
-  const OrderCard({Key key, this.order, this.isCurrentOrder, this.model})
+  const OrderCard(
+      {Key? key,
+      required this.order,
+      required this.isCurrentOrder,
+      required this.model})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: MyCard(
-        title:
-            '${order.createdAt == null ? '' : getStringFromDatetime(order.createdAt)}',
+        title: order.createdAt == null
+            ? ''
+            : getStringFromDatetime(order.createdAt!),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '${order.orderStatus}',
-              style: TextStyle(
+              order.orderStatus,
+              style: const TextStyle(
                 color: kMainGrey,
                 fontSize: 17,
                 fontWeight: FontWeight.w700,
@@ -157,7 +163,7 @@ class OrderCard extends StatelessWidget with Formatter {
             verticalSpaceRegular,
             ListView.separated(
               itemCount: order.cart.items.length,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 Item _item = order.cart.items[index];
@@ -166,19 +172,19 @@ class OrderCard extends StatelessWidget with Formatter {
                   children: [
                     Row(
                       children: [
-                        Container(
+                        SizedBox(
                           height: 120,
                           width: 120,
                           child: CachedNetworkImage(
                             imageUrl: _item.inventory.product.thumbnailPath,
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            fadeInDuration: Duration(milliseconds: 50),
+                                const Icon(Icons.error),
+                            fadeInDuration: const Duration(milliseconds: 50),
                             fit: BoxFit.cover,
                           ),
                         ),
                         horizontalSpaceRegular,
-                        Container(
+                        SizedBox(
                           height: 100,
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -202,10 +208,12 @@ class OrderCard extends StatelessWidget with Formatter {
                                   ),
                                 ],
                               ),
-                              Text(getPriceFromInt(_item.inventory.product.price),
+                              Text(
+                                  getPriceFromInt(
+                                      _item.inventory.product.price),
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1
+                                      .bodyText1!
                                       .copyWith(
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 0.5)),
@@ -215,9 +223,9 @@ class OrderCard extends StatelessWidget with Formatter {
                       ],
                     ),
                     verticalSpaceSmall,
-                    this.isCurrentOrder == true
+                    isCurrentOrder == true
                         ? Container()
-                        : Container(
+                        : SizedBox(
                             height: 40,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -231,25 +239,25 @@ class OrderCard extends StatelessWidget with Formatter {
                                       elevation: 0.5,
                                       position: BadgePosition.topEnd(),
                                       borderRadius: BorderRadius.circular(10),
-                                      padding: (!this.order.isReviewed &&
-                                              !this.isCurrentOrder)
-                                          ? EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 2)
-                                          : EdgeInsets.zero,
-                                      badgeContent: (!this.order.isReviewed &&
-                                              !this.isCurrentOrder)
-                                          ? Text(
-                                              "리뷰를 작성해 주세요",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10),
-                                            )
-                                          : Container(),
+                                      padding:
+                                          (!order.isReviewed && !isCurrentOrder)
+                                              ? const EdgeInsets.symmetric(
+                                                  horizontal: 8, vertical: 2)
+                                              : EdgeInsets.zero,
+                                      badgeContent:
+                                          (!order.isReviewed && !isCurrentOrder)
+                                              ? const Text(
+                                                  "리뷰를 작성해 주세요",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10),
+                                                )
+                                              : Container(),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               width: 0.5,
-                                              color: this.order.isReviewed
+                                              color: order.isReviewed
                                                   ? kMainBlack
                                                   : kMainColor),
                                         ),
@@ -258,16 +266,16 @@ class OrderCard extends StatelessWidget with Formatter {
                                           '리뷰 작성',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2
+                                              .bodyText2!
                                               .copyWith(
-                                                  color: this.order.isReviewed
+                                                  color: order.isReviewed
                                                       ? kMainBlack
                                                       : kMainColor),
                                         )),
                                       ),
                                     ),
                                     onTap: () async => await model.createReview(
-                                        _item.inventory.product.id, this.order.id),
+                                        _item.inventory.product.id, order.id),
                                   ),
                                 ),
                                 horizontalSpaceRegular,
@@ -302,30 +310,34 @@ class OrderCard extends StatelessWidget with Formatter {
               },
               separatorBuilder: (context, index) => Container(),
             ),
-            if (this.isCurrentOrder == true)
+            if (isCurrentOrder == true)
               Column(
                 children: [
-                   if(this.order.option == 'delivery')
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        '배송지',
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            color: kMainGrey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      verticalSpaceTiny,
-                      Text(
-                        "${order.address.address} ${order.address?.addressDetail ?? ""}",
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
-                              fontSize: 16,
-                            ),
-                      ),
-                    ],
-                  ),
+                  if (order.option == 'delivery')
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          '배송지',
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                  color: kMainGrey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal),
+                        ),
+                        verticalSpaceTiny,
+                        Text(
+                          "${order.address.address} ${order.address.addressDetail ?? ""}",
+                          style:
+                              Theme.of(context).textTheme.subtitle2!.copyWith(
+                                    fontSize: 16,
+                                  ),
+                        ),
+                      ],
+                    ),
                   verticalSpaceSmall,
                   Column(
                     mainAxisSize: MainAxisSize.min,
@@ -333,7 +345,7 @@ class OrderCard extends StatelessWidget with Formatter {
                     children: [
                       Text(
                         '수령예정시간',
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: kMainGrey,
                             fontSize: 16,
                             fontWeight: FontWeight.normal),
@@ -341,14 +353,14 @@ class OrderCard extends StatelessWidget with Formatter {
                       verticalSpaceTiny,
                       Text(
                         order.bookingOrderMessage?.toString() ?? '',
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                               fontSize: 16,
                             ),
                       ),
                     ],
                   ),
                   verticalSpaceSmall,
-                  Divider(
+                  const Divider(
                     height: 5,
                     thickness: 2,
                     color: kMainLightPink,
@@ -359,14 +371,14 @@ class OrderCard extends StatelessWidget with Formatter {
                     children: [
                       Text(
                         '결제 금액',
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: kMainGrey,
                             fontSize: 16,
                             fontWeight: FontWeight.normal),
                       ),
                       Text(
                         getPriceFromInt(order.paidAmount),
-                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: kMainBlack,
                             fontSize: 16,
                             letterSpacing: 0.7),

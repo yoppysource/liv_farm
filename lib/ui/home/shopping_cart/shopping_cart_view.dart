@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/address_card.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/cart_item_list_tile.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/coupon_card.dart';
-import 'package:liv_farm/ui/home/shopping_cart/component/delivery_date_card.dart';
+import 'package:liv_farm/ui/home/shopping_cart/component/order_request_card.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/delivery_option_card.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/purchase_button_bar.dart';
 import 'package:liv_farm/ui/home/shopping_cart/component/receipt_card.dart';
@@ -12,7 +12,6 @@ import 'package:liv_farm/ui/shared/address_appbar/address_appbar_view.dart';
 import 'package:liv_farm/ui/shared/formatter.dart';
 import 'package:liv_farm/ui/shared/information_about_company_card.dart';
 import 'package:liv_farm/ui/shared/my_icons_icons.dart';
-import 'package:liv_farm/ui/shared/offline_store_appbar/offline_store_appbar.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
@@ -20,7 +19,7 @@ import 'package:stacked/stacked.dart';
 import 'delivery_information/delivery_information_view.dart';
 
 class ShoppingCartView extends StatelessWidget with Formatter {
-  const ShoppingCartView({Key key}) : super(key: key);
+  const ShoppingCartView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       MyIcons.shopping_cart,
                       color: kMainGrey,
                       size: 80,
@@ -41,7 +40,7 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                     verticalSpaceRegular,
                     Text(
                       '카트가 비어 있습니다',
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
                           color: kMainGrey, fontWeight: FontWeight.normal),
                     )
                   ],
@@ -50,17 +49,30 @@ class ShoppingCartView extends StatelessWidget with Formatter {
             )
           : LoadingOverlay(
               isLoading: model.isBusy,
-              progressIndicator: CircularProgressIndicator(),
+              progressIndicator: const CircularProgressIndicator(),
               child: Scaffold(
-                  appBar: PreferredSize(child:  model.isOffineMode ? OfflineStoreAppbarView() : AddressAppBarView(), preferredSize: new Size.fromHeight(50),),
+                  appBar: PreferredSize(
+                    child: AddressAppBarView(shoppingCartViewModel: model),
+                    preferredSize: const Size.fromHeight(50),
+                  ),
                   body: Stack(
                     children: [
                       Padding(
                         padding: horizontalPaddingToScaffold,
                         child: ListView(
                           children: [
-                            if(model.showBannerText)
-                            Container(height: 30,color: Colors.white, child: Center(child: Text(model.bannerText, style: TextStyle(color: kSubColor.withOpacity(0.9),),),),),
+                            Container(
+                              height: 30,
+                              color: Colors.white,
+                              child: Center(
+                                child: Text(
+                                  model.bannerText,
+                                  style: TextStyle(
+                                    color: kSubColor.withOpacity(0.9),
+                                  ),
+                                ),
+                              ),
+                            ),
                             verticalSpaceRegular,
                             Column(
                               children: model.cart.items
@@ -71,47 +83,41 @@ class ShoppingCartView extends StatelessWidget with Formatter {
                                   .toList(),
                             ),
                             //default padding is 25, and padding on listTile  = 18  Thus, 7
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             verticalSpaceRegular,
                             CouponCard(
                               model: model,
                             ),
                             verticalSpaceRegular,
                             ReceiptCard(model: model),
-                         
-                            if(!model.isOffineMode) 
-                            Column(
-                              children: [
-                                verticalSpaceRegular,
-                                 DeliveryInformationView(),
                             verticalSpaceRegular,
-                            if(model.store.takeOut)
-                            Column(
-                              children: [
-                                DeliveryOptionCard(model: model,),
-                                 verticalSpaceRegular,
-                              ],
-                            ),
-                            if(!model.takeOut)
-                            Column(
-                              children: [
-                                AddressCard(
-                                  model: model,
-                                ),
-                                 verticalSpaceRegular,
-                              ],
-                            ),
-                     
-                            DeliveryDateCard(
+                            const DeliveryInformationView(),
+                            verticalSpaceRegular,
+                            if (model.store!.takeOut)
+                              Column(
+                                children: [
+                                  DeliveryOptionCard(
+                                    model: model,
+                                  ),
+                                  verticalSpaceRegular,
+                                ],
+                              ),
+                            if (!model.takeOut)
+                              Column(
+                                children: [
+                                  AddressCard(
+                                    model: model,
+                                  ),
+                                  verticalSpaceRegular,
+                                ],
+                              ),
+                            OrderRequestCard(
                               model: model,
                             ),
 
-                              ],
-                            ),
-                           
                             verticalSpaceRegular,
-                            InformationAboutCompanyCard(),
-                            SizedBox(
+                            const InformationAboutCompanyCard(),
+                            const SizedBox(
                               height: 100,
                             )
                           ],

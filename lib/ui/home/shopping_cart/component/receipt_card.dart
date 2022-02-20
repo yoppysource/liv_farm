@@ -7,7 +7,7 @@ import 'package:liv_farm/ui/shared/styles.dart';
 class ReceiptCard extends StatelessWidget with Formatter {
   final ShoppingCartViewModel model;
 
-  const ReceiptCard({Key key, this.model}) : super(key: key);
+  const ReceiptCard({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +20,14 @@ class ReceiptCard extends StatelessWidget with Formatter {
             children: [
               Text(
                 '상품 금액',
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainGrey,
                     fontSize: 18,
                     fontWeight: FontWeight.normal),
               ),
               Text(
-                getPriceFromInt(model.totalPrice),
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                getPriceFromInt(model.totalProductPrice),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainBlack, fontSize: 18, letterSpacing: 0.7),
               ),
             ],
@@ -38,14 +38,16 @@ class ReceiptCard extends StatelessWidget with Formatter {
             children: [
               Text(
                 '할인 금액',
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainGrey,
                     fontSize: 18,
                     fontWeight: FontWeight.normal),
               ),
               Text(
-                getPriceFromInt(model.discountAmount),
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                getPriceFromInt(model.totalProductPrice -
+                    model.paymentAmount +
+                    model.deliveryFee),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainBlack, fontSize: 18, letterSpacing: 0.7),
               ),
             ],
@@ -56,14 +58,14 @@ class ReceiptCard extends StatelessWidget with Formatter {
             children: [
               Text(
                 '배송비',
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainGrey,
                     fontSize: 18,
                     fontWeight: FontWeight.normal),
               ),
               Text(
-                '무료배송',
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                getPriceFromInt(model.deliveryFee),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainBlack, fontSize: 18, letterSpacing: 0.7),
               ),
             ],
@@ -80,14 +82,14 @@ class ReceiptCard extends StatelessWidget with Formatter {
             children: [
               Text(
                 '결제 금액',
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainGrey,
                     fontSize: 18,
                     fontWeight: FontWeight.normal),
               ),
               Text(
-                getPriceFromInt(model.finalPrice),
-                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                getPriceFromInt(model.paymentAmount),
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
                     color: kMainBlack, fontSize: 18, letterSpacing: 0.7),
               ),
             ],

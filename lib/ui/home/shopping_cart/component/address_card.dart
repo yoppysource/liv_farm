@@ -8,7 +8,7 @@ import '../shopping_cart_viewmodel.dart';
 class AddressCard extends StatelessWidget {
   final ShoppingCartViewModel model;
 
-  const AddressCard({Key key, this.model}) : super(key: key);
+  const AddressCard({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class AddressCard extends StatelessWidget {
                         child: Text(
                             model.selectedAddress == null
                                 ? "주소를 선택해주세요"
-                                : '${model.selectedAddress.address} ${model.selectedAddress.addressDetail == null ? "" : model.selectedAddress.addressDetail.length > 7 ? "" : model.selectedAddress.addressDetail}',
+                                : '${model.selectedAddress!.address} ${model.selectedAddress!.addressDetail == null ? "" : model.selectedAddress!.addressDetail!.length > 7 ? "" : model.selectedAddress!.addressDetail}',
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyText1),
                       ),

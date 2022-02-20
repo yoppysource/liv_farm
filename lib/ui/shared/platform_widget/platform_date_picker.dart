@@ -9,14 +9,16 @@ class PlatformDatePicker extends PlatformWidget {
   final DateTime initialDate;
   final Function onDateTimeChanged;
 
-  PlatformDatePicker({this.initialDate, this.onDateTimeChanged});
+  const PlatformDatePicker(
+      {Key? key, required this.initialDate, required this.onDateTimeChanged})
+      : super(key: key);
 
   Future<DateTime> show(BuildContext context) async {
     return Platform.isIOS
         ? await showModalBottomSheet(
             backgroundColor: Colors.white,
             context: context,
-            builder: (context) => this.buildCupertinoWidget(context),
+            builder: (context) => buildCupertinoWidget(context),
           )
         : await showDatePicker(
             context: context,
@@ -29,22 +31,22 @@ class PlatformDatePicker extends PlatformWidget {
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    DateTime selectedDateTime;
-    return Container(
+    late DateTime selectedDateTime;
+    return SizedBox(
       height: 300,
       child: Column(
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: Container(
+            child: SizedBox(
               height: 50,
               child: CupertinoButton(
-                child: Text('선택'),
+                child: const Text('선택'),
                 onPressed: () => Navigator.of(context).pop(selectedDateTime),
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: 200,
             child: CupertinoDatePicker(
                 onDateTimeChanged: (DateTime dateTime) {

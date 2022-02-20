@@ -1,8 +1,8 @@
 class Event {
-  String imageUrl;
-  String url;
+  late final String imageUrl;
+  late final String url;
 
-  Event({this.imageUrl, this.url});
+  Event({required this.imageUrl, required this.url});
 
   Event.fromJson(Map<String, dynamic> json) {
     imageUrl = json['imageUrl'];
@@ -10,9 +10,9 @@ class Event {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['imageUrl'] = this.imageUrl;
-    data['url'] = this.url;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['imageUrl'] = imageUrl;
+    data['url'] = url;
     return data;
   }
 }

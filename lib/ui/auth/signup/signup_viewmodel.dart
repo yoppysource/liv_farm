@@ -13,28 +13,39 @@ class SignupViewModel extends AuthViewModel {
 
   @override
   Future<void> onMainButtonPressed() async {
-    _userInputAuthService.email = emailValue;
-    _userInputAuthService.password = passwordValue;
-    _userInputAuthService.passwordConfirm = passwordConfirmValue;
+    _userInputAuthService.email = emailValue!;
+    _userInputAuthService.password = passwordValue!;
+    _userInputAuthService.passwordConfirm = passwordConfirmValue!;
     await onAuthPressed(_userInputAuthService);
   }
 
   @override
   void onToggleButtonPressed() =>
       _navigationService.navigateTo(Routes.loginView);
+
   @override
   void setFormStatus() {
     isInputVaildToSubmit = false;
-    if (!emailValue.contains("@") && emailValue.length > 6)
+    if (emailValue != null &&
+        !emailValue!.contains("@") &&
+        emailValue!.length > 6) {
       setValidationMessage("이메일 형식이 올바르지 않습니다.");
-    if (passwordValue.isNotEmpty && passwordValue.length < 6)
+    }
+    if (passwordValue != null &&
+        passwordValue!.isNotEmpty &&
+        passwordValue!.length < 6) {
       setValidationMessage("비밀번호가 너무 짧습니다.");
-    if (passwordConfirmValue.isNotEmpty &&
-        passwordConfirmValue != passwordValue)
+    }
+
+    if (passwordConfirmValue != null &&
+        passwordConfirmValue!.isNotEmpty &&
+        passwordConfirmValue != passwordValue) {
       setValidationMessage("비밀번호가 일치하지 않습니다.");
-    if (emailValue.isNotEmpty &&
-        passwordValue.isNotEmpty &&
-        passwordConfirmValue.isNotEmpty &&
+    }
+
+    if (emailValue!.isNotEmpty &&
+        passwordValue!.isNotEmpty &&
+        passwordConfirmValue!.isNotEmpty &&
         validationMessage == null) isInputVaildToSubmit = true;
   }
 }

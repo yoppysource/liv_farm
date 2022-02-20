@@ -5,36 +5,36 @@ import 'package:liv_farm/services/secure_storage_service.dart';
 
 class InOffineStoreService {
   bool _isOffineMode = false;
-  String storeId;
+  String? storeId;
   bool get isOffineMode => _isOffineMode;
   final SecureStorageService _secureStorageService =
       locator<SecureStorageService>();
 
   InOffineStoreService() {
-    this._isOffineMode = false;
+    _isOffineMode = false;
   }
 
-  Future<void> switchToOffineMode(String storeId) async {
+  Future<void> switchToOffineMode(String? storeId) async {
     try {
+      if (storeId == null) return;
       await _secureStorageService.storeValueToStorage(
-          key: KEY_IN_STORE, value: storeId);
+          key: KEY_STORE, value: storeId);
       _isOffineMode = true;
       this.storeId = storeId;
     } catch (e) {
       debugPrint(e.toString());
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> backToOnlineMode() async {
     try {
-      await _secureStorageService.deleteValueFromStorage(
-          key: KEY_IN_STORE);
+      await _secureStorageService.deleteValueFromStorage(key: KEY_STORE);
       _isOffineMode = false;
-      this.storeId = null;
+      storeId = null;
     } catch (e) {
       debugPrint(e.toString());
-      throw e;
+      rethrow;
     }
   }
 }

@@ -5,7 +5,7 @@ import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
 
 class DeliveryInformationView extends StatelessWidget {
-  const DeliveryInformationView({Key key}) : super(key: key);
+  const DeliveryInformationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class DeliveryInformationView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .copyWith(letterSpacing: 0.4)),
                         ),
                       ),

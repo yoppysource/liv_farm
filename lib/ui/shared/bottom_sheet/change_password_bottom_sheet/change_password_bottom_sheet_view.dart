@@ -7,10 +7,9 @@ import 'package:stacked_services/stacked_services.dart';
 class ChangePasswordBottomSheetView extends StatefulWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  final Widget child;
 
   const ChangePasswordBottomSheetView(
-      {Key key, this.request, this.completer, this.child})
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
 
   @override
@@ -21,9 +20,9 @@ class ChangePasswordBottomSheetView extends StatefulWidget {
 class _ChangePasswordBottomSheetViewState
     extends State<ChangePasswordBottomSheetView> {
   final Color buttonTextColor = kMainPink;
-  TextEditingController _currentPasswordTextEditingController;
-  TextEditingController _newPasswordTextEditingController;
-  TextEditingController _newPasswordConfirmTextEditingController;
+  late TextEditingController _currentPasswordTextEditingController;
+  late TextEditingController _newPasswordTextEditingController;
+  late TextEditingController _newPasswordConfirmTextEditingController;
   final FocusNode newpasswordFocusNode = FocusNode();
   final FocusNode newpasswordConfirmFocusNode = FocusNode();
   bool isValid = true;
@@ -41,9 +40,9 @@ class _ChangePasswordBottomSheetViewState
   void dispose() {
     newpasswordFocusNode.dispose();
     newpasswordConfirmFocusNode.dispose();
-    _currentPasswordTextEditingController?.dispose();
-    _newPasswordTextEditingController?.dispose();
-    _newPasswordConfirmTextEditingController?.dispose();
+    _currentPasswordTextEditingController.dispose();
+    _newPasswordTextEditingController.dispose();
+    _newPasswordConfirmTextEditingController.dispose();
     super.dispose();
   }
 
@@ -58,7 +57,7 @@ class _ChangePasswordBottomSheetViewState
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,12 +73,12 @@ class _ChangePasswordBottomSheetViewState
                   controller: _currentPasswordTextEditingController,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyText2!
                       .copyWith(color: Colors.black87),
                   obscureText: true,
                   onEditingComplete: () =>
                       FocusScope.of(context).requestFocus(newpasswordFocusNode),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: '현재 비밀번호',
                     focusColor: kMainPink,
                     border: OutlineInputBorder(
@@ -95,12 +94,12 @@ class _ChangePasswordBottomSheetViewState
                   controller: _newPasswordTextEditingController,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyText2!
                       .copyWith(color: Colors.black87),
                   obscureText: true,
                   onEditingComplete: () => FocusScope.of(context)
                       .requestFocus(newpasswordConfirmFocusNode),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: '새로운 비밀번호',
                     focusColor: kMainPink,
                     border: OutlineInputBorder(
@@ -108,32 +107,31 @@ class _ChangePasswordBottomSheetViewState
                   ),
                 ),
                 verticalSpaceTiny,
-              
                 TextField(
                   scrollPadding: EdgeInsets.zero,
                   cursorColor: kMainPink,
                   controller: _newPasswordConfirmTextEditingController,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyText2!
                       .copyWith(color: Colors.black87),
                   obscureText: true,
                   focusNode: newpasswordConfirmFocusNode,
                   onEditingComplete: () => FocusScope.of(context)
                       .requestFocus(newpasswordConfirmFocusNode),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: '새로운 비밀번호 확인',
                     focusColor: kMainPink,
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: kMainBlack, width: 0.5)),
                   ),
                 ),
-              if (!isValid)
+                if (!isValid)
                   Column(
                     children: [
                       Text(
                         message,
-                        style: TextStyle(color: Colors.redAccent),
+                        style: const TextStyle(color: Colors.redAccent),
                       ),
                       verticalSpaceTiny,
                     ],
@@ -148,7 +146,7 @@ class _ChangePasswordBottomSheetViewState
                       child: TextButton(
                         onPressed: () =>
                             widget.completer(SheetResponse(confirmed: false)),
-                        child: Text(
+                        child: const Text(
                           '뒤로가기',
                           style: TextStyle(color: kMainPink, fontSize: 18),
                         ),
@@ -159,9 +157,16 @@ class _ChangePasswordBottomSheetViewState
                       child: FullScreenButton(
                           title: '변경하기',
                           color: kMainPink,
-                          onPressed:() {
-            onPressedChange(currentPasswordTextEditingController: _currentPasswordTextEditingController, newPasswordConfirmTextEditingController: _newPasswordTextEditingController, newPasswordTextEditingController: _newPasswordConfirmTextEditingController,);
-                          } ),
+                          onPressed: () {
+                            onPressedChange(
+                              currentPasswordTextEditingController:
+                                  _currentPasswordTextEditingController,
+                              newPasswordConfirmTextEditingController:
+                                  _newPasswordTextEditingController,
+                              newPasswordTextEditingController:
+                                  _newPasswordConfirmTextEditingController,
+                            );
+                          }),
                     ),
                   ],
                 )
@@ -173,10 +178,10 @@ class _ChangePasswordBottomSheetViewState
     );
   }
 
-  void onPressedChange(
-      {TextEditingController currentPasswordTextEditingController,
-      TextEditingController newPasswordTextEditingController,
-      TextEditingController newPasswordConfirmTextEditingController}) {
+  dynamic onPressedChange(
+      {required TextEditingController currentPasswordTextEditingController,
+      required TextEditingController newPasswordTextEditingController,
+      required TextEditingController newPasswordConfirmTextEditingController}) {
     if (currentPasswordTextEditingController.text.length < 6 ||
         newPasswordTextEditingController.text.length < 6 ||
         newPasswordConfirmTextEditingController.text.length < 6) {
@@ -197,10 +202,10 @@ class _ChangePasswordBottomSheetViewState
         newPasswordConfirmTextEditingController.text = '';
       });
     } else {
-          return widget.completer(SheetResponse(confirmed: true, responseData: {
-      'currentPassword': currentPasswordTextEditingController.text.trim(),
-      'newPassword': newPasswordTextEditingController.text.trim(),
-    }));
+      return widget.completer(SheetResponse(confirmed: true, data: {
+        'currentPassword': currentPasswordTextEditingController.text.trim(),
+        'newPassword': newPasswordTextEditingController.text.trim(),
+      }));
     }
   }
 }

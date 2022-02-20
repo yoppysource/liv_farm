@@ -8,14 +8,13 @@ import 'package:stacked/stacked.dart';
 //Second, Check JWT token to determine whether the path should be homeView or promotionVideo
 //
 class LandingView extends StatelessWidget {
-  const LandingView({Key key}) : super(key: key);
-
+  const LandingView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LandingViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: Center(
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
             child: Image.asset(
               "assets/images/livLogo.png",

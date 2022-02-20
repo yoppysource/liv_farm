@@ -7,7 +7,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 
 class AddressSelectView extends StatelessWidget {
-  const AddressSelectView({Key key}) : super(key: key);
+  const AddressSelectView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class AddressSelectView extends StatelessWidget {
             backgroundColor: Colors.white,
             leading: Padding(
               padding: const EdgeInsets.only(left: 15),
-              child:
-                  GestureDetector(onTap: model.onPressedBack, child: kArrowBack),
+              child: GestureDetector(
+                  onTap: model.onPressedBack, child: kArrowBack),
             ),
           ),
           body: ListView(
@@ -45,7 +45,7 @@ class AddressSelectView extends StatelessWidget {
                                 '도로명 건물명 또는 지번으로 검색하기',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1
+                                    .bodyText1!
                                     .copyWith(fontSize: 16),
                               ),
                             ),
@@ -89,8 +89,7 @@ class AddressSelectView extends StatelessWidget {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                  child:
-                      Image.asset('assets/images/map_5km.png'),
+                  child: Image.asset('assets/images/map_5km.png'),
                 ),
               ),
               verticalSpaceSmall,
@@ -108,12 +107,16 @@ class AddressListTile extends StatelessWidget {
   final int index;
   final AddressSelectViewModel model;
 
-  const AddressListTile({Key key, this.address, this.index, this.model})
+  const AddressListTile(
+      {Key? key,
+      required this.address,
+      required this.index,
+      required this.model})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 50,
         child: Padding(
           padding: horizontalPaddingToScaffold,
@@ -122,7 +125,8 @@ class AddressListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () async =>await  model.onPressedAddressTile(this.address),
+                onTap: () async =>
+                    await model.onPressedAddressTile(address, index),
                 child: Icon(
                   CupertinoIcons.check_mark,
                   color: index == 0 ? kMainPink : Colors.transparent,
@@ -131,14 +135,15 @@ class AddressListTile extends StatelessWidget {
               horizontalSpaceSmall,
               Expanded(
                 child: GestureDetector(
-                  onTap: () async =>await  model.onPressedAddressTile(this.address),
+                  onTap: () async =>
+                      await model.onPressedAddressTile(address, index),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "${address.address} ${address?.addressDetail ?? ""}",
+                      "${address.address} ${address.addressDetail ?? ""}",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2
+                          .bodyText2!
                           .copyWith(color: kMainBlack),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -147,8 +152,8 @@ class AddressListTile extends StatelessWidget {
               ),
               horizontalSpaceSmall,
               InkWell(
-                onTap: ()async =>await  model.onPressedDelete(this.address),
-                child: Icon(
+                onTap: () async => await model.onPressedDelete(address, index),
+                child: const Icon(
                   Icons.delete_outline_rounded,
                   color: kMainGrey,
                 ),

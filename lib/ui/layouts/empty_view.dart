@@ -5,7 +5,8 @@ class EmptyView extends StatelessWidget {
   final IconData iconData;
   final String text;
 
-  const EmptyView({Key key, this.iconData, this.text}) : super(key: key);
+  const EmptyView({Key? key, required this.iconData, required this.text})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +26,7 @@ class EmptyView extends StatelessWidget {
                 text,
                 style: Theme.of(context)
                     .textTheme
-                    .subtitle2
+                    .subtitle2!
                     .copyWith(color: kMainGrey, fontWeight: FontWeight.normal),
               ),
             )

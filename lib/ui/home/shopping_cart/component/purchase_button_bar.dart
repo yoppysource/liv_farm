@@ -6,7 +6,7 @@ import 'package:liv_farm/ui/shared/styles.dart';
 class PurchaseButtonBar extends StatelessWidget with Formatter {
   final ShoppingCartViewModel model;
 
-  const PurchaseButtonBar({Key key, this.model}) : super(key: key);
+  const PurchaseButtonBar({Key? key, required this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -14,7 +14,7 @@ class PurchaseButtonBar extends StatelessWidget with Formatter {
       child: Container(
         height: 80,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -33,18 +33,21 @@ class PurchaseButtonBar extends StatelessWidget with Formatter {
                           '결제 금액',
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2
+                              .subtitle2!
                               .copyWith(color: kMainGrey, fontSize: 18),
                         ),
                       ),
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          getPriceFromInt(model.finalPrice),
-                          style: Theme.of(context).textTheme.subtitle2.copyWith(
-                              color: kMainBlack,
-                              fontSize: 18,
-                              letterSpacing: 0.7),
+                          getPriceFromInt(model.paymentAmount),
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                  color: kMainBlack,
+                                  fontSize: 18,
+                                  letterSpacing: 0.7),
                         ),
                       ),
                     ],
@@ -62,10 +65,13 @@ class PurchaseButtonBar extends StatelessWidget with Formatter {
                       child: FittedBox(
                         child: Text(
                           model.purchaseButtonMessage,
-                          style: Theme.of(context).textTheme.subtitle2.copyWith(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white,
-                              fontSize: 19),
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  fontSize: 19),
                         ),
                       ),
                       onPressed: model.isPossibleToPurchase
@@ -78,7 +84,7 @@ class PurchaseButtonBar extends StatelessWidget with Formatter {
             ),
           ),
         ),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(

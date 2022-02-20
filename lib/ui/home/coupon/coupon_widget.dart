@@ -7,14 +7,15 @@ class CouponWidget extends StatelessWidget with Formatter {
   final Coupon coupon;
   final bool selected;
 
-  const CouponWidget({Key key, this.coupon, this.selected}) : super(key: key);
+  const CouponWidget({Key? key, required this.coupon, required this.selected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               border: Border.all(
@@ -29,12 +30,12 @@ class CouponWidget extends StatelessWidget with Formatter {
                   Text(
                     coupon.description ?? "할인쿠폰",
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 15, color: Colors.black54),
+                    style: const TextStyle(fontSize: 15, color: Colors.black54),
                   ),
                   GestureDetector(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: const [
                         Text(
                           '선택하기',
                           style: TextStyle(fontSize: 15, color: Colors.black54),
@@ -52,7 +53,7 @@ class CouponWidget extends StatelessWidget with Formatter {
                 coupon.category == "value"
                     ? "${getPriceFromInt(coupon.amount.toInt())} 할인"
                     : "${(coupon.amount * 100).toInt()}% 할인",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 20,
                     color: kSubColor,
                     fontWeight: FontWeight.w700),

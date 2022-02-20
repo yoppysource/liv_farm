@@ -9,13 +9,13 @@ class MyTextField extends StatelessWidget {
   final VoidCallback onEditingComplete;
 
   const MyTextField({
-    Key key,
-    this.hintText,
-    this.controller,
-    this.focusNode,
+    Key? key,
+    required this.hintText,
+    required this.controller,
+    required this.focusNode,
     this.obscureText = false,
     this.textInputAction = TextInputAction.next,
-    this.onEditingComplete,
+    required this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -30,10 +30,11 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black45),
+          borderSide: const BorderSide(color: Colors.black45),
           borderRadius: BorderRadius.circular(10),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       ),
     );
   }

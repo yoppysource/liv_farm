@@ -6,10 +6,10 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
   String defaultString;
   static const String KEY_selectedDate = 'selectedDate';
   static const String KEY_deliveryGuideMessage = 'deliveryGuide';
-  List<String> weekDayNameList = ['월','화','수', '목', '금','토', '일'];
-  DateTime selectedDateTime;
-  TimeOfDay selectedTimeOfDay;
-  DateTime finalDateTime;
+  List<String> weekDayNameList = ['월', '화', '수', '목', '금', '토', '일'];
+  DateTime? selectedDateTime;
+  TimeOfDay? selectedTimeOfDay;
+  DateTime? finalDateTime;
   int selectedIndex = 0;
   bool isHourSelected = false;
 
@@ -19,7 +19,7 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
       ? defaultString
       : selectedTimeOfDay == null
           ? "시간을 선택해 주세요"
-          : "${finalDateTime.day}일(${weekDayNameList[finalDateTime.weekday-1]}) ${finalDateTime.hour}시${finalDateTime.minute == 0 ? '' : " " + finalDateTime.minute.toString() + '분'}에 받기";
+          : "${finalDateTime!.day}일(${weekDayNameList[finalDateTime!.weekday - 1]}) ${finalDateTime!.hour}시${finalDateTime!.minute == 0 ? '' : " " + finalDateTime!.minute.toString() + '분'}에 받기";
 
   void onPressedDateButton(int index) {
     selectedIndex = index;
@@ -35,8 +35,8 @@ class PickDateTimeBottomSheetViewModel extends BaseViewModel {
   void onHourSelected(TimeOfDay timeOfDay) {
     selectedTimeOfDay = timeOfDay;
 
-    finalDateTime = new DateTime(selectedDateTime.year, selectedDateTime.month,
-        selectedDateTime.day, timeOfDay.hour, timeOfDay.minute);
+    finalDateTime = DateTime(selectedDateTime!.year, selectedDateTime!.month,
+        selectedDateTime!.day, timeOfDay.hour, timeOfDay.minute);
     notifyListeners();
   }
 }

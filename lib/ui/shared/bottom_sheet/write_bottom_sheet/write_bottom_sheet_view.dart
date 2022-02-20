@@ -7,10 +7,9 @@ import 'package:stacked_services/stacked_services.dart';
 class WriteBottomSheetView extends StatefulWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  final Widget child;
 
   const WriteBottomSheetView(
-      {Key key, this.request, this.completer, this.child})
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
 
   @override
@@ -19,18 +18,18 @@ class WriteBottomSheetView extends StatefulWidget {
 
 class _WriteBottomSheetViewState extends State<WriteBottomSheetView> {
   final Color buttonTextColor = kMainPink;
-  TextEditingController _textEditingController;
+  late TextEditingController _textEditingController;
 
   @override
   void initState() {
     _textEditingController = TextEditingController();
-    _textEditingController.text = widget.request.customData['text'];
+    _textEditingController.text = widget.request.data['text'] ?? '';
     super.initState();
   }
 
   @override
   void dispose() {
-    _textEditingController?.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -45,13 +44,13 @@ class _WriteBottomSheetViewState extends State<WriteBottomSheetView> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.request.title,
+                  widget.request.title!,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 verticalSpaceMedium,
@@ -60,12 +59,13 @@ class _WriteBottomSheetViewState extends State<WriteBottomSheetView> {
                   cursorColor: kMainPink,
                   controller: _textEditingController,
                   style: Theme.of(context).textTheme.bodyText1,
-                  maxLength: widget.request.customData['maxLength'],
-                  keyboardType: widget.request.customData['keyboardType'],
+                  maxLength: widget.request.data['maxLength'] ?? 10,
+                  keyboardType:
+                      widget.request.data['keyboardType'] ?? TextInputType.text,
                   decoration: InputDecoration(
-                    hintText: widget.request.customData['hintText'],
+                    hintText: widget.request.data['hintText'],
                     focusColor: kMainPink,
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: kMainBlack, width: 0.5)),
                   ),
                   autofocus: true,
@@ -80,7 +80,7 @@ class _WriteBottomSheetViewState extends State<WriteBottomSheetView> {
                       child: TextButton(
                         onPressed: () =>
                             widget.completer(SheetResponse(confirmed: false)),
-                        child: Text(
+                        child: const Text(
                           '뒤로가기',
                           style: TextStyle(color: kMainPink, fontSize: 18),
                         ),
@@ -93,9 +93,7 @@ class _WriteBottomSheetViewState extends State<WriteBottomSheetView> {
                         color: kMainPink,
                         onPressed: () => widget.completer(SheetResponse(
                             confirmed: true,
-                            responseData: {
-                              'input': _textEditingController.text
-                            })),
+                            data: {'input': _textEditingController.text})),
                       ),
                     ),
                   ],

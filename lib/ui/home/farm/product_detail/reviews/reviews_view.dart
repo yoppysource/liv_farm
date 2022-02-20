@@ -9,23 +9,24 @@ import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
 class ReviewsView extends StatelessWidget {
-  final List<Review> reviews;
+  final List<Review>? reviews;
   final ProductDetailViewModel productDetailViewModel;
 
-  const ReviewsView({Key key, this.reviews, this.productDetailViewModel})
+  const ReviewsView(
+      {Key? key, this.reviews, required this.productDetailViewModel})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return (reviews == null || this.reviews.isEmpty)
-        ? EmptyView(
+    return (reviews == null || reviews!.isEmpty)
+        ? const EmptyView(
             iconData: Icons.rate_review_outlined, text: "아직 등록된 리뷰가 없습니다")
         : Padding(
             padding: horizontalPaddingToScaffold,
             child: ListView.builder(
-              itemCount: this.reviews.length,
+              itemCount: reviews!.length,
               itemBuilder: (context, index) => ReviewCard(
-                review: reviews[index],
-                onTapForReport: productDetailViewModel?.onTapForReport,
+                review: reviews![index],
+                onTapForReport: productDetailViewModel.onTapForReport,
               ),
             ),
           );
@@ -36,7 +37,8 @@ class ReviewCard extends StatelessWidget with Formatter {
   final Review review;
   final Function onTapForReport;
 
-  const ReviewCard({Key key, this.review, this.onTapForReport})
+  const ReviewCard(
+      {Key? key, required this.review, required this.onTapForReport})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,9 @@ class ReviewCard extends StatelessWidget with Formatter {
       child: Stack(
         children: [
           MyCard(
-            title:
-                '${review.createdAt == null ? '' : getStringFromDatetime(review.createdAt)}',
+            title: review.createdAt == null
+                ? ''
+                : getStringFromDatetime(review.createdAt!),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -55,7 +58,7 @@ class ReviewCard extends StatelessWidget with Formatter {
                   children: [
                     RatingBarIndicator(
                       rating: review.rating,
-                      itemBuilder: (context, index) => Icon(
+                      itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: kMainPink,
                       ),
@@ -63,7 +66,7 @@ class ReviewCard extends StatelessWidget with Formatter {
                       itemSize: 20.0,
                       direction: Axis.horizontal,
                     ),
-                    Text("${review?.userName[0] ?? "김"}** 고객님")
+                    Text("${review.userName?[0] ?? '김'}** 고객님")
                   ],
                 ),
                 verticalSpaceRegular,
@@ -71,7 +74,7 @@ class ReviewCard extends StatelessWidget with Formatter {
                   review.review,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
+                      .bodyText2!
                       .copyWith(color: Colors.black87),
                 ),
               ],
@@ -89,7 +92,7 @@ class ReviewCard extends StatelessWidget with Formatter {
                     '신고하기',
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2
+                        .bodyText2!
                         .copyWith(color: kMainPink.withOpacity(0.7)),
                   )),
             ),

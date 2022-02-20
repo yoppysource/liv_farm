@@ -7,19 +7,19 @@ import 'package:liv_farm/ui/shared/styles.dart';
 class PurchaseOptionView extends StatelessWidget with Formatter {
   final String orderName;
   final int amount;
-  final Address address;
+  final Address? address;
   final String orderRequestMessage;
   final String bookingOrderMessage;
   final String option;
 
   const PurchaseOptionView(
-      {Key key,
-      this.orderName,
-      this.amount,
+      {Key? key,
+      required this.orderName,
+      required this.amount,
       this.address,
-      this.orderRequestMessage,
-      this.option,
-      this.bookingOrderMessage})
+      required this.orderRequestMessage,
+      required this.option,
+      required this.bookingOrderMessage})
       : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
         title: Text('결제하기',
             style: Theme.of(context)
                 .textTheme
-                .subtitle2
+                .subtitle2!
                 .copyWith(fontWeight: FontWeight.normal)),
       ),
       body: SingleChildScrollView(
@@ -47,12 +47,16 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                     children: [
                       ConfirmOrderListTile(
                         title: '주문명',
-                        content: this.orderName,
+                        content: orderName,
                       ),
                       verticalSpaceRegular,
-                        ConfirmOrderListTile(
+                      ConfirmOrderListTile(
                         title: '수령 방법',
-                        content: this.option =='inStore' ? "매장 내 구매":option=='delivery'? '배달받기': '매장에서 찾기',
+                        content: option == 'inStore'
+                            ? "매장 내 구매"
+                            : option == 'delivery'
+                                ? '배달받기'
+                                : '매장에서 찾기',
                       ),
                       verticalSpaceRegular,
                       Row(
@@ -62,17 +66,17 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                             '결제 금액',
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle2
+                                .subtitle2!
                                 .copyWith(
                                     color: kMainGrey,
                                     fontSize: 16,
                                     fontWeight: FontWeight.normal),
                           ),
                           Text(
-                            getPriceFromInt(this.amount),
+                            getPriceFromInt(amount),
                             style: Theme.of(context)
                                 .textTheme
-                                .subtitle2
+                                .subtitle2!
                                 .copyWith(
                                     color: kMainBlack,
                                     fontSize: 16,
@@ -81,26 +85,27 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                         ],
                       ),
                       verticalSpaceRegular,
-                      if(this.option == 'delivery')
-                      Column(
-                        children: [
-                          ConfirmOrderListTile(
-                              title: '주소', content: this.address.address),
-                                       verticalSpaceRegular,
-                      ConfirmOrderListTile(
-                          title: '상세주소',
-                          content: this.address.addressDetail ?? ' '),
+                      if (option == 'delivery')
+                        Column(
+                          children: [
+                            ConfirmOrderListTile(
+                                title: '주소', content: address!.address),
+                            verticalSpaceRegular,
+                            ConfirmOrderListTile(
+                                title: '상세주소',
+                                content: address!.addressDetail ?? ' '),
+                            verticalSpaceRegular,
+                          ],
+                        ),
+                      if (option != 'inStore')
+                        ConfirmOrderListTile(
+                            title: '배송/포장 메세지', content: orderRequestMessage),
                       verticalSpaceRegular,
-                        ],
-                      ),
-                       if(this.option !='inStore')ConfirmOrderListTile(
-                          title: '배송/포장 메세지',
-                          content: this.orderRequestMessage ?? '없음'),
-                      verticalSpaceRegular,
-                      if(this.option !='inStore')ConfirmOrderListTile(
-                        title: '수령 시간',
-                        content: this.bookingOrderMessage,
-                      ),
+                      if (option != 'inStore')
+                        ConfirmOrderListTile(
+                          title: '수령 시간',
+                          content: bookingOrderMessage,
+                        ),
                     ],
                   ),
                 ),
@@ -112,7 +117,7 @@ class PurchaseOptionView extends StatelessWidget with Formatter {
                   child: Container(
                     height: 70,
                     decoration: BoxDecoration(
-                      color: Color(0xffF7E600),
+                      color: const Color(0xffF7E600),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
@@ -195,7 +200,8 @@ class ConfirmOrderListTile extends StatelessWidget {
   final String content;
   final String title;
 
-  const ConfirmOrderListTile({Key key, this.content, this.title})
+  const ConfirmOrderListTile(
+      {Key? key, required this.content, required this.title})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -204,7 +210,7 @@ class ConfirmOrderListTile extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.subtitle2.copyWith(
+          style: Theme.of(context).textTheme.subtitle2!.copyWith(
               color: kMainGrey, fontSize: 16, fontWeight: FontWeight.normal),
         ),
         Flexible(

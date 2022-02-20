@@ -3,7 +3,7 @@ import 'package:liv_farm/ui/home/shopping_cart/address_select/daum_postcode_sear
 import 'package:liv_farm/ui/shared/styles.dart';
 
 class DaumPostcodeSearchView extends StatelessWidget {
-  const DaumPostcodeSearchView({Key key}) : super(key: key);
+  const DaumPostcodeSearchView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

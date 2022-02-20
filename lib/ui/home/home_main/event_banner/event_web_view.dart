@@ -8,7 +8,8 @@ class EventWebView extends StatefulWidget {
   final String url;
   final String imageUrl;
 
-  const EventWebView({Key key, this.url, this.imageUrl}) : super(key: key);
+  const EventWebView({Key? key, required this.url, required this.imageUrl})
+      : super(key: key);
 
   @override
   EventWebViewState createState() => EventWebViewState();
@@ -29,8 +30,8 @@ class EventWebViewState extends State<EventWebView> {
       body: CachedNetworkImage(
         imageUrl: widget.imageUrl,
         fit: BoxFit.fitWidth,
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        fadeInDuration: Duration(milliseconds: 50),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+        fadeInDuration: const Duration(milliseconds: 50),
       ),
     );
   }

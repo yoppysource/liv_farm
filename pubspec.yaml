@@ -15,11 +15,11 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.1.3+30
+version: 2.2.3+34
 # 버전 수정
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -27,61 +27,60 @@ dependencies:
     sdk: flutter
 
   #Icons
-  cupertino_icons: ^1.0.0
-  font_awesome_flutter: ^8.10.0
+  cupertino_icons: ^1.0.4
+  font_awesome_flutter: ^9.2.0
   #Payment
-  iamport_flutter: ^0.9.15
+  iamport_flutter: ^0.10.0
   #State Management
-  stacked: ^1.9.2
-  stacked_services: ^0.7.3
+  stacked: ^2.2.7+1
+  stacked_services: ^0.8.16
   #Http call
-  http: ^0.12.2
-  flutter_html: ^1.2.0
+  http: ^0.13.4
   #Manage Token
-  flutter_secure_storage: "^3.3.5"
+  flutter_secure_storage: ^5.0.2
   # Auth Package
-  kakao_flutter_sdk: ^0.5.4
-  sign_in_with_apple: ^2.5.4
-  google_sign_in: ^4.5.9
+  kakao_flutter_sdk: ^0.9.0
+  sign_in_with_apple: ^3.3.0
+  google_sign_in: ^5.2.1
   #In async call
-  loading_overlay: ^0.2.1
+  loading_overlay: ^0.3.0
   #animations
-  animations: ^1.1.2
+  animations: ^2.0.2
   #caching image
-  cached_network_image: ^2.5.0
+  cached_network_image: ^3.2.0
   #indicator
-  bubble_tab_indicator: ^0.1.4
+  bubble_tab_indicator: ^0.1.6
   #Toast Message
-  fluttertoast: ^7.1.6
+  fluttertoast: ^8.0.8
   #URL lancher
-  url_launcher: ^5.7.10
+  url_launcher: ^6.0.17
   #Version management
-  store_redirect: ^1.0.2
-  package_info: ^0.4.3
+  store_redirect: ^2.0.0
+  package_info: ^2.0.2
   #Badge
-  badges: ^1.1.6
-  #Get Address using kakao API
-  # kopo: ^0.1.3
+  badges: ^2.0.2
   #Star rating
-  flutter_rating_bar: ^3.2.0+1
-  #Image slider
-  flutter_image_slideshow: ^0.0.4
-  webview_flutter: ^1.0.7
+  flutter_rating_bar: ^4.0.0
+  webview_flutter: ^2.0.4
   #Add Firebase Analytics
-  firebase_analytics: ^7.0.1
-  firebase_core: ^0.7.0
-  location: ^3.2.4
-  observable_ish: ^2.1.5
-  firebase_dynamic_links: ^0.7.0+1
-  qr_code_scanner: ^0.3.5
-  permission_handler: ^5.1.0+2
-  flutter_inappwebview: ^4.0.0+4
+  firebase_analytics: ^9.0.4
+  firebase_core: ^1.10.6
+  location: ^4.3.0
+  observable_ish: ^3.0.1
+  firebase_dynamic_links: ^4.0.3
+  qr_code_scanner: ^0.6.1
+  permission_handler: ^8.3.0
+  flutter_html: ^2.2.1
+  flutter_inappwebview: ^5.3.2
+  draggable_home: ^1.0.2
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
-  stacked_generator: ^0.2.1
+  stacked_generator:
+  flutter_lints: ^1.0.0
 
 flutter_icons:
   android: true

@@ -7,10 +7,9 @@ import '../setup_bottom_sheet.dart';
 class CustomerServiceBottomSheetView extends StatelessWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  final Widget child;
 
   const CustomerServiceBottomSheetView(
-      {Key key, this.request, this.completer, this.child})
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
 
   @override
@@ -22,7 +21,7 @@ class CustomerServiceBottomSheetView extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,14 +64,14 @@ class CustomerServiceBottomSheetView extends StatelessWidget {
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {
-                                return null;
+                                return;
                               }
                             },
                             child: Text(
                               '02-6081-8179',
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .copyWith(
                                       decoration: TextDecoration.underline,
                                       textBaseline: TextBaseline.alphabetic),

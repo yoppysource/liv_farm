@@ -8,7 +8,8 @@ import 'package:liv_farm/ui/shared/styles.dart';
 class ProductGridView extends StatelessWidget with Formatter {
   final List<Inventory> inventoryList;
   final OnlineFarmViewModel model;
-  const ProductGridView({Key key, this.inventoryList, this.model})
+  const ProductGridView(
+      {Key? key, required this.inventoryList, required this.model})
       : super(key: key);
 
   @override
@@ -39,9 +40,11 @@ class ProductGridView extends StatelessWidget with Formatter {
                       flex: 4,
                       child: CachedNetworkImage(
                         imageUrl: inventoryList[index].product.thumbnailPath,
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        fadeInDuration: Duration(milliseconds: 50),
-                        fit: isOneItemForRow ? BoxFit.fitWidth : BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        fadeInDuration: const Duration(milliseconds: 50),
+                        fit:
+                            isOneItemForRow ? BoxFit.fitWidth : BoxFit.fitWidth,
                       ),
                     ),
                     Expanded(
@@ -59,12 +62,12 @@ class ProductGridView extends StatelessWidget with Formatter {
                                 FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
-                                    '${inventoryList[index].product.name}',
+                                    inventoryList[index].product.name,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .subtitle2
+                                        .subtitle2!
                                         .copyWith(
-                                            color: Color(0xff333333),
+                                            color: const Color(0xff333333),
                                             fontSize: 18,
                                             fontWeight: FontWeight.normal),
                                   ),
@@ -75,10 +78,11 @@ class ProductGridView extends StatelessWidget with Formatter {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${getPriceFromInt(inventoryList[index].product.price)}',
+                                      getPriceFromInt(
+                                          inventoryList[index].product.price),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText1!
                                           .copyWith(
                                               fontWeight: FontWeight.w600,
                                               color:
@@ -86,10 +90,10 @@ class ProductGridView extends StatelessWidget with Formatter {
                                               letterSpacing: 0.7),
                                     ),
                                     Text(
-                                      '${inventoryList[index].product.weight}',
+                                      inventoryList[index].product.weight,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText1!
                                           .copyWith(
                                             color:
                                                 Colors.black.withOpacity(0.6),
@@ -115,7 +119,7 @@ class ProductGridView extends StatelessWidget with Formatter {
                   alignment: Alignment.topLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
+                    child: SizedBox(
                         height: 40,
                         child: Image.asset(
                           'assets/images/growing_icon.png',

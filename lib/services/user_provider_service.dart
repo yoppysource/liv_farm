@@ -6,64 +6,66 @@ import 'package:liv_farm/secret.dart';
 import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
 import 'package:liv_farm/services/secure_storage_service.dart';
-import 'package:liv_farm/services/server_service/server_service.dart';
+import 'package:liv_farm/services/server_service/client_service.dart';
 
 class UserProviderService {
-  MyUser user;
-  bool get isLogined => this.user == null ? false : true;
+  MyUser? user;
+  bool get isLogined => user == null ? false : true;
   final SecureStorageService _secureStorageService =
       locator<SecureStorageService>();
   final CartProviderService _cartProviderService =
       locator<CartProviderService>();
-  final ServerService _serverService = locator<ServerService>();
+  final ClientService _serverService = locator<ClientService>();
   final AnalyticsService _analyticsService = locator<AnalyticsService>();
 
   void setUserFromJson(Map<String, dynamic> data) {
-    this.user = MyUser.fromJson(data);
-    _cartProviderService.syncCartFromInstance(user.cart);
-    _analyticsService.setUserProperties(userEmail: this.user.email);
+    user = MyUser.fromJson(data);
+    _cartProviderService.syncCartFromInstance(user!.cart);
+    _analyticsService.setUserProperties(userEmail: user!.email);
   }
 
   Future<void> syncUserFromServer() async {
     try {
-      Map<String, dynamic> data =
-          await _serverService.getData(resource: Resource.users, path: '/me');
+      Map<String, dynamic> data = await _serverService.sendRequest(
+          method: HttpMethod.get, resource: Resource.users, endPath: '/me');
       setUserFromJson(data);
     } catch (e) {
       debugPrint(e.toString());
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> appendAddress(Address address) async {
     bool isDuplicated = false;
-    this.user.addresses.forEach((Address existedAddress) {
+    for (var existedAddress in user!.addresses!) {
       if (existedAddress.address == address.address) {
         isDuplicated = true;
       }
-    });
+    }
     if (!isDuplicated) {
-      this.user.addresses.insert(0, address);
+      user!.addresses!.insert(0, address);
       await updateUserToServer();
     }
   }
 
   Future<void> updateUserToServer() async {
     try {
-      Map<String, dynamic> data =
-          await _serverService.patchData<Map<String, dynamic>>(
-              resource: Resource.users, data: user.toJson(), path: '/updateMe');
+      Map<String, dynamic> data = await _serverService.sendRequest(
+          method: HttpMethod.patch,
+          resource: Resource.users,
+          data: user!.toJson(),
+          endPath: '/updateMe');
 
       setUserFromJson(data);
     } catch (e) {
       debugPrint(e.toString());
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> logout() async {
     await _secureStorageService.deleteValueFromStorage(key: KEY_JWT);
-    this.user = null;
+    user = null;
     _cartProviderService.resetCart();
   }
 }

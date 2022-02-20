@@ -32,11 +32,12 @@ mixin $SignupView on StatelessWidget {
 
   /// Updates the formData on the FormViewModel
   void _updateFormData(FormViewModel model) => model.setData(
-        {
-          EmailValueKey: emailController.text,
-          PasswordValueKey: passwordController.text,
-          PasswordConfirmValueKey: passwordConfirmController.text,
-        },
+        model.formValueMap
+          ..addAll({
+            EmailValueKey: emailController.text,
+            PasswordValueKey: passwordController.text,
+            PasswordConfirmValueKey: passwordConfirmController.text,
+          }),
       );
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -44,13 +45,24 @@ mixin $SignupView on StatelessWidget {
     // The dispose function for a TextEditingController sets all listeners to null
 
     emailController.dispose();
+    emailFocusNode.dispose();
     passwordController.dispose();
+    passwordFocusNode.dispose();
     passwordConfirmController.dispose();
+    passwordConfirmFocusNode.dispose();
   }
 }
 
 extension ValueProperties on FormViewModel {
-  String get emailValue => this.formValueMap[EmailValueKey];
-  String get passwordValue => this.formValueMap[PasswordValueKey];
-  String get passwordConfirmValue => this.formValueMap[PasswordConfirmValueKey];
+  String? get emailValue => this.formValueMap[EmailValueKey];
+  String? get passwordValue => this.formValueMap[PasswordValueKey];
+  String? get passwordConfirmValue =>
+      this.formValueMap[PasswordConfirmValueKey];
+
+  bool get hasEmail => this.formValueMap.containsKey(EmailValueKey);
+  bool get hasPassword => this.formValueMap.containsKey(PasswordValueKey);
+  bool get hasPasswordConfirm =>
+      this.formValueMap.containsKey(PasswordConfirmValueKey);
 }
+
+extension Methods on FormViewModel {}

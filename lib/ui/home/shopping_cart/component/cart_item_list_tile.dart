@@ -10,7 +10,8 @@ class ItemListTile extends StatelessWidget with Formatter {
   final ShoppingCartViewModel model;
   final Item item;
 
-  const ItemListTile({Key key, this.model, this.item}) : super(key: key);
+  const ItemListTile({Key? key, required this.model, required this.item})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 100,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -54,11 +55,29 @@ class ItemListTile extends StatelessWidget with Formatter {
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ),
+                        item.options.isNotEmpty
+                            ? FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text(
+                                  item.options.map((e) => e.name).reduce(
+                                      (value, element) =>
+                                          value + ", " + element),
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              )
+                            : Container(),
                         Text(
-                          getPriceFromInt(item.inventory.product.price),
+                          getPriceFromInt(item.options.isEmpty
+                              ? item.inventory.product.price
+                              : item.options
+                                  .map((element) => element.price)
+                                  .fold(
+                                      item.inventory.product.price,
+                                      (previousValue, element) =>
+                                          previousValue + element)),
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2
+                              .subtitle2!
                               .copyWith(color: kMainGrey, letterSpacing: 0.7),
                         ),
                       ],
@@ -68,7 +87,7 @@ class ItemListTile extends StatelessWidget with Formatter {
               ),
             ),
             horizontalSpaceTiny,
-            Container(
+            SizedBox(
               height: 100,
               width: 90,
               child: FittedBox(
@@ -82,7 +101,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                       width: 30,
                       child: Center(
                         child: IconButton(
-                          icon: Icon(Icons.remove),
+                          icon: const Icon(Icons.remove),
                           padding: EdgeInsets.zero,
                           iconSize: 30,
                           splashRadius: 20,
@@ -105,7 +124,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2
+                              .subtitle2!
                               .copyWith(color: kMainGrey),
                         ),
                       ),
@@ -115,7 +134,7 @@ class ItemListTile extends StatelessWidget with Formatter {
                       width: 30,
                       child: Center(
                         child: IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           padding: EdgeInsets.zero,
                           iconSize: 30,
                           splashRadius: 20,
@@ -137,8 +156,8 @@ class ItemListTile extends StatelessWidget with Formatter {
                 onPressed: () async {
                   await model.removeFromCart(item);
                 },
-                padding: EdgeInsets.all(0.0),
-                icon: Icon(
+                padding: const EdgeInsets.all(0.0),
+                icon: const Icon(
                   Icons.delete_outlined,
                   size: 25.0,
                   color: kMainGrey,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liv_farm/ui/auth/login/login_view.form.dart';
 import 'package:liv_farm/ui/auth/login/login_viewmodel.dart';
-import 'package:liv_farm/ui/layouts/auth_layout.dart';
+import 'package:liv_farm/ui/auth/layout/auth_layout.dart';
 import 'package:liv_farm/ui/shared/my_text_field.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 import 'package:stacked/stacked.dart';
@@ -12,16 +12,16 @@ import 'package:stacked/stacked_annotations.dart';
   FormTextField(name: 'password', isPassword: true),
 ])
 class LoginView extends StatelessWidget with $LoginView {
-  LoginView({Key key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
       onModelReady: (model) => listenToFormUpdated(model),
       viewModelBuilder: () => LoginViewModel(),
       builder: (
-        BuildContext context,
-        LoginViewModel model,
-        Widget child,
+        context,
+        model,
+        child,
       ) {
         return Scaffold(
             body: AuthLayout(

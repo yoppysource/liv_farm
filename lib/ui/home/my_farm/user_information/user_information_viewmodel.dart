@@ -8,16 +8,17 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class UserInformationViewModel extends BaseViewModel with Formatter {
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final UserProviderService _userProviderService =
+      locator<UserProviderService>();
+  final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
 
   String get name =>
-      getStringOrDefaultString(_userProviderService.user.name, true);
+      getStringOrDefaultString(_userProviderService.user!.name, true);
   String get phoneNumber =>
-      getStringOrDefaultString(_userProviderService.user.phoneNumber, false);
-  String get email => _userProviderService.user.email;
+      getStringOrDefaultString(_userProviderService.user!.phoneNumber, false);
+  String? get email => _userProviderService.user?.email;
   String get logoPathForPlatform {
-    switch (_userProviderService.user.platform) {
+    switch (_userProviderService.user!.platform) {
       case ('kakao'):
         return "assets/images/kakao_icon.png";
       case ('apple'):
@@ -31,12 +32,12 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
     }
   }
 
-  String get gender => _userProviderService.user.gender;
-  String get birthday => _userProviderService.user.birthday == null
+  String? get gender => _userProviderService.user!.gender;
+  String get birthday => _userProviderService.user!.birthday == null
       ? '생년월일을 입력해주세요'
-      : getStringFromDatetime(_userProviderService.user.birthday);
+      : getStringFromDatetime(_userProviderService.user!.birthday!);
 
-  String getStringOrDefaultString(String value, bool isName) {
+  String getStringOrDefaultString(String? value, bool isName) {
     if (value == null || value == '') {
       return isName ? "이름을 입력해주세요" : "전화번호를 입력해주세요";
     } else {
@@ -45,14 +46,13 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
   }
 
   Future<void> callBottomSheetToGetName() async {
-    SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
+    SheetResponse? _sheetResponse = await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,
         variant: BottomSheetType.Write,
-        customData: {'maxLength': 5, 'text': _userProviderService.user.name},
+        data: {'maxLength': 5, 'text': _userProviderService.user!.name},
         title: '성함');
-    if (_sheetResponse.confirmed) {
-      _userProviderService.user.name =
-          _sheetResponse.responseData['input'].trim();
+    if (_sheetResponse != null && _sheetResponse.confirmed) {
+      _userProviderService.user!.name = _sheetResponse.data['input'].trim();
       notifyListeners();
       await _userProviderService.updateUserToServer();
       notifyListeners();
@@ -60,19 +60,19 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
   }
 
   Future<void> callBottomSheetToGetPhoneNumber() async {
-    SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
+    SheetResponse? _sheetResponse = await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,
         variant: BottomSheetType.Write,
-        customData: {
+        data: {
           'maxLength': 11,
-          'text': _userProviderService.user.phoneNumber,
+          'text': _userProviderService.user!.phoneNumber,
           'keyboardType': TextInputType.phone,
           'hintText': '- 없이 숫자만 입력해주세요'
         },
         title: '전화번호');
-    if (_sheetResponse.confirmed) {
-      _userProviderService.user.phoneNumber =
-          _sheetResponse.responseData['input'].trim();
+    if (_sheetResponse != null && _sheetResponse.confirmed) {
+      _userProviderService.user!.phoneNumber =
+          _sheetResponse.data['input'].trim();
       notifyListeners();
       await _userProviderService.updateUserToServer();
       notifyListeners();
@@ -81,29 +81,28 @@ class UserInformationViewModel extends BaseViewModel with Formatter {
 
   Future<void> callDateTimePickerForBirthDay(BuildContext context) async {
     DateTime value = await PlatformDatePicker(
-      initialDate: (_userProviderService.user?.birthday == null)
+      initialDate: _userProviderService.user!.birthday == null
           ? DateTime(1993, 09, 08)
-          : _userProviderService.user?.birthday,
+          : _userProviderService.user!.birthday!,
       onDateTimeChanged: (dateTime) {
         notifyListeners();
       },
     ).show(context);
-    if (value != null) {
-      _userProviderService.user?.birthday = value;
-      notifyListeners();
-      _userProviderService.updateUserToServer();
-      notifyListeners();
-    }
+    _userProviderService.user!.birthday = value;
+    notifyListeners();
+    _userProviderService.updateUserToServer();
+    notifyListeners();
   }
 
   Future callBottomSheetForSelectingGender() async {
-    SheetResponse _sheetResponse = await _bottomSheetService.showCustomSheet(
+    SheetResponse? _sheetResponse = await _bottomSheetService.showCustomSheet(
         isScrollControlled: true,
         variant: BottomSheetType.GetGender,
-        customData: {'gender': _userProviderService.user.gender},
+        data: {'gender': _userProviderService.user!.gender},
         title: '전화번호');
-    if (_sheetResponse.confirmed)
-      _userProviderService.user.gender = _sheetResponse.responseData['input'];
+    if (_sheetResponse != null && _sheetResponse.confirmed) {
+      _userProviderService.user!.gender = _sheetResponse.data['input'];
+    }
     notifyListeners();
     await _userProviderService.updateUserToServer();
     notifyListeners();

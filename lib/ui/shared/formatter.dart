@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 class Formatter {
   String getStringFromDatetime(DateTime dateTime) {
-    final df = new DateFormat('yyyy/MM/dd');
+    final df = DateFormat('yyyy/MM/dd');
 
     return df.format(dateTime);
   }

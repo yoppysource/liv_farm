@@ -8,10 +8,9 @@ import 'package:stacked_services/stacked_services.dart';
 class PointInputBottomSheetView extends StatefulWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
-  final Widget child;
 
   const PointInputBottomSheetView(
-      {Key key, this.request, this.completer, this.child})
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
 
   @override
@@ -20,7 +19,7 @@ class PointInputBottomSheetView extends StatefulWidget {
 
 class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
   final Color buttonTextColor = kMainPink;
-  TextEditingController _textEditingController;
+  late TextEditingController _textEditingController;
   int availablePoint = 0;
   final DialogService _dialogService = locator<DialogService>();
 
@@ -33,7 +32,7 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
 
   @override
   void dispose() {
-    _textEditingController?.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -48,13 +47,13 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.request.title,
+                  widget.request.title!,
                   style: Theme.of(context).textTheme.subtitle2,
                 ),
                 Align(
@@ -63,7 +62,7 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
                     child: Text('전액 사용',
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(color: kSubColor)),
                     onPressed: () {
                       _textEditingController.text = availablePoint.toString();
@@ -79,7 +78,7 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
                   decoration: InputDecoration(
                     hintText: widget.request.customData['hintText'],
                     focusColor: kMainPink,
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: kMainBlack, width: 0.5)),
                   ),
                   autofocus: true,
@@ -94,7 +93,7 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
                       child: TextButton(
                         onPressed: () =>
                             widget.completer(SheetResponse(confirmed: false)),
-                        child: Text(
+                        child: const Text(
                           '뒤로가기',
                           style: TextStyle(color: kMainPink, fontSize: 18),
                         ),
@@ -107,29 +106,32 @@ class _WriteBottomSheetViewState extends State<PointInputBottomSheetView> {
                           color: kMainPink,
                           onPressed: () {
                             try {
-                              int pointInput = int.tryParse(
+                              int? pointInput = int.tryParse(
                                   _textEditingController.text.trim());
-                              if (pointInput > availablePoint) {
-                                return _dialogService.showDialog(
+                              if (pointInput! > availablePoint) {
+                                _dialogService.showDialog(
                                     title: "오류",
                                     description:
                                         "$availablePoint보다 같거나 작은 숫자를 입력해주세요",
                                     buttonTitle: "확인");
+                                return;
                               }
                               if (pointInput < 0) {
-                                return _dialogService.showDialog(
+                                _dialogService.showDialog(
                                     title: "오류",
                                     description: "포인트 입력값이 잘못되었습니다",
                                     buttonTitle: "확인");
+                                return;
                               }
                               widget.completer(SheetResponse(
                                   confirmed: true,
-                                  responseData: {'pointInput': pointInput}));
+                                  data: {'pointInput': pointInput}));
                             } catch (e) {
-                              return _dialogService.showDialog(
+                              _dialogService.showDialog(
                                   title: "오류",
                                   description: "숫자만 기입가능합니다",
                                   buttonTitle: "확인");
+                              return;
                             }
                           }),
                     ),

@@ -4,10 +4,10 @@ import 'package:liv_farm/ui/home/shopping_cart/shopping_cart_viewmodel.dart';
 import 'package:liv_farm/ui/shared/my_card.dart';
 import 'package:liv_farm/ui/shared/styles.dart';
 
-class DeliveryDateCard extends StatelessWidget {
+class OrderRequestCard extends StatelessWidget {
   final ShoppingCartViewModel model;
 
-  const DeliveryDateCard({Key key, this.model}) : super(key: key);
+  const OrderRequestCard({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +18,17 @@ class DeliveryDateCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            model.takeOut? '언제 매장에서 찾으시겠어요?': '언제 배송을 받아보시겠어요?',
+            model.takeOut ? '언제 매장에서 찾으시겠어요?' : '언제 배송을 받아보시겠어요?',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           verticalSpaceSmall,
-          BookingOrderView(
+          OrderTimeView(
             model: model,
           ),
           verticalSpaceSmall,
           verticalSpaceSmall,
           Text(
-            model.takeOut? '포장 시 요청사항이 있으신가요?':  '배송 시 요청사항이 있으신가요?',
+            model.takeOut ? '포장 시 요청사항이 있으신가요?' : '배송 시 요청사항이 있으신가요?',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           verticalSpaceSmall,
@@ -53,7 +53,9 @@ class DeliveryDateCard extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Text(
                             model.deliveryRequestMessage == ''
-                                ? model.takeOut? '예) 뿌리는 제거해주세요' : '예) 문 앞에 두고 가주세요'
+                                ? model.takeOut
+                                    ? '예) 뿌리는 제거해주세요'
+                                    : '예) 문 앞에 두고 가주세요'
                                 : model.deliveryRequestMessage,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyText1),

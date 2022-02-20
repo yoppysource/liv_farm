@@ -27,10 +27,11 @@ mixin $LoginView on StatelessWidget {
 
   /// Updates the formData on the FormViewModel
   void _updateFormData(FormViewModel model) => model.setData(
-        {
-          EmailValueKey: emailController.text,
-          PasswordValueKey: passwordController.text,
-        },
+        model.formValueMap
+          ..addAll({
+            EmailValueKey: emailController.text,
+            PasswordValueKey: passwordController.text,
+          }),
       );
 
   /// Calls dispose on all the generated controllers and focus nodes
@@ -38,11 +39,18 @@ mixin $LoginView on StatelessWidget {
     // The dispose function for a TextEditingController sets all listeners to null
 
     emailController.dispose();
+    emailFocusNode.dispose();
     passwordController.dispose();
+    passwordFocusNode.dispose();
   }
 }
 
 extension ValueProperties on FormViewModel {
-  String get emailValue => this.formValueMap[EmailValueKey];
-  String get passwordValue => this.formValueMap[PasswordValueKey];
+  String? get emailValue => this.formValueMap[EmailValueKey];
+  String? get passwordValue => this.formValueMap[PasswordValueKey];
+
+  bool get hasEmail => this.formValueMap.containsKey(EmailValueKey);
+  bool get hasPassword => this.formValueMap.containsKey(PasswordValueKey);
 }
+
+extension Methods on FormViewModel {}

@@ -31,13 +31,13 @@ const Color kSubColor = Color(0xffC5299B);
 
 const Color kMainBlack = Color(0xff333333);
 const Color kMainGrey = Color(0xff828282);
-// const Color kMainLightPink = Color(0xffF8d9e0);
+//const Color kMainLightPink = Color(0xffF8d9e0);
 const Color kMainLightPink = Color(0xffC5299B);
 
 const Color kMainGreen = Color(0xff93ca23);
 const Color kMainDarkGreen = Color(0xff868a53);
 const Color kMainIvory = Color(0xfffaf9f7);
-// const Color kMainPink = Color(0xfff59890);
+const Color kDelightPink = Color(0xfff59890);
 const Color kMainPink = Color(0xffC5299B);
 
 // const Color kBrightPink = Color(0xffF8d9e0);

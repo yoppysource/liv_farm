@@ -5,7 +5,8 @@ class MyCard extends StatelessWidget {
   final String title;
   final Widget child;
 
-  const MyCard({Key key, this.title, this.child}) : super(key: key);
+  const MyCard({Key? key, required this.title, required this.child})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -14,7 +15,7 @@ class MyCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         elevation: 0,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

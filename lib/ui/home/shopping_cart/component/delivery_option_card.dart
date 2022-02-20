@@ -9,7 +9,7 @@ import '../shopping_cart_viewmodel.dart';
 class DeliveryOptionCard extends StatelessWidget {
   final ShoppingCartViewModel model;
 
-  const DeliveryOptionCard({Key key, this.model}) : super(key: key);
+  const DeliveryOptionCard({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class DeliveryOptionCard extends StatelessWidget {
           GestureDetector(
             onTap: () => model.onPressedDeliveryOption(false),
             child: Container(
-              height: MediaQuery.of(context).size.width*0.25,
-              width: MediaQuery.of(context).size.width*0.25,
+              height: MediaQuery.of(context).size.width * 0.25,
+              width: MediaQuery.of(context).size.width * 0.25,
               decoration: BoxDecoration(
-                color: model.takeOut ?  Colors.white : kMainPink,
+                color: model.takeOut ? Colors.white : kMainPink,
                 border:
                     Border.all(color: kMainPink.withOpacity(0.95), width: 0.50),
                 borderRadius: BorderRadius.circular(10),
@@ -36,23 +36,28 @@ class DeliveryOptionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height:  MediaQuery.of(context).size.width*0.15,
-                      width: MediaQuery.of(context).size.width*0.15,
+                      height: MediaQuery.of(context).size.width * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.15,
                       child: Center(
                         child: Icon(
                           Icons.delivery_dining,
-                         size:MediaQuery.of(context).size.width*0.15,
-                          color: model.takeOut ?   kMainPink: Colors.white,
+                          size: MediaQuery.of(context).size.width * 0.15,
+                          color: model.takeOut ? kMainPink : Colors.white,
                         ),
                       ),
                     ),
                     Flexible(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(
-                            "배달받기",
+                        child: Text("배달받기",
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyText2.copyWith(color: model.takeOut ?   kMainPink: Colors.white)),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(
+                                    color: model.takeOut
+                                        ? kMainPink
+                                        : Colors.white)),
                       ),
                     ),
                   ],
@@ -61,12 +66,12 @@ class DeliveryOptionCard extends StatelessWidget {
             ),
           ),
           GestureDetector(
-             onTap: () => model.onPressedDeliveryOption(true),
+            onTap: () => model.onPressedDeliveryOption(true),
             child: Container(
-                height: MediaQuery.of(context).size.width*0.25,
-              width: MediaQuery.of(context).size.width*0.25,
+              height: MediaQuery.of(context).size.width * 0.25,
+              width: MediaQuery.of(context).size.width * 0.25,
               decoration: BoxDecoration(
-                color: model.takeOut ?   kMainPink: Colors.white,
+                color: model.takeOut ? kMainPink : Colors.white,
                 border:
                     Border.all(color: kMainPink.withOpacity(0.95), width: 0.50),
                 borderRadius: BorderRadius.circular(10),
@@ -78,26 +83,31 @@ class DeliveryOptionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                       height:  MediaQuery.of(context).size.width*0.15,
-                      width: MediaQuery.of(context).size.width*0.15,
+                      height: MediaQuery.of(context).size.width * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.15,
                       child: Center(
                         child: Icon(
                           FontAwesomeIcons.shoppingBag,
-                          size:  MediaQuery.of(context).size.width*0.10,
-                          color:  model.takeOut ?    Colors.white : kMainPink,
+                          size: MediaQuery.of(context).size.width * 0.10,
+                          color: model.takeOut ? Colors.white : kMainPink,
                         ),
                       ),
                     ),
                     Flexible(
                       child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
+                          alignment: Alignment.center,
+                          child: Text(
                             "매장찾기",
                             overflow: TextOverflow.ellipsis,
-                            style:Theme.of(context).textTheme.bodyText2.copyWith(color: model.takeOut ? Colors.white : kMainPink),)
-                      ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(
+                                    color: model.takeOut
+                                        ? Colors.white
+                                        : kMainPink),
+                          )),
                     ),
-                    
                   ],
                 ),
               ),

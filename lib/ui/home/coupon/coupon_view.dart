@@ -7,7 +7,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 
 class CouponView extends StatelessWidget {
-  const CouponView({Key key}) : super(key: key);
+  const CouponView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class CouponView extends StatelessWidget {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    child: Center(
+                                    child: const Center(
                                       child: FittedBox(
                                         fit: BoxFit.scaleDown,
                                         child: Text(
@@ -72,22 +72,27 @@ class CouponView extends StatelessWidget {
                                   ),
                                 ),
                                 horizontalSpaceSmall,
-                                FlatButton(
-                                    color: Colors.white,
-                                    child: Text(
-                                      '입력',
-                                      style: TextStyle(color: kMainBlack),
-                                    ),
-                                    onPressed: () async {
-                                      await model.registerCoupon();
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: kMainGrey,
-                                            width: 0.3,
-                                            style: BorderStyle.solid),
-                                        borderRadius:
-                                            BorderRadius.circular(5))),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      primary: Colors.white,
+                                      minimumSize: const Size(88, 36),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: kMainGrey,
+                                              width: 0.3,
+                                              style: BorderStyle.solid),
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  child: const Text(
+                                    '입력',
+                                    style: TextStyle(color: kMainBlack),
+                                  ),
+                                  onPressed: () async {
+                                    await model.registerCoupon();
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -104,11 +109,11 @@ class CouponView extends StatelessWidget {
                               ? SizedBox(
                                   height: 200,
                                   width: MediaQuery.of(context).size.width,
-                                  child: Center(
+                                  child: const Center(
                                     child: Text('현재 등록하신 쿠폰이 없습니다'),
                                   ),
                                 )
-                              : Container(
+                              : SizedBox(
                                   height: (MediaQuery.of(context).size.height *
                                           0.8) -
                                       200,
@@ -121,14 +126,10 @@ class CouponView extends StatelessWidget {
                                           return GestureDetector(
                                               onTap: () =>
                                                   model.selectCoupon(index),
-                                              child: Container(
-                                                child: CouponWidget(
-                                                  coupon:
-                                                      model.couponList[index],
-                                                  selected:
-                                                      model.selectedIndex ==
-                                                          index,
-                                                ),
+                                              child: CouponWidget(
+                                                coupon: model.couponList[index],
+                                                selected: model.selectedIndex ==
+                                                    index,
                                               ));
                                         }),
                                   ),
@@ -141,7 +142,7 @@ class CouponView extends StatelessWidget {
               ),
               if (model.selectedIndex != null)
                 AnimatedAlign(
-                  duration: Duration(milliseconds: 10000),
+                  duration: const Duration(milliseconds: 10000),
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(
                     onTap: model.onPressedApply,
@@ -149,7 +150,7 @@ class CouponView extends StatelessWidget {
                       height: 70,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
                         ),
@@ -158,7 +159,8 @@ class CouponView extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 1,
                             blurRadius: 1,
-                            offset: Offset(0, 1), // changes position of shadow
+                            offset: const Offset(
+                                0, 1), // changes position of shadow
                           ),
                         ],
                       ),
@@ -167,7 +169,7 @@ class CouponView extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: kMainPink,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20),
                           ),
@@ -176,12 +178,12 @@ class CouponView extends StatelessWidget {
                               color: Colors.grey.withOpacity(0.3),
                               spreadRadius: 1,
                               blurRadius: 1,
-                              offset:
-                                  Offset(0, 1), // changes position of shadow
+                              offset: const Offset(
+                                  0, 1), // changes position of shadow
                             ),
                           ],
                         ),
-                        child: Center(
+                        child: const Center(
                             child: Text(
                           "쿠폰 적용하기",
                           style: TextStyle(

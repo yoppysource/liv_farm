@@ -1,14 +1,19 @@
 class Review {
-  DateTime createdAt;
-  String review;
-  double rating;
-  String id;
-  String userName;
+  late final DateTime? createdAt;
+  late final String review;
+  late final double rating;
+  late final String id;
+  late final String? userName;
 
-  Review({this.createdAt, this.review, this.rating, this.userName, this.id});
+  Review(
+      {this.createdAt,
+      required this.review,
+      required this.rating,
+      this.userName,
+      required this.id});
 
   Review.fromJson(Map<String, dynamic> json) {
-    createdAt = DateTime?.parse(json['createdAt']) ?? null;
+    createdAt = DateTime?.parse(json['createdAt']);
     review = json['review'];
     rating = json['rating'].toDouble();
     id = json['id'];
@@ -16,12 +21,12 @@ class Review {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['createdAt'] = DateTime.now().toIso8601String();
-    data['review'] = this.review;
-    data['rating'] = this.rating;
-    data['userName'] = this.userName;
-    data['id'] = this.id;
+    data['review'] = review;
+    data['rating'] = rating;
+    data['userName'] = userName;
+    data['id'] = id;
     return data;
   }
 }

@@ -12,13 +12,14 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
 
   final Function(SheetResponse) completer;
 
-  const PickDateTimeBottomSheetView({Key key, this.request, this.completer})
+  const PickDateTimeBottomSheetView(
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<PickDateTimeBottomSheetViewModel>.reactive(
       viewModelBuilder: () =>
-          PickDateTimeBottomSheetViewModel(request.title, request.customData),
+          PickDateTimeBottomSheetViewModel(request.title!, request.data),
       builder: (context, model, child) => GestureDetector(
         child: Container(
           decoration: BoxDecoration(
@@ -26,7 +27,7 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,13 +49,13 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                       model: model,
                       index: 1,
                       label:
-                          '${model.data.keys.elementAt(0).day}(${model.weekDayNameList[model.data.keys.elementAt(0).weekday-1]})',
+                          '${model.data.keys.elementAt(0).day}(${model.weekDayNameList[model.data.keys.elementAt(0).weekday - 1]})',
                     ),
                     DateButton(
                       model: model,
                       index: 2,
                       label:
-                          '${model.data.keys.elementAt(1).day}(${model.weekDayNameList[model.data.keys.elementAt(1).weekday-1]})',
+                          '${model.data.keys.elementAt(1).day}(${model.weekDayNameList[model.data.keys.elementAt(1).weekday - 1]})',
                     ),
                   ],
                 ),
@@ -67,11 +68,12 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                                 (model.data.values
                                     .elementAt(0)[0]
                                     .after(model.data.values.elementAt(0)[1]))))
-                        ? Center(
+                        ? const Center(
                             child: Text('선택가능한 시간이 없습니다.'),
                           )
                         : TimeList(
                             timeStep: 30,
+                            initialTime: const TimeOfDay(hour: 9, minute: 40),
                             firstTime: model.data.values
                                 .elementAt(model.selectedIndex - 1)[0],
                             lastTime: model.data.values
@@ -104,7 +106,7 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                       child: TextButton(
                         onPressed: () =>
                             completer(SheetResponse(confirmed: false)),
-                        child: Text(
+                        child: const Text(
                           '뒤로가기',
                           style: TextStyle(color: kMainPink, fontSize: 18),
                         ),
@@ -115,8 +117,8 @@ class PickDateTimeBottomSheetView extends StatelessWidget {
                       child: FullScreenButton(
                         title: '선택하기',
                         color: kMainPink,
-                        onPressed: () => completer(
-                            SheetResponse(confirmed: true, responseData: {
+                        onPressed: () =>
+                            completer(SheetResponse(confirmed: true, data: {
                           PickDateTimeBottomSheetViewModel.KEY_selectedDate:
                               model.finalDateTime,
                         })),
@@ -138,7 +140,8 @@ class DateButton extends StatelessWidget {
   final int index;
   final String label;
 
-  const DateButton({Key key, this.model, this.index, this.label})
+  const DateButton(
+      {Key? key, required this.model, required this.index, required this.label})
       : super(key: key);
 
   @override
@@ -163,11 +166,11 @@ class DateButton extends StatelessWidget {
                 style: index == model.selectedIndex
                     ? Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(color: Colors.white, fontSize: 20)
                     : Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyText1!
                         .copyWith(color: kMainBlack, fontSize: 20)),
           ),
         ),

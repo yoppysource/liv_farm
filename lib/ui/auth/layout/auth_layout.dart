@@ -14,32 +14,32 @@ class AuthLayout extends StatelessWidget {
   final bool showTermsText;
   final Function onMainButtonPressed;
   final Function onToggleButtonPressed;
-  final Function onForgetPasswordButtonPressed;
+  final Function? onForgetPasswordButtonPressed;
   final Function onBackButtonPressed;
   final Function onGooglePressed;
   final Function onApplePressed;
   final Function onKakaoPressed;
-  final String validationMessage;
+  final String? validationMessage;
   final bool busy;
   final bool isVaildToSubmit;
 
   const AuthLayout({
-    @required this.title,
-    @required this.toggleQuestionText,
-    @required this.form,
-    @required this.onMainButtonPressed,
+    required this.title,
+    required this.toggleQuestionText,
+    required this.form,
+    required this.onMainButtonPressed,
     this.validationMessage,
-    this.onToggleButtonPressed,
+    required this.onToggleButtonPressed,
     this.onForgetPasswordButtonPressed,
-    this.onBackButtonPressed,
-    @required this.onGooglePressed,
-    @required this.onApplePressed,
-    @required this.onKakaoPressed,
+    required this.onBackButtonPressed,
+    required this.onGooglePressed,
+    required this.onApplePressed,
+    required this.onKakaoPressed,
     this.mainButtonTitle = 'CONTINUE',
     this.showTermsText = false,
     this.busy = false,
     this.isVaildToSubmit = false,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class AuthLayout extends StatelessWidget {
                     color: Colors.black.withOpacity(0.75),
                     size: 32,
                   ),
-                  onPressed: onBackButtonPressed,
+                  onPressed: () => onBackButtonPressed(),
                 ),
                 verticalSpaceMedium,
                 Padding(
@@ -83,17 +83,22 @@ class AuthLayout extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 form,
-                
+
                 if (onForgetPasswordButtonPressed != null)
                   Column(
                     children: [
-                       verticalSpaceMedium,
+                      verticalSpaceMedium,
                       Align(
                         alignment: Alignment.center,
                         child: GestureDetector(
-                          onTap: onForgetPasswordButtonPressed,
-                          child: Text('비밀번호를 잊어버리셨습니까?',
-                              style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.black54),),
+                          onTap: () => onForgetPasswordButtonPressed!(),
+                          child: Text(
+                            '비밀번호를 잊어버리셨습니까?',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(color: Colors.black54),
+                          ),
                         ),
                       ),
                     ],
@@ -102,10 +107,10 @@ class AuthLayout extends StatelessWidget {
                     ? Column(
                         children: [
                           verticalSpaceSmall,
-                          Text(validationMessage,
+                          Text(validationMessage!,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .copyWith(color: Colors.red)),
                           verticalSpaceSmall,
                         ],
@@ -122,7 +127,7 @@ class AuthLayout extends StatelessWidget {
                       : null,
                   child: Text(
                     mainButtonTitle,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
                         fontSize: 18),
@@ -130,7 +135,7 @@ class AuthLayout extends StatelessWidget {
                 ),
                 verticalSpaceMedium,
                 GestureDetector(
-                  onTap: onToggleButtonPressed,
+                  onTap: () => onToggleButtonPressed(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -138,7 +143,7 @@ class AuthLayout extends StatelessWidget {
                         toggleQuestionText,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText1
+                            .bodyText1!
                             .copyWith(color: Colors.black54),
                       ),
                       horizontalSpaceSmall,
@@ -149,8 +154,8 @@ class AuthLayout extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (showTermsText) Text('이용정보 보호 약관'),
- verticalSpaceMedium,
+                if (showTermsText) const Text('이용정보 보호 약관'),
+                verticalSpaceMedium,
                 // Container(
                 //     height: MediaQuery.of(context).size.height * 0.4,
                 //     child: Center(
@@ -160,7 +165,7 @@ class AuthLayout extends StatelessWidget {
                   needBorder: true,
                   color: Colors.white,
                   onPressed: onGooglePressed,
-                  child: SocialAuthContent(
+                  child: const SocialAuthContent(
                     assetPath: "assets/images/google_icon.png",
                     text: "Google로 계속하기",
                   ),
@@ -168,9 +173,9 @@ class AuthLayout extends StatelessWidget {
                 verticalSpaceMedium,
                 AuthButton(
                   needBorder: false,
-                  color: Color(0xfffee500),
+                  color: const Color(0xfffee500),
                   onPressed: onKakaoPressed,
-                  child: SocialAuthContent(
+                  child: const SocialAuthContent(
                     assetPath: "assets/images/kakao_icon.png",
                     text: "Kakao로 계속하기",
                   ),
@@ -192,7 +197,7 @@ class AuthLayout extends StatelessWidget {
                     needBorder: true,
                     color: Colors.black,
                     onPressed: onApplePressed,
-                    child: SocialAuthContent(
+                    child: const SocialAuthContent(
                       assetPath: "assets/images/apple_icon.png",
                       text: "Apple로 계속하기",
                       textColor: Colors.white,
@@ -207,10 +212,10 @@ class AuthLayout extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PolicyPage()));
+                              builder: (context) => const PolicyPage()));
                     },
                     child: Text('최초 로그인 시 개인보호정책에 동의한 것으로 간주됩니다',
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             fontSize: 12,
                             decoration: TextDecoration.underline,
                             textBaseline: TextBaseline.alphabetic)),
@@ -230,12 +235,12 @@ class SocialAuthContent extends StatelessWidget {
   final String assetPath;
   final String text;
   final Color textColor;
-  final Color assetColor;
+  final Color? assetColor;
 
   const SocialAuthContent(
-      {Key key,
-      this.assetPath,
-      this.text,
+      {Key? key,
+      required this.assetPath,
+      required this.text,
       this.textColor = Colors.black,
       this.assetColor})
       : super(key: key);
@@ -281,21 +286,27 @@ class SocialAuthContent extends StatelessWidget {
 
 class AuthButton extends StatelessWidget {
   const AuthButton(
-      {Key key,
-      @required this.onPressed,
-      @required this.child,
-      @required this.color,
-      @required this.needBorder})
+      {Key? key,
+      this.onPressed,
+      required this.child,
+      required this.color,
+      required this.needBorder})
       : super(key: key);
 
-  final Function onPressed;
+  final Function? onPressed;
   final Widget child;
   final Color color;
   final bool needBorder;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        if (onPressed == null) {
+          return;
+        } else {
+          onPressed!();
+        }
+      },
       child: Container(
         width: double.infinity,
         height: 45,

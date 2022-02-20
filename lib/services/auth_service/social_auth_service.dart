@@ -6,60 +6,32 @@ import 'package:kakao_flutter_sdk/user.dart';
 
 class KakaoAuthService extends AuthService {
   @override
-  final path = '/socialLogin';
-  @override
-  Future<Map<String, dynamic>> getInitialData() async {
+  Future<Map<String, dynamic>> createCredential() async {
     final bool installed = await isKakaoTalkInstalled();
     final authCode = installed
         ? await AuthCodeClient.instance.requestWithTalk()
         : await AuthCodeClient.instance.request();
-    var token = await AuthApi.instance.issueAccessToken(authCode);
-    AccessTokenStore.instance.toStore(token);
-    print(token);
+    OAuthToken token = await AuthApi.instance.issueAccessToken(authCode);
+    TokenManagerProvider.instance.manager.setToken(token);
     User user = await UserApi.instance.me();
 
-    return createInitialData(
+    return generateMapFromSocialAuth(
         snsId: user.id.toString(),
-        email: user.kakaoAccount.email,
+        email: user.kakaoAccount?.email,
         platform: "kakao");
   }
 }
 
-// class FacebookAuthService extends AuthService {
-//   @override
-//   final path = '/socialLogin';
-
-//   @override
-//   Future<Map<String, dynamic>> getInitialData() async {
-//     final FacebookLogin plugin = FacebookLogin(debug: false);
-//     final result = await plugin.logIn(permissions: [
-//       FacebookPermission.email,
-//     ]);
-//     final email = await plugin.getUserEmail();
-//     if (result.status == FacebookLoginStatus.success) {
-//       return createInitialData(
-//           snsId: result.accessToken.userId.toString(),
-//           email: email,
-//           platform: "facebook");
-//     } else {
-//       print(result);
-//       throw Exception();
-//     }
-//   }
-// }
-
 class AppleAuthService extends AuthService {
   @override
-  final path = '/socialLogin';
-  @override
-  Future<Map<String, dynamic>> getInitialData() async {
+  Future<Map<String, dynamic>> createCredential() async {
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
       ],
     );
 
-    return createInitialData(
+    return generateMapFromSocialAuth(
         snsId: credential.userIdentifier.toString(),
         email: credential.email,
         platform: "apple");
@@ -67,15 +39,19 @@ class AppleAuthService extends AuthService {
 }
 
 class GoogleAuthService extends AuthService {
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
+    'email',
+  ]);
   @override
-  final path = '/socialLogin';
-  @override
-  Future<Map<String, dynamic>> getInitialData() async {
-    final GoogleSignInAccount googleUser =
-        await GoogleSignIn(scopes: ['email']).signIn();
+  Future<Map<String, dynamic>> createCredential() async {
+    // final GoogleSignInAccount googleUser =
+    //     await GoogleSignIn(scopes: ['email']).signIn();
+    GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) throw Exception();
 
     String uid = googleUser.id;
-    String email = googleUser.email;
-    return createInitialData(snsId: uid, email: email, platform: "google");
+    String? email = googleUser.email;
+    return generateMapFromSocialAuth(
+        snsId: uid, email: email, platform: "google");
   }
 }

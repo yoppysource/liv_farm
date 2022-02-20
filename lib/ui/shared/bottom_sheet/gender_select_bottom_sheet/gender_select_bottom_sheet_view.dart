@@ -8,7 +8,8 @@ class GenderSelectBottomSheetView extends StatefulWidget {
   final SheetRequest request;
   final Function(SheetResponse) completer;
 
-  const GenderSelectBottomSheetView({Key key, this.request, this.completer})
+  const GenderSelectBottomSheetView(
+      {Key? key, required this.request, required this.completer})
       : super(key: key);
 
   @override
@@ -19,11 +20,11 @@ class GenderSelectBottomSheetView extends StatefulWidget {
 class _GenderSelectBottomSheetViewState
     extends State<GenderSelectBottomSheetView> {
   final Color buttonTextColor = kMainPink;
-  String selectedGender;
+  String? selectedGender;
 
   @override
   void initState() {
-    selectedGender = widget.request.customData['gender'] ?? 'female';
+    selectedGender = widget.request.data['gender'] ?? 'female';
     super.initState();
   }
 
@@ -36,7 +37,7 @@ class _GenderSelectBottomSheetViewState
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +57,7 @@ class _GenderSelectBottomSheetViewState
                     });
                   },
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 1000),
+                    duration: const Duration(milliseconds: 1000),
                     height: 35,
                     width: 90,
                     decoration: BoxDecoration(
@@ -66,16 +67,14 @@ class _GenderSelectBottomSheetViewState
                     child: Stack(
                       children: <Widget>[
                         AnimatedPositioned(
-                          duration: Duration(milliseconds: 1000),
+                          duration: const Duration(milliseconds: 1000),
                           curve: Curves.easeIn,
                           left: selectedGender == 'male' //남자일경
                               ? 50
                               : 0.0,
-                          right: widget.request.customData['gender'] == 'male'
-                              ? 0.0
-                              : 50,
+                          right: selectedGender == 'male' ? 0.0 : 50,
                           child: AnimatedSwitcher(
-                            duration: Duration(milliseconds: 1000),
+                            duration: const Duration(milliseconds: 1000),
                             transitionBuilder:
                                 (Widget child, Animation<double> animation) {
                               return RotationTransition(
@@ -113,7 +112,7 @@ class _GenderSelectBottomSheetViewState
                     child: TextButton(
                       onPressed: () =>
                           widget.completer(SheetResponse(confirmed: false)),
-                      child: Text(
+                      child: const Text(
                         '뒤로가기',
                         style: TextStyle(color: kMainPink, fontSize: 18),
                       ),
@@ -124,8 +123,8 @@ class _GenderSelectBottomSheetViewState
                     child: FullScreenButton(
                       title: '저장하기',
                       color: kMainPink,
-                      onPressed: () => widget.completer(
-                          SheetResponse(confirmed: true, responseData: {
+                      onPressed: () => widget
+                          .completer(SheetResponse(confirmed: true, data: {
                         'input': selectedGender,
                       })),
                     ),

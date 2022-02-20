@@ -15,15 +15,15 @@ class TimeList extends StatefulWidget {
   final double padding;
   final TimeSelectedCallback onHourSelected;
 
-  TimeList({
-    Key key,
+  const TimeList({
+    Key? key,
     this.padding = 0,
-    this.timeStep,
-    this.firstTime,
-    this.lastTime,
-    this.onHourSelected,
-    this.initialTime,
-    this.index,
+    required this.timeStep,
+    required this.firstTime,
+    required this.lastTime,
+    required this.onHourSelected,
+    required this.initialTime,
+    this.index = 0,
   }) : super(key: key);
 
   @override
@@ -31,9 +31,9 @@ class TimeList extends StatefulWidget {
 }
 
 class _TimeListState extends State<TimeList> {
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
   final double itemExtent = 90;
-  TimeOfDay _selectedHour;
+  late TimeOfDay _selectedHour;
   List<TimeOfDay> hours = [];
 
   @override
@@ -41,7 +41,7 @@ class _TimeListState extends State<TimeList> {
     super.initState();
     _initialData();
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _animateScroll(hours.indexOf(widget.initialTime));
     });
   }
@@ -98,10 +98,10 @@ class _TimeListState extends State<TimeList> {
               activeBorderColor: kMainGreen,
               backgroundColor: Colors.white,
               activeBackgroundColor: kMainGreen.withOpacity(0.9),
-              textStyle: Theme.of(context).textTheme.bodyText2,
+              textStyle: Theme.of(context).textTheme.bodyText2!,
               activeTextStyle: Theme.of(context)
                   .textTheme
-                  .bodyText2
+                  .bodyText2!
                   .copyWith(color: kMainBlack),
               time: hour.format(context),
               value: _selectedHour == hour,
@@ -126,6 +126,6 @@ class _TimeListState extends State<TimeList> {
       offset = _scrollController.position.maxScrollExtent;
     }
     _scrollController.animateTo(offset,
-        duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
   }
 }

@@ -1,5 +1,6 @@
 enum BottomSheetType {
   Basic,
+  storeSelection,
   AddToCart,
   Write,
   GetDateTime,
@@ -8,4 +9,5 @@ enum BottomSheetType {
   Review,
   ChangePassword,
   PointInput,
+  optionGroups,
 }

@@ -7,7 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UserInformationView extends StatelessWidget {
-  const UserInformationView({Key key}) : super(key: key);
+  const UserInformationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,12 @@ class UserInformationView extends StatelessWidget {
             Text(
               '이메일',
               style:
-                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
+                  Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14),
             ),
             verticalSpaceSmall,
             Container(
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: Padding(
@@ -38,12 +38,11 @@ class UserInformationView extends StatelessWidget {
                     Flexible(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(model?.email ?? "Apple Account",
+                        child: Text(model.email ?? "Apple Account",
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
-                                .copyWith(fontSize: 14)
+                                .bodyText1!
                                 .copyWith(fontSize: 14)),
                       ),
                     ),
@@ -62,7 +61,7 @@ class UserInformationView extends StatelessWidget {
             Text(
               '성함',
               style:
-                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
+                  Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14),
             ),
             verticalSpaceSmall,
             GestureDetector(
@@ -87,11 +86,11 @@ class UserInformationView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .copyWith(fontSize: 14)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                         width: 25,
                         child: Center(
@@ -111,7 +110,7 @@ class UserInformationView extends StatelessWidget {
             Text(
               '연락처',
               style:
-                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
+                  Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14),
             ),
             verticalSpaceSmall,
             GestureDetector(
@@ -136,11 +135,11 @@ class UserInformationView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1
+                                  .bodyText1!
                                   .copyWith(letterSpacing: 0.4, fontSize: 14)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                         width: 25,
                         child: Center(
@@ -160,7 +159,7 @@ class UserInformationView extends StatelessWidget {
             Text(
               '성별',
               style:
-                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
+                  Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14),
             ),
             verticalSpaceSmall,
             GestureDetector(
@@ -182,7 +181,7 @@ class UserInformationView extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.center,
                             child: model.gender == null
-                                ? Icon(
+                                ? const Icon(
                                     FontAwesomeIcons.question,
                                     size: 21,
                                     color: kMainGrey,
@@ -194,10 +193,10 @@ class UserInformationView extends StatelessWidget {
                                         color:
                                             Colors.blueAccent.withOpacity(0.9),
                                       )
-                                    : Icon(FontAwesomeIcons.venus,
+                                    : const Icon(FontAwesomeIcons.venus,
                                         size: 23, color: kMainPink)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                         width: 25,
                         child: Center(
@@ -217,7 +216,7 @@ class UserInformationView extends StatelessWidget {
             Text(
               '생년월일',
               style:
-                  Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 14),
+                  Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14),
             ),
             verticalSpaceSmall,
             GestureDetector(
@@ -243,7 +242,7 @@ class UserInformationView extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText1
+                                .bodyText1!
                                 .copyWith(color: Colors.white, fontSize: 14)),
                       ),
                       SizedBox(
@@ -254,7 +253,7 @@ class UserInformationView extends StatelessWidget {
                             onPressed: () {},
                             iconSize: 20,
                             padding: EdgeInsets.zero,
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.calendar_today_outlined,
                               color: Colors.white,
                             ),

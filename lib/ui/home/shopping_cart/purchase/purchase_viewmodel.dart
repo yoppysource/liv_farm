@@ -4,7 +4,7 @@ import 'package:liv_farm/app/app.locator.dart';
 import 'package:liv_farm/model/order.dart';
 import 'package:liv_farm/services/analytics_service.dart';
 import 'package:liv_farm/services/cart_provider_service.dart';
-import 'package:liv_farm/services/server_service/server_service.dart';
+import 'package:liv_farm/services/server_service/client_service.dart';
 import 'package:liv_farm/services/user_provider_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -12,13 +12,16 @@ import 'package:stacked_services/stacked_services.dart';
 class PurchaseViewModel extends BaseViewModel {
   final PaymentData paymentData;
   final Order order;
+  @override
   bool isBusy = false;
-  NavigationService _navigationService = locator<NavigationService>();
-  DialogService _dialogService = locator<DialogService>();
-  UserProviderService _userProviderService = locator<UserProviderService>();
-  CartProviderService _cartProviderService = locator<CartProviderService>();
-  AnalyticsService _analyticsService = locator<AnalyticsService>();
-  ServerService _serverService = locator<ServerService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final DialogService _dialogService = locator<DialogService>();
+  final UserProviderService _userProviderService =
+      locator<UserProviderService>();
+  final CartProviderService _cartProviderService =
+      locator<CartProviderService>();
+  final AnalyticsService _analyticsService = locator<AnalyticsService>();
+  final ClientService _serverService = locator<ClientService>();
   PurchaseViewModel(this.paymentData, this.order);
 
   void onPressedArrowBack() {
@@ -36,8 +39,11 @@ class PurchaseViewModel extends BaseViewModel {
     notifyListeners();
     if (result['imp_success'] == 'true') {
       try {
-        final Map<String, dynamic> data =
-            await _serverService.postData(resource: Resource.orders,path:'/my', data: order.toJson());
+        final Map<String, dynamic> data = await _serverService.sendRequest(
+            method: HttpMethod.post,
+            resource: Resource.orders,
+            endPath: '/my',
+            data: order.toJson());
         debugPrint(data.toString());
 
         await _userProviderService.syncUserFromServer();
@@ -50,12 +56,11 @@ class PurchaseViewModel extends BaseViewModel {
           barrierDismissible: false,
         );
         await _analyticsService.logPurchase(
-          purchaseAmount: this.order.paidAmount.toDouble(),
+          purchaseAmount: order.paidAmount.toDouble(),
           couponDescription: order.coupon?.description ?? 'Not used',
-          address: order.address.toString(),
         );
       } catch (e) {
-        debugPrint(e);
+        debugPrint(e.toString());
 
         _navigationService.back();
         _dialogService.showDialog(
@@ -66,7 +71,6 @@ class PurchaseViewModel extends BaseViewModel {
         );
       }
     } else {
-      print(result.toString());
       _navigationService.back();
       _dialogService.showDialog(
         title: '결제취소',
